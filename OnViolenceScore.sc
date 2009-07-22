@@ -39,6 +39,7 @@ OnViolenceScore {var s, basicPath, <>score, globalMIDI, globalTimes, start, end,
 		};
 		
 		MIDIIn.sysrt = { arg src, chan, val;  tempo = val; };
+		
 		partials = PartialTracker(512, 5);  //a partial tracker
 	}
 	
@@ -471,6 +472,7 @@ OnViolenceScore {var s, basicPath, <>score, globalMIDI, globalTimes, start, end,
 		stepPedal = page;
 	}
 
+	//use percussion sounds as triggers
 	funcAlgoScore {arg sample=1,page=1, tempo=176, repeat=1,pagePartial=0;
 		var step=0, color, tempo2, sampleEnd;
 		Routine({ 
@@ -506,11 +508,12 @@ OnViolenceScore {var s, basicPath, <>score, globalMIDI, globalTimes, start, end,
 		}).play(score.clock);
 	}
 
+		//send midi instead of using percussion sounds
 	funcAlgoScoreMIDI {arg sample=1,page=1, tempo=176, repeat=1,pagePartial=0;
 		var step=0, color, tempo2, sampleEnd, bufferTimesMIDI,pattMIDI;
 		bufferTimesMIDI = [ 0.025, 0.039185800697256, 0.061421079051404, 0.096273366492749, 0.15090195807355, 0.21139096075449, 0.33134096229308, 0.51935443645014, 0.81405277751885, 1.2759723958761, 2 ];
 		pattMIDI = Pseq((0,1..16), inf).asStream;
-		Synth(\headmonitor, [\bufnum, bufferArr[1].bufnum]);
+		//Synth(\headmonitor, [\bufnum, bufferArr[1].bufnum]);
 		Routine({ 
 		partialTrig = 1;
 		sampleEnd = sample;
@@ -541,7 +544,7 @@ OnViolenceScore {var s, basicPath, <>score, globalMIDI, globalTimes, start, end,
 		score.expressionClose;
 		});
 		if(pagePartial == 0, {this.funcPage(page); partialTrig = 0;}, {this.partialNotes(5.47*tempo2,page,"c 4".notemidi,"c 6".notemidi, "f")});
-		Synth(\headmonitor, [\bufnum, bufferArr[2].bufnum]);
+		//Synth(\headmonitor, [\bufnum, bufferArr[2].bufnum]);
 		}).play(score.clock);
 	}
 
@@ -700,24 +703,24 @@ OnViolenceScore {var s, basicPath, <>score, globalMIDI, globalTimes, start, end,
 		{countPedalOn == 28} {{this.funcPage(14);}.defer;}
 		{countPedalOn == 34} {{this.funcPage(15);}.defer;}
 		//algoScore
-		{countPedalOn == 38} {{this.funcAlgoScore(1,18,tempo);}.defer; countPedalOff = countPedalOn-1;}
-		{countPedalOn == 39} {{this.funcAlgoScore(2,19,tempo); }.defer; countPedalOff = countPedalOn-1;}
-		{countPedalOn == 40} {{this.funcAlgoScore(3,20,tempo,2);}.defer; countPedalOff = countPedalOn-1;}
-		{countPedalOn == 41} {{this.funcAlgoScore(5,21,tempo);}.defer; countPedalOff = countPedalOn-1;}
-		{countPedalOn == 42} {{this.funcAlgoScore(6,22,tempo, 2);}.defer; countPedalOff = countPedalOn-1;}
-		{countPedalOn == 43} {{this.funcAlgoScore(8,23,tempo);}.defer; countPedalOff = countPedalOn-1;}
-		{countPedalOn == 44} {{this.funcAlgoScore(9,24,tempo);}.defer; countPedalOff = countPedalOn-1;}
-		{countPedalOn == 45} {{this.funcAlgoScore(10,25,tempo, 2);}.defer; countPedalOff = countPedalOn-1;}
-		{countPedalOn == 46} {{this.funcAlgoScore(12,26,tempo,3);}.defer; countPedalOff = countPedalOn-1;}
-		{countPedalOn == 47} {{this.funcAlgoScore(15,27,tempo,2);}.defer; countPedalOff = countPedalOn-1;}
-		{countPedalOn == 48} {{this.funcAlgoScore(17,28,tempo,1);}.defer; countPedalOff = countPedalOn-1;}
-		{countPedalOn == 49} {{this.funcAlgoScore(18,29,tempo,2);}.defer; countPedalOff = countPedalOn-1;}
-		{countPedalOn == 50} {{this.funcAlgoScore(20,30,tempo,2);}.defer; countPedalOff = countPedalOn-1;}
-		{countPedalOn == 51} {{this.funcAlgoScore(22,31,tempo,1);}.defer; countPedalOff = countPedalOn-1;}
-		{countPedalOn == 52} {{score.tagClose; this.funcAlgoScore(23,31,tempo,1);}.defer; countPedalOff = countPedalOn-1;}
-		{countPedalOn == 53} {{score.tagClose; this.funcAlgoScore(24,31,tempo,1);}.defer; countPedalOff = countPedalOn-1;}
-		{countPedalOn == 54} {{score.tagClose; this.funcAlgoScore(25,32,tempo,1,1);}.defer; this.partialNum(18); countPedalOff = countPedalOn-1;}
-		{countPedalOn == 55} {{score.tagClose; this.funcAlgoScore(26,32,tempo,1);}.defer; countPedalOff = countPedalOn-1;}
+		{countPedalOn == 38} {{this.funcAlgoScoreMIDI(1,18,tempo);}.defer; countPedalOff = countPedalOn-1;}
+		{countPedalOn == 39} {{this.funcAlgoScoreMIDI(2,19,tempo); }.defer; countPedalOff = countPedalOn-1;}
+		{countPedalOn == 40} {{this.funcAlgoScoreMIDI(3,20,tempo,2);}.defer; countPedalOff = countPedalOn-1;}
+		{countPedalOn == 41} {{this.funcAlgoScoreMIDI(5,21,tempo);}.defer; countPedalOff = countPedalOn-1;}
+		{countPedalOn == 42} {{this.funcAlgoScoreMIDI(6,22,tempo, 2);}.defer; countPedalOff = countPedalOn-1;}
+		{countPedalOn == 43} {{this.funcAlgoScoreMIDI(8,23,tempo);}.defer; countPedalOff = countPedalOn-1;}
+		{countPedalOn == 44} {{this.funcAlgoScoreMIDI(9,24,tempo);}.defer; countPedalOff = countPedalOn-1;}
+		{countPedalOn == 45} {{this.funcAlgoScoreMIDI(10,25,tempo, 2);}.defer; countPedalOff = countPedalOn-1;}
+		{countPedalOn == 46} {{this.funcAlgoScoreMIDI(12,26,tempo,3);}.defer; countPedalOff = countPedalOn-1;}
+		{countPedalOn == 47} {{this.funcAlgoScoreMIDI(15,27,tempo,2);}.defer; countPedalOff = countPedalOn-1;}
+		{countPedalOn == 48} {{this.funcAlgoScoreMIDI(17,28,tempo,1);}.defer; countPedalOff = countPedalOn-1;}
+		{countPedalOn == 49} {{this.funcAlgoScoreMIDI(18,29,tempo,2);}.defer; countPedalOff = countPedalOn-1;}
+		{countPedalOn == 50} {{this.funcAlgoScoreMIDI(20,30,tempo,2);}.defer; countPedalOff = countPedalOn-1;}
+		{countPedalOn == 51} {{this.funcAlgoScoreMIDI(22,31,tempo,1);}.defer; countPedalOff = countPedalOn-1;}
+		{countPedalOn == 52} {{score.tagClose; this.funcAlgoScoreMIDI(23,31,tempo,1);}.defer; countPedalOff = countPedalOn-1;}
+		{countPedalOn == 53} {{score.tagClose; this.funcAlgoScoreMIDI(24,31,tempo,1);}.defer; countPedalOff = countPedalOn-1;}
+		{countPedalOn == 54} {{score.tagClose; this.funcAlgoScoreMIDI(25,32,tempo,1,1);}.defer; this.partialNum(18); countPedalOff = countPedalOn-1;}
+		{countPedalOn == 55} {{score.tagClose; this.funcAlgoScoreMIDI(26,32,tempo,1);}.defer; countPedalOff = countPedalOn-1;}
 		{countPedalOn == 56} {{score.tagClose; this.partialNotes(7.17*(176/tempo),32,"c 3".notemidi,"c 6".notemidi, "F");}.defer; countPedalOff = countPedalOn-1;}
 		{countPedalOn == 57} {{score.tagClose; this.partialNotes(3.07*(176/tempo),32,"c 2".notemidi,"c 7".notemidi, "F");}.defer; countPedalOff = countPedalOn-1;}
 		{countPedalOn == 58} {{score.tagClose; this.partialNotes(6.42*(176/tempo),33,"c 2".notemidi,"c 7".notemidi, "P");}.defer; countPedalOff = countPedalOn-1;}
@@ -800,24 +803,24 @@ OnViolenceScore {var s, basicPath, <>score, globalMIDI, globalTimes, start, end,
 		{countPedalOn == 28} {{this.funcPage(14);}.defer;}
 		{countPedalOn == 34} {{this.funcPage(15);}.defer;}
 		//algoScore
-		{countPedalOn == 38} {{this.funcAlgoScore(1,18,tempo);}.defer; countPedalOff = countPedalOn-1;}
-		{countPedalOn == 39} {{this.funcAlgoScore(2,19,tempo); }.defer; countPedalOff = countPedalOn-1;}
-		{countPedalOn == 40} {{this.funcAlgoScore(3,20,tempo,2);}.defer; countPedalOff = countPedalOn-1;}
-		{countPedalOn == 41} {{this.funcAlgoScore(5,21,tempo);}.defer; countPedalOff = countPedalOn-1;}
-		{countPedalOn == 42} {{this.funcAlgoScore(6,22,tempo, 2);}.defer; countPedalOff = countPedalOn-1;}
-		{countPedalOn == 43} {{this.funcAlgoScore(8,23,tempo);}.defer; countPedalOff = countPedalOn-1;}
-		{countPedalOn == 44} {{this.funcAlgoScore(9,24,tempo);}.defer; countPedalOff = countPedalOn-1;}
-		{countPedalOn == 45} {{this.funcAlgoScore(10,25,tempo, 2);}.defer; countPedalOff = countPedalOn-1;}
-		{countPedalOn == 46} {{this.funcAlgoScore(12,26,tempo,3);}.defer; countPedalOff = countPedalOn-1;}
-		{countPedalOn == 47} {{this.funcAlgoScore(15,27,tempo,2);}.defer; countPedalOff = countPedalOn-1;}
-		{countPedalOn == 48} {{this.funcAlgoScore(17,28,tempo,1);}.defer; countPedalOff = countPedalOn-1;}
-		{countPedalOn == 49} {{this.funcAlgoScore(18,29,tempo,2);}.defer; countPedalOff = countPedalOn-1;}
-		{countPedalOn == 50} {{this.funcAlgoScore(20,30,tempo,2);}.defer; countPedalOff = countPedalOn-1;}
-		{countPedalOn == 51} {{this.funcAlgoScore(22,31,tempo,1);}.defer; countPedalOff = countPedalOn-1;}
-		{countPedalOn == 52} {{score.tagClose; this.funcAlgoScore(23,31,tempo,1);}.defer; countPedalOff = countPedalOn-1;}
-		{countPedalOn == 53} {{score.tagClose; this.funcAlgoScore(24,31,tempo,1);}.defer; countPedalOff = countPedalOn-1;}
-		{countPedalOn == 54} {{score.tagClose; this.funcAlgoScore(25,32,tempo,1,1);}.defer; this.partialNum(18); countPedalOff = countPedalOn-1;}
-		{countPedalOn == 55} {{score.tagClose; this.funcAlgoScore(26,32,tempo,1);}.defer; countPedalOff = countPedalOn-1;}
+		{countPedalOn == 38} {{this.funcAlgoScoreMIDI(1,18,tempo);}.defer; countPedalOff = countPedalOn-1;}
+		{countPedalOn == 39} {{this.funcAlgoScoreMIDI(2,19,tempo); }.defer; countPedalOff = countPedalOn-1;}
+		{countPedalOn == 40} {{this.funcAlgoScoreMIDI(3,20,tempo,2);}.defer; countPedalOff = countPedalOn-1;}
+		{countPedalOn == 41} {{this.funcAlgoScoreMIDI(5,21,tempo);}.defer; countPedalOff = countPedalOn-1;}
+		{countPedalOn == 42} {{this.funcAlgoScoreMIDI(6,22,tempo, 2);}.defer; countPedalOff = countPedalOn-1;}
+		{countPedalOn == 43} {{this.funcAlgoScoreMIDI(8,23,tempo);}.defer; countPedalOff = countPedalOn-1;}
+		{countPedalOn == 44} {{this.funcAlgoScoreMIDI(9,24,tempo);}.defer; countPedalOff = countPedalOn-1;}
+		{countPedalOn == 45} {{this.funcAlgoScoreMIDI(10,25,tempo, 2);}.defer; countPedalOff = countPedalOn-1;}
+		{countPedalOn == 46} {{this.funcAlgoScoreMIDI(12,26,tempo,3);}.defer; countPedalOff = countPedalOn-1;}
+		{countPedalOn == 47} {{this.funcAlgoScoreMIDI(15,27,tempo,2);}.defer; countPedalOff = countPedalOn-1;}
+		{countPedalOn == 48} {{this.funcAlgoScoreMIDI(17,28,tempo,1);}.defer; countPedalOff = countPedalOn-1;}
+		{countPedalOn == 49} {{this.funcAlgoScoreMIDI(18,29,tempo,2);}.defer; countPedalOff = countPedalOn-1;}
+		{countPedalOn == 50} {{this.funcAlgoScoreMIDI(20,30,tempo,2);}.defer; countPedalOff = countPedalOn-1;}
+		{countPedalOn == 51} {{this.funcAlgoScoreMIDI(22,31,tempo,1);}.defer; countPedalOff = countPedalOn-1;}
+		{countPedalOn == 52} {{score.tagClose; this.funcAlgoScoreMIDI(23,31,tempo,1);}.defer; countPedalOff = countPedalOn-1;}
+		{countPedalOn == 53} {{score.tagClose; this.funcAlgoScoreMIDI(24,31,tempo,1);}.defer; countPedalOff = countPedalOn-1;}
+		{countPedalOn == 54} {{score.tagClose; this.funcAlgoScoreMIDI(25,32,tempo,1,1);}.defer; this.partialNum(18); countPedalOff = countPedalOn-1;}
+		{countPedalOn == 55} {{score.tagClose; this.funcAlgoScoreMIDI(26,32,tempo,1);}.defer; countPedalOff = countPedalOn-1;}
 		{countPedalOn == 56} {{score.tagClose; this.partialNotes(7.17*(176/tempo),32,"c 3".notemidi,"c 6".notemidi, "F");}.defer; countPedalOff = countPedalOn-1;}
 		{countPedalOn == 57} {{score.tagClose; this.partialNotes(3.07*(176/tempo),32,"c 2".notemidi,"c 7".notemidi, "F");}.defer; countPedalOff = countPedalOn-1;}
 		{countPedalOn == 58} {{score.tagClose; this.partialNotes(6.42*(176/tempo),33,"c 2".notemidi,"c 7".notemidi, "P");}.defer; countPedalOff = countPedalOn-1;}
