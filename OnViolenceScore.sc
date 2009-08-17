@@ -1,4 +1,4 @@
-OnViolenceScore {var <>perfMode, headOut, adjScore, s, basicPath, <>score, globalMIDI, globalTimes, start, end, bufferTimes, selectPitch, buffType, algoTimes, stepPedal, <>chooseSamples, countPedalOn, countPedalOff,<>tempo=176, <>partials, <percglobalTimesGlob,<>midiout, partialTrig=0, document, bufferArr, <percArray, pedalOnOld, pedalOffOld, pedalSwitch, ccResponder;
+OnViolenceScore {var <>perfMode, headOut, adjScore, s, basicPath, <>score, globalMIDI, globalTimes, start, end, bufferTimes, selectPitch, buffType, algoTimes, <>stepPedal, <>chooseSamples, countPedalOn, countPedalOff,<>tempo=176, <>partials, <percglobalTimesGlob,<>midiout, partialTrig=0, document, bufferArr, <percArray, pedalOnOld, pedalOffOld, pedalSwitch, ccResponder;
 
 	*new {arg perfMode=\concert, headOut=0,adjScore=13.75;
 	^super.new.initOnViolenceScore(perfMode,headOut,adjScore);
@@ -49,6 +49,7 @@ OnViolenceScore {var <>perfMode, headOut, adjScore, s, basicPath, <>score, globa
 		MIDIIn.sysrt = { arg src, chan, val;  tempo = val; };
 		}, {
 		chooseSamples = Array.fill(26, {rrand(1,10)}); 
+		chooseSamples = chooseSamples-1;
 		});
 		
 		partials = PartialTracker(512, 5);  //a partial tracker
