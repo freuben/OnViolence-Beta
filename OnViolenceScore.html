@@ -5,12 +5,12 @@
 <meta http-equiv="Content-Style-Type" content="text/css">
 <title></title>
 <meta name="Generator" content="Cocoa HTML Writer">
-<meta name="CocoaVersion" content="949.46">
+<meta name="CocoaVersion" content="1138.47">
 <style type="text/css">
 p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 10.0px Monaco; color: #a8220e}
 p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 10.0px Monaco; min-height: 14.0px}
 p.p3 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; min-height: 12.0px}
-p.p4 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #bf0000}
+p.p4 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #a8220e; min-height: 12.0px}
 p.p5 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #a8220e}
 p.p6 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco}
 p.p7 {margin: 0.0px 0.0px 0.0px 0.0px; font: 10.0px Monaco}
@@ -24,33 +24,19 @@ span.s7 {font: 9.0px Monaco}
 </style>
 </head>
 <body>
-<p class="p1">//first connect sampler to IAC Driver using MIDIClient.destinations[0]<span class="Apple-converted-space"> </span></p>
-<p class="p2"><br></p>
 <p class="p1"><span class="s1">s.boot; </span>//boot the server</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="s2">MIDIIn</span><span class="s1">.allsources; </span>//start midi comunication</p>
 <p class="p2"><br></p>
 <p class="p1">//practice mode:</p>
 <p class="p2"><br></p>
-<p class="p1"><span class="s1">a = </span><span class="s2">OnViolenceScore</span><span class="s1">(</span><span class="s3">\practice</span><span class="s4">, </span><span class="s1">0, 13.75); </span>//start Score. args: perfMode, headOut, adjScore</p>
+<p class="p1"><span class="s1">a = </span><span class="s2">OnViolenceScore</span><span class="s1">(</span><span class="s3">\practice</span><span class="s4">)</span><span class="s1">; </span>//start Score. arg: perfMode</p>
 <p class="p3"><br></p>
-<p class="p4">//a.readyToStart;</p>
-<p class="p3"><br></p>
-<p class="p1"><span class="s1">a.displayScore(1); </span>//arg: page - start a new score from page 1</p>
-<p class="p3"><br></p>
-<p class="p5">//conect pedals:</p>
-<p class="p3"><br></p>
-<p class="p6">a.startPedals;</p>
-<p class="p5"><span class="s1">a.removePedals; </span>//switch pedals off</p>
-<p class="p3"><br></p>
-<p class="p5">//instead of midi pedal use keyboard "q", "a", "w", "s"</p>
-<p class="p6">a.keyboardPedal;</p>
-<p class="p5"><span class="s1">a.keyboardPedalOff; </span>//switch keyboard off</p>
+<p class="p4"><br></p>
 <p class="p3"><br></p>
 <p class="p3"><br></p>
 <p class="p5">//while practicing</p>
 <p class="p6">a.<span class="s5">displayPage</span>(12); <span class="s6">//go to page 12</span></p>
 <p class="p6">a.<span class="s5">displayPage</span>(30); <span class="s6">//go to page 30</span></p>
+<p class="p7"><span class="s7">a.</span>displayPage<span class="s7">(26);</span></p>
 <p class="p2"><br></p>
 <p class="p6">~tempo = 176;</p>
 <p class="p5">//this are the algo sections:</p>

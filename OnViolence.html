@@ -5,21 +5,21 @@
 <meta http-equiv="Content-Style-Type" content="text/css">
 <title></title>
 <meta name="Generator" content="Cocoa HTML Writer">
-<meta name="CocoaVersion" content="949.35">
+<meta name="CocoaVersion" content="949.46">
 <style type="text/css">
-p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #783a1d}
-p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #783a1d; min-height: 12.0px}
-p.p3 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #952e14}
+p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #663f23}
+p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #663f23; min-height: 12.0px}
+p.p3 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #783a1d}
 p.p4 {margin: 0.0px 0.0px 0.0px 0.0px; font: 10.0px Monaco; min-height: 14.0px}
 p.p5 {margin: 0.0px 0.0px 0.0px 0.0px; font: 10.0px Monaco}
 p.p6 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; min-height: 12.0px}
 p.p7 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco}
 span.s1 {font: 12.0px Helvetica}
-span.s2 {color: #0626af}
-span.s3 {color: #783a1d}
+span.s2 {color: #102da7}
+span.s3 {color: #663f23}
 span.s4 {color: #000000}
-span.s5 {color: #952e14}
-span.s6 {color: #556824}
+span.s5 {color: #783a1d}
+span.s6 {color: #5d652c}
 span.Apple-tab-span {white-space:pre}
 </style>
 </head>
@@ -61,7 +61,7 @@ span.Apple-tab-span {white-space:pre}
 <p class="p6"><br></p>
 <p class="p6"><br></p>
 <p class="p6"><br></p>
-<p class="p3">//Huddersfield-Cambridge setup - Now there is a Pan4 for buxtahude and and Pan2 for Parsifal...</p>
+<p class="p3">//Huddersfield-Cambridge setup<span class="Apple-converted-space"> </span></p>
 <p class="p7">(</p>
 <p class="p7">~violence.prepare(pianoOut: 0, metalOut: 4, grito1Out: 1, grito2Out: 2, grito3Out: 3, grito4Out:7, motorOut: 6, wagner1Out: 2, wagner2Out: 0, wagner3Out: 0, wagner4Out: 2, buxtaOut: 0, parsifalOut: 2); <span class="s5">//outs: piano, metal, grito1, grito2, grito3, grito4, motor,wagner1,wagner2,wagner3,wagner4,buxta,parsifal</span></p>
 <p class="p7">)</p>
@@ -69,13 +69,13 @@ span.Apple-tab-span {white-space:pre}
 <p class="p6"><br></p>
 <p class="p1"><span class="s4">~violence.mixer; </span>//global amplitude mixer</p>
 <p class="p6"><br></p>
-<p class="p1"><span class="s4">~violence.readyToStart(156, 0.13, 1); </span>//onsetThresh, page, pedalDown, pedalUp<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="s4">~violence.readyToStart(156, 0.13, 1); </span>//firstTempo, onsetThresh, page, pedalDown, pedalUp<span class="Apple-converted-space"> </span></p>
 <p class="p6"><br></p>
-<p class="p7">~violence.readyToStart(156, 0.13, <span class="s6">\pedal</span>, 51, 51);<span class="s3">//onsetThresh, page, pedalDown, pedalUp<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s4">~violence.readyToStart(156, 0.13, </span><span class="s6">\pedal</span><span class="s4">, 51, 51);</span>//firstTempo, onsetThresh, page, pedalDown, pedalUp</p>
 <p class="p6"><br></p>
-<p class="p7">~violence.readyToStart(156, 0.13, <span class="s6">\pedal</span>, 59, 59);<span class="s3">//onsetThresh, page, pedalDown, pedalUp<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s4">~violence.readyToStart(156, 0.13, </span><span class="s6">\pedal</span><span class="s4">, 59, 59);</span>//firstTempo, onsetThresh, page, pedalDown, pedalUp</p>
 <p class="p6"><br></p>
-<p class="p1"><span class="s4">~violence.readyToStart(156, 0.13, 16);</span>//onsetThresh, page =&gt; notice the change in onsetThresh<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="s4">~violence.readyToStart(156, 0.13, 16);</span>//firstTempo, onsetThresh, page =&gt; notice the change in onsetThresh<span class="Apple-converted-space"> </span></p>
 <p class="p6"><br></p>
 <p class="p7">~violence.remove; <span class="s3">//to stop</span></p>
 <p class="p6"><br></p>
