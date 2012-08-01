@@ -1,10 +1,10 @@
-OnViolenceMotor {var s, <out, basicPath, motor, sensor, <lowVal, <highVal, <leftVal, <rightVal, bendLow, bendHigh, newMacroArray1, newMacroArray2, arrA, arrB, pivot1, pivot2, step1, step2, thisArray1, thisArray2, <>direction1, <>direction2, oscNode, sensorVal1, sensorVal2, <>sensorLag1, <>sensorLag2, whichPedal, noteLow, noteHigh, <>volMotor, <synth1, <synth2; 
+OnViolenceMotor {var s, <out, basicPath, motor, sensor, <>lowVal, <>highVal, <>leftVal, <>rightVal, bendLow, bendHigh, newMacroArray1, newMacroArray2, arrA, arrB, pivot1, pivot2, step1, step2, thisArray1, thisArray2, <>direction1, <>direction2, oscNode, sensorVal1, sensorVal2, <>sensorLag1, <>sensorLag2, whichPedal, noteLow, noteHigh, <>volMotor, <synth1, <synth2, <>sensorWin, <slider, <window; 
 		
 	*new {arg outBus=0, vol=1, lowVal=43.276000976562, highVal=46.995998382568, leftVal=41.668201446533, rightVal=46.628700256348, pathName;
-		^super.new.initOnViolenceMotor(outBus, vol, lowVal, highVal, leftVal, rightVal);
+		^super.new.initOnViolenceMotor(outBus, vol, lowVal, highVal, leftVal, rightVal, pathName);
 	}
 	
-	initOnViolenceMotor {arg outBus=0, vol=1, valLow=43.276000976562, valHigh=46.995998382568, valLeft=41.668201446533,valRight=46.628700256348,pathName;
+	initOnViolenceMotor {arg outBus, vol, valLow, valHigh, valLeft,valRight,pathName;
 		var sensorPitch;
 		out = outBus;
 		volMotor = vol;
@@ -34,8 +34,8 @@ OnViolenceMotor {var s, <out, basicPath, motor, sensor, <lowVal, <highVal, <left
 	
 	readyToStart {
 
-	sensor.put(0, \lagging, 0, [\num, lowVal, \low, lowVal, \high, highVal, \id, 4, \lag, 0.5]);
-	sensor.put(1, \lagging, 0,  [\num, rightVal, \low, leftVal, \high, rightVal, \id, 5, \lag, 0.8]);
+	sensor.put(0, \lagging, 0, [\num, lowVal, \low, lowVal, \high, highVal, \id, 4, \lag, 0.5/4]);
+	sensor.put(1, \lagging, 0,  [\num, rightVal, \low, leftVal, \high, rightVal, \id, 5, \lag, 0.8/4]);
 
 	sensorLag1 = sensor.objects[0];
 	sensorLag2 = sensor.objects[1];
@@ -118,7 +118,7 @@ OnViolenceMotor {var s, <out, basicPath, motor, sensor, <lowVal, <highVal, <left
 				if( arrA[step1].notNil, {
 					direction1 = arrA[step1][2];
 					thisArray1 = arrA[step1];
-					'PIVOT1'.postln;
+					this.sliderPivot;
 					this.findPivot1(step1);
 				});
 			});
@@ -128,7 +128,7 @@ OnViolenceMotor {var s, <out, basicPath, motor, sensor, <lowVal, <highVal, <left
 				if( arrA[step1].notNil, {
 					direction1 = arrA[step1][2];
 					thisArray1 = arrA[step1];
-					'PIVOT1'.postln;
+					this.sliderPivot;
 					this.findPivot1(step1);
 				});
 			});
@@ -152,7 +152,6 @@ OnViolenceMotor {var s, <out, basicPath, motor, sensor, <lowVal, <highVal, <left
 				if( arrB[step2].notNil, {
 					direction2 = arrB[step2][2];
 					thisArray2 = arrB[step2];
-					'PIVOT2'.postln;
 					this.findPivot2(step2);
 				});	
 			});
@@ -162,7 +161,6 @@ OnViolenceMotor {var s, <out, basicPath, motor, sensor, <lowVal, <highVal, <left
 				if( arrB[step2].notNil, {
 					direction2 = arrB[step2][2];
 					thisArray2 = arrB[step2];
-					'PIVOT2'.postln;
 					this.findPivot2(step2);
 				});	
 			});
@@ -186,7 +184,7 @@ OnViolenceMotor {var s, <out, basicPath, motor, sensor, <lowVal, <highVal, <left
 	pedalLag {arg numPedal=1;	
 		var lagArray;
 		//pedal lags
-		lagArray = [[0.5, 0.8], [0.45714285714286, 0.71428571428571], [0.41428571428571, 0.62857142857143], [0.37142857142857, 0.54285714285714], [0.32857142857143, 0.45714285714286], [0.28571428571429, 0.37142857142857], [0.24285714285714, 0.28571428571429], [0.2, 0.2]];
+		lagArray = [[0.5, 0.8], [0.45714285714286, 0.71428571428571], [0.41428571428571, 0.62857142857143], [0.37142857142857, 0.54285714285714], [0.32857142857143, 0.45714285714286], [0.28571428571429, 0.37142857142857], [0.24285714285714, 0.28571428571429], [0.2, 0.2]]/4;
 			
 		case 
 		{numPedal < 5} {
@@ -200,9 +198,17 @@ OnViolenceMotor {var s, <out, basicPath, motor, sensor, <lowVal, <highVal, <left
 		
 		}
 	
-	oscRespNode {
+	oscRespNode {arg rectArr;
 	var cambio, oldNum1 = 0, oldNum2 = 0;
 	
+	rectArr ?? {rectArr = [-40, 260, 30, 360]};
+	window = Window("Sensor", (rectArr+40).asRect, border:false).background_(Color.white);
+	sensorWin = window.front;
+	sensorWin.alwaysOnTop = true;
+	slider = LevelIndicator(sensorWin, Rect(20,sensorWin.bounds.asArray.last-rectArr.last/2,rectArr[2],rectArr[3]));
+	slider.numTicks = 3;
+	slider.numMajorTicks = 3; 
+
 	//OSCresponderNode listens to id 4 and 5 
 	oscNode = OSCresponderNode(s.addr,'/tr',{arg time,responder,msg;
 		
@@ -210,6 +216,7 @@ OnViolenceMotor {var s, <out, basicPath, motor, sensor, <lowVal, <highVal, <left
 		{msg[2] == 4} {
 		if(oldNum1 != msg[3], {
 		sensorVal1 = msg[3];
+		{slider.value = sensorVal1.linlin(0,127,0,1);}.defer;
 		this.sensor1(sensorVal1);
 		this.sensor2(sensorVal1);
 		oldNum1 = msg[3]
@@ -232,6 +239,18 @@ OnViolenceMotor {var s, <out, basicPath, motor, sensor, <lowVal, <highVal, <left
 		});
 		}
 	}).add;	
+	}
+	
+	sliderPivot {
+	{
+	slider.critical = 1;
+	0.15.yield;
+	slider.critical = 0;
+	}.fork(AppClock);	
+	}
+	
+	vol {arg amp=1;
+	motor.set(\amp, amp);	
 	}
 
 

@@ -7,108 +7,111 @@
 <meta name="Generator" content="Cocoa HTML Writer">
 <meta name="CocoaVersion" content="1138.47">
 <style type="text/css">
-p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 10.0px Monaco; color: #a8220e}
+p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 10.0px Monaco; color: #d5100d}
 p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 10.0px Monaco; min-height: 14.0px}
-p.p3 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; min-height: 12.0px}
-p.p4 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #a8220e; min-height: 12.0px}
-p.p5 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #a8220e}
-p.p6 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco}
-p.p7 {margin: 0.0px 0.0px 0.0px 0.0px; font: 10.0px Monaco}
-span.s1 {color: #000000}
-span.s2 {color: #0013bb}
-span.s3 {color: #316f11}
-span.s4 {font: 9.0px Monaco; color: #000000}
-span.s5 {font: 10.0px Monaco}
-span.s6 {color: #a8220e}
-span.s7 {font: 9.0px Monaco}
+p.p3 {margin: 0.0px 0.0px 0.0px 0.0px; font: 10.0px Monaco}
+p.p4 {margin: 0.0px 0.0px 0.0px 0.0px; font: 10.0px Monaco; color: #a8220e}
+span.s1 {color: #737373}
+span.s2 {color: #000000}
+span.s3 {color: #132bc3}
+span.s4 {color: #a8220e}
+span.s5 {color: #0013bb}
+span.s6 {color: #316f11}
 </style>
 </head>
 <body>
-<p class="p1"><span class="s1">s.boot; </span>//boot the server</p>
+<p class="p1"><span class="s1">"perform"</span><span class="s2">.myScript.appleScript; </span>//script for performance</p>
 <p class="p2"><br></p>
-<p class="p1">//practice mode:</p>
+<p class="p3">s.bootAndMIDI;</p>
+<p class="p1">//eobody, setup:</p>
+<p class="p1">//1 - left pedal<span class="Apple-converted-space"> </span></p>
+<p class="p1">//2 - right pedal</p>
+<p class="p1">//3 - 3D mainCable</p>
+<p class="p1">//4 - 3D white</p>
+<p class="p1">//5 - 3D blue</p>
 <p class="p2"><br></p>
-<p class="p1"><span class="s1">a = </span><span class="s2">OnViolenceScore</span><span class="s1">(</span><span class="s3">\practice</span><span class="s4">)</span><span class="s1">; </span>//start Score. arg: perfMode</p>
-<p class="p3"><br></p>
-<p class="p4"><br></p>
-<p class="p3"><br></p>
-<p class="p3"><br></p>
-<p class="p5">//while practicing</p>
-<p class="p6">a.<span class="s5">displayPage</span>(12); <span class="s6">//go to page 12</span></p>
-<p class="p6">a.<span class="s5">displayPage</span>(30); <span class="s6">//go to page 30</span></p>
-<p class="p7"><span class="s7">a.</span>displayPage<span class="s7">(26);</span></p>
+<p class="p4">//practice mode:</p>
 <p class="p2"><br></p>
-<p class="p6">~tempo = 176;</p>
-<p class="p5">//this are the algo sections:</p>
-<p class="p7">a.funcAlgoScoreMIDI(1,18,~tempo);<span class="Apple-converted-space"> </span></p>
-<p class="p7">a.funcAlgoScoreMIDI(2,19,~tempo);<span class="Apple-converted-space"> </span></p>
-<p class="p7">a.funcAlgoScoreMIDI(3,20,~tempo,2);</p>
+<p class="p1"><span class="s2">a = </span><span class="s3">OnViolenceScore</span><span class="s2">(0,1,2,55,71,49,31); </span>//start Score. arg: headOut, motorOur, motorVol</p>
 <p class="p2"><br></p>
-<p class="p7">a.funcAlgoScoreMIDI(5,21,~tempo);</p>
-<p class="p7">a.funcAlgoScoreMIDI(6,22,~tempo, 2);</p>
-<p class="p7">a.funcAlgoScoreMIDI(8,23,~tempo);</p>
-<p class="p7">a.funcAlgoScoreMIDI(9,24,~tempo);</p>
-<p class="p7">a.funcAlgoScoreMIDI(10,25,~tempo, 2);</p>
+<p class="p4">//while practicing</p>
+<p class="p3">a.displayPage(12); <span class="s4">//go to page 12</span></p>
+<p class="p3">a.displayPage(30); <span class="s4">//go to page 30</span></p>
+<p class="p3">a.displayPage(26);</p>
 <p class="p2"><br></p>
-<p class="p7">a.funcAlgoScoreMIDI(12,26,~tempo,3);</p>
-<p class="p7">a.funcAlgoScoreMIDI(15,27,~tempo,2);</p>
-<p class="p7">a.funcAlgoScoreMIDI(17,28,~tempo,1);</p>
-<p class="p7">a.funcAlgoScoreMIDI(18,29,~tempo,2);</p>
-<p class="p7">a.funcAlgoScoreMIDI(20,30,~tempo,2);</p>
-<p class="p7">a.funcAlgoScoreMIDI(22,31,~tempo,1);</p>
-<p class="p7">a.funcAlgoScoreMIDI(23,31,~tempo,1);</p>
+<p class="p3">~tempo = 176;</p>
+<p class="p4">//this are the algo sections:</p>
+<p class="p3">a.funcAlgoScoreMIDI(1,18,~tempo);<span class="Apple-converted-space"> </span></p>
+<p class="p3">a.funcAlgoScoreMIDI(2,19,~tempo);<span class="Apple-converted-space"> </span></p>
+<p class="p3">a.funcAlgoScoreMIDI(3,20,~tempo,2);</p>
 <p class="p2"><br></p>
-<p class="p1">//practice makes perfect</p>
+<p class="p3">a.funcAlgoScoreMIDI(5,21,~tempo);</p>
+<p class="p3">a.funcAlgoScoreMIDI(6,22,~tempo, 2);</p>
+<p class="p3">a.funcAlgoScoreMIDI(8,23,~tempo);</p>
+<p class="p3">a.funcAlgoScoreMIDI(9,24,~tempo);</p>
+<p class="p3">a.funcAlgoScoreMIDI(10,25,~tempo, 2);</p>
 <p class="p2"><br></p>
-<p class="p6"><span class="s5">a.</span>practiceAlgoScore<span class="s5">(1);<span class="Apple-converted-space"> </span></span></p>
-<p class="p6"><span class="s5">a.</span>practiceAlgoScore<span class="s5">(2);<span class="Apple-converted-space"> </span></span></p>
-<p class="p6"><span class="s5">a.</span>practiceAlgoScore<span class="s5">(3);</span></p>
-<p class="p6"><span class="s5">a.</span>practiceAlgoScore<span class="s5">(4);</span></p>
-<p class="p6"><span class="s5">a.</span>practiceAlgoScore<span class="s5">(16);</span></p>
-<p class="p3"><br></p>
-<p class="p7"><span class="s7">a.</span>displayPage<span class="s7">(1);</span></p>
-<p class="p6">a.funcPage(2);</p>
+<p class="p3">a.funcAlgoScoreMIDI(12,26,~tempo,3);</p>
+<p class="p3">a.funcAlgoScoreMIDI(15,27,~tempo,2);</p>
+<p class="p3">a.funcAlgoScoreMIDI(17,28,~tempo,1);</p>
+<p class="p3">a.funcAlgoScoreMIDI(18,29,~tempo,2);</p>
+<p class="p3">a.funcAlgoScoreMIDI(20,30,~tempo,2);</p>
+<p class="p3">a.funcAlgoScoreMIDI(22,31,~tempo,1);</p>
+<p class="p3">a.funcAlgoScoreMIDI(23,31,~tempo,1);</p>
 <p class="p2"><br></p>
-<p class="p1">//midi realization</p>
-<p class="p7">a.midiout.latency = 0.0;</p>
+<p class="p4">//practice makes perfect</p>
 <p class="p2"><br></p>
-<p class="p7">~tempo = 176;</p>
-<p class="p7">a.funcAlgoScoreMIDI(1,18,~tempo);<span class="Apple-converted-space"> </span></p>
-<p class="p7">a.funcAlgoScoreMIDI(2,19,~tempo);<span class="Apple-converted-space"> </span></p>
-<p class="p7">a.funcAlgoScoreMIDI(3,20,~tempo,2);</p>
+<p class="p3">a.practiceAlgoScore(1);<span class="Apple-converted-space"> </span></p>
+<p class="p3">a.practiceAlgoScore(2);<span class="Apple-converted-space"> </span></p>
+<p class="p3">a.practiceAlgoScore(3);</p>
+<p class="p3">a.practiceAlgoScore(4);</p>
+<p class="p3">a.practiceAlgoScore(16);</p>
 <p class="p2"><br></p>
-<p class="p7">a.funcAlgoScoreMIDI(5,21,~tempo);</p>
-<p class="p7">a.funcAlgoScoreMIDI(6,22,~tempo, 2);</p>
-<p class="p7">a.funcAlgoScoreMIDI(8,23,~tempo);</p>
-<p class="p7">a.funcAlgoScoreMIDI(9,24,~tempo);</p>
-<p class="p7">a.funcAlgoScoreMIDI(10,25,~tempo, 2);</p>
+<p class="p3">a.displayPage(1);</p>
+<p class="p3">a.funcPage(2);</p>
 <p class="p2"><br></p>
-<p class="p7">a.funcAlgoScoreMIDI(12,26,~tempo,3);</p>
-<p class="p7">a.funcAlgoScoreMIDI(15,27,~tempo,2);</p>
-<p class="p7">a.funcAlgoScoreMIDI(17,28,~tempo,1);</p>
-<p class="p7">a.funcAlgoScoreMIDI(18,29,~tempo,2);</p>
-<p class="p7">a.funcAlgoScoreMIDI(20,30,~tempo,2);</p>
-<p class="p7">a.funcAlgoScoreMIDI(22,31,~tempo,1);</p>
-<p class="p7">a.funcAlgoScoreMIDI(23,31,~tempo,1);</p>
+<p class="p4">//midi realization</p>
+<p class="p3">a.midiout.latency = 0.0;</p>
 <p class="p2"><br></p>
-<p class="p7">a.funcAlgoScoreMIDI(24,31,~tempo,1);</p>
-<p class="p7">a.funcAlgoScoreMIDI(25,31,~tempo,1);</p>
-<p class="p7">a.funcAlgoScoreMIDI(26,31,~tempo,1);</p>
+<p class="p3">~tempo = 176;</p>
+<p class="p3">a.funcAlgoScoreMIDI(1,18,~tempo);<span class="Apple-converted-space"> </span></p>
+<p class="p3">a.funcAlgoScoreMIDI(2,19,~tempo);<span class="Apple-converted-space"> </span></p>
+<p class="p3">a.funcAlgoScoreMIDI(3,20,~tempo,2);</p>
 <p class="p2"><br></p>
-<p class="p7">a.remove;</p>
+<p class="p3">a.funcAlgoScoreMIDI(5,21,~tempo);</p>
+<p class="p3">a.funcAlgoScoreMIDI(6,22,~tempo, 2);</p>
+<p class="p3">a.funcAlgoScoreMIDI(8,23,~tempo);</p>
+<p class="p3">a.funcAlgoScoreMIDI(9,24,~tempo);</p>
+<p class="p3">a.funcAlgoScoreMIDI(10,25,~tempo, 2);</p>
 <p class="p2"><br></p>
-<p class="p1">//concert version</p>
+<p class="p3">a.funcAlgoScoreMIDI(12,26,~tempo,3);</p>
+<p class="p3">a.funcAlgoScoreMIDI(15,27,~tempo,2);</p>
+<p class="p3">a.funcAlgoScoreMIDI(17,28,~tempo,1);</p>
+<p class="p3">a.funcAlgoScoreMIDI(18,29,~tempo,2);</p>
+<p class="p3">a.funcAlgoScoreMIDI(20,30,~tempo,2);</p>
+<p class="p3">a.funcAlgoScoreMIDI(22,31,~tempo,1);</p>
+<p class="p3">a.funcAlgoScoreMIDI(23,31,~tempo,1);</p>
 <p class="p2"><br></p>
-<p class="p1"><span class="s1">a = </span><span class="s2">OnViolenceScore</span><span class="s1">(</span><span class="s3">\concert</span><span class="s4">, </span><span class="s1">0, 13.75); </span>//start Score. args: perfMode, headOut, adjScore</p>
+<p class="p3">a.funcAlgoScoreMIDI(24,31,~tempo,1);</p>
+<p class="p3">a.funcAlgoScoreMIDI(25,31,~tempo,1);</p>
+<p class="p3">a.funcAlgoScoreMIDI(26,31,~tempo,1);</p>
 <p class="p2"><br></p>
-<p class="p1">//starts MIDI pedals and comunication with other computer</p>
-<p class="p7">a.startPedals;</p>
+<p class="p3">a.remove;</p>
 <p class="p2"><br></p>
-<p class="p1">//ones message is recived:</p>
-<p class="p7">a.readyToStart;</p>
+<p class="p1"><span class="s1">"finish"</span><span class="s2">.myScript.appleScript; </span>//script after performance</p>
 <p class="p2"><br></p>
-<p class="p1">//at the end of performance - remove score and comunication</p>
-<p class="p7">a.remove</p>
+<p class="p4">//concert version</p>
+<p class="p2"><br></p>
+<p class="p4"><span class="s2">a = </span><span class="s5">OnViolenceScore</span><span class="s2">(</span><span class="s6">\concert</span><span class="s2">, 0, 13.75); </span>//start Score. args: perfMode, headOut, adjScore</p>
+<p class="p2"><br></p>
+<p class="p4">//starts MIDI pedals and comunication with other computer</p>
+<p class="p3">a.startPedals;</p>
+<p class="p2"><br></p>
+<p class="p4">//ones message is recived:</p>
+<p class="p3">a.readyToStart;</p>
+<p class="p2"><br></p>
+<p class="p4">//at the end of performance - remove score and comunication</p>
+<p class="p3">a.remove</p>
 <p class="p2"><br></p>
 </body>
 </html>

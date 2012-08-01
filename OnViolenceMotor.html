@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<title></title>
+<meta name="Generator" content="Cocoa HTML Writer">
+<meta name="CocoaVersion" content="1138.47">
+<style type="text/css">
+p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #d5100d}
+p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; min-height: 12.0px}
+p.p3 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco}
+p.p4 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #d5100d; min-height: 12.0px}
+span.s1 {color: #132bc3}
+span.s2 {color: #1b39f5}
+span.s3 {color: #008326}
+span.s4 {color: #d5100d}
+span.Apple-tab-span {white-space:pre}
+</style>
+</head>
+<body>
+<p class="p1">//eobody, setup:</p>
+<p class="p1">//1 - left pedal<span class="Apple-converted-space"> </span></p>
+<p class="p1">//2 - right pedal</p>
+<p class="p1">//3 - 3D mainCable</p>
+<p class="p1">//4 - 3D white</p>
+<p class="p1">//5 - 3D blue</p>
+<p class="p2"><br></p>
+<p class="p3">s.bootAndMIDI;</p>
+<p class="p2"><br></p>
+<p class="p3">o = <span class="s1">OnViolenceMotor</span>(0,2,55,73,49,31);</p>
+<p class="p2"><br></p>
+<p class="p4"><br></p>
+<p class="p3">(</p>
+<p class="p3"><span class="s2">var</span> pedalNum=1, src= -1927836118;<span class="Apple-tab-span">	</span></p>
+<p class="p3"><span class="s2">var</span> number1, number2;</p>
+<p class="p2"><br></p>
+<p class="p3"><span class="s1">MIDIdef</span>.cc(<span class="s3">\pedal1</span>, {<span class="s2">arg</span> val;<span class="Apple-converted-space"> </span></p>
+<p class="p3"><span class="Apple-tab-span">	</span>if(val == 0, {o.pedalOff;});</p>
+<p class="p3"><span class="Apple-tab-span">	</span>}, 1, srcID: src);<span class="Apple-converted-space"> </span></p>
+<p class="p3"><span class="s1">MIDIdef</span>.cc(<span class="s3">\pedal2</span>, {<span class="s2">arg</span> val;<span class="Apple-converted-space"> </span></p>
+<p class="p3"><span class="Apple-tab-span">	</span>if(val == 0, {o.pedalOn(pedalNum); pedalNum = pedalNum + 1});</p>
+<p class="p3"><span class="Apple-tab-span">	</span>}, 2, srcID: src);</p>
+<p class="p2"><span class="Apple-tab-span">	</span></p>
+<p class="p3"><span class="s1">MIDIdef</span>.cc(<span class="s3">\sensorUp</span>, {<span class="s2">arg</span> val;<span class="Apple-converted-space"> </span></p>
+<p class="p3"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>case</p>
+<p class="p3"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>{val &lt; o.lowVal} {number2 = o.lowVal}</p>
+<p class="p3"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>{val &gt; o.highVal} {number2 = o.highVal}</p>
+<p class="p3"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>{(val &gt;= o.lowVal).and(val &lt;= o.highVal)} {number2 = val};</p>
+<p class="p3"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>o.sensorLag1.set(<span class="s3">\num</span>, number2);</p>
+<p class="p3"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>val.postln;</p>
+<p class="p3"><span class="Apple-tab-span">	</span>}, 4, srcID: src);</p>
+<p class="p3"><span class="s1">MIDIdef</span>.cc(<span class="s3">\sensorSide</span>, {<span class="s2">arg</span> val;<span class="Apple-converted-space"> </span></p>
+<p class="p3"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>case</p>
+<p class="p3"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>{val &lt; o.leftVal} {number1 = o.leftVal}</p>
+<p class="p3"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>{val &gt; o.rightVal} {number1 = o.rightVal}</p>
+<p class="p3"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>{(val &gt;= o.leftVal).and(val &lt;= o.rightVal)} {number1 = val};</p>
+<p class="p3"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>o.sensorLag2.set(<span class="s3">\num</span>, number1);</p>
+<p class="p3"><span class="Apple-tab-span">	</span>}, 5, srcID: src);</p>
+<p class="p3">)</p>
+<p class="p2"><br></p>
+<p class="p3">o.lowVal = 55;</p>
+<p class="p3">o.lowVal = 70;</p>
+<p class="p1">//sensors:</p>
+<p class="p3">o.sensorLag1.set(<span class="s3">\lag</span>, 0.05); <span class="s4">//sensor lag</span></p>
+<p class="p3">o.sensorLag2.set(<span class="s3">\lag</span>, 0.05); <span class="s4">//sensor lag</span></p>
+<p class="p2"><br></p>
+<p class="p3">o.window.visible = false;</p>
+<p class="p3">o.window.visible = true;</p>
+<p class="p2"><br></p>
+<p class="p3">o.vol(2);</p>
+<p class="p2"><br></p>
+<p class="p3"><span class="s1">MIDIdef</span>.freeAll;</p>
+<p class="p2"><br></p>
+<p class="p3">o.pedalOn(1);</p>
+<p class="p2"><br></p>
+<p class="p3">o.slider.free;</p>
+<p class="p2"><br></p>
+<p class="p3">o.sensorLag1.set(<span class="s3">\num</span>, 127);</p>
+<p class="p3">o.sensorLag2.set(<span class="s3">\num</span>, 0);</p>
+<p class="p2"><br></p>
+<p class="p3">o.sensorLag1.set(<span class="s3">\num</span>, 0);</p>
+<p class="p2"><br></p>
+<p class="p3">o.pedalOff;</p>
+<p class="p2"><br></p>
+<p class="p3">o.pedalOn(2);</p>
+<p class="p2"><br></p>
+<p class="p3">o.sensorLag1.set(<span class="s3">\num</span>, 127);</p>
+<p class="p2"><br></p>
+<p class="p3">o.sensorLag1.set(<span class="s3">\num</span>, 0);</p>
+<p class="p2"><br></p>
+<p class="p3">o.pedalOff;</p>
+<p class="p2"><br></p>
+<p class="p2"><br></p>
+<p class="p3">o.pedalOn(3);</p>
+<p class="p2"><br></p>
+<p class="p3">o.pedalOff;</p>
+<p class="p2"><br></p>
+</body>
+</html>

@@ -1,18 +1,20 @@
-OnViolenceScore {var <>perfMode, headOut, adjScore, s, basicPath, <>score, globalMIDI, globalTimes, start, end, bufferTimes, selectPitch, buffType, algoTimes, <>stepPedal, <>chooseSamples, countPedalUp, countPedalDown,<>tempo=176, <>partials, <percglobalTimesGlob, partialTrig=0, document, <>bufferArr, <percArray, pedalUpOld, pedalDownOld, ccResponder, <>node, <>rightWin=1, clock, motorSound;
+OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, adjScore, s, basicPath, <>score, globalMIDI, globalTimes, start, end, bufferTimes, selectPitch, buffType, algoTimes, <>stepPedal, <>chooseSamples, countPedalUp, countPedalDown,<>tempo=176, <>partials, <percglobalTimesGlob, partialTrig=0, document, <>bufferArr, <percArray, pedalUpOld, pedalDownOld, ccResponder, <>node, <>rightWin=1, clock, <motorSound, <>src;
 
-	*new {arg perfMode=\concert, headOut=0,adjScore= -11.7;
-	^super.new.initOnViolenceScore(perfMode,headOut,adjScore);
+	*new {arg headOut=0, motorOut=0, motorVol=2, lowVal=40, highVal=50, leftVal=49, rightVal=31, adjScore= -11.7, src;
+	^super.new.initOnViolenceScore(headOut, motorOut, motorVol, lowVal, highVal, leftVal, rightVal, adjScore, src);
 	}
 	
-	initOnViolenceScore {arg modePerf=\concert,outHead=0,scoreAdj= -11.7;
+	initOnViolenceScore {arg outHead, outMotor, volMotor, lowVal, highVal, leftVal, rightVal,  scoreAdj, srcID;
 		//arguments to variables
-		perfMode = modePerf;
 		headOut = outHead;
+		motorOut = outMotor;
+		motorVol = volMotor;
 		adjScore = scoreAdj;
-		
+		src = srcID;
+		src ?? {src = -1927836118};
 		s = Server.default;
 		clock = AppClock;
-		basicPath = Document.current.path.dirname;
+		basicPath =  Document.standardizePath("~/Library/Application Support/SuperCollider/Extensions/FedeClasses/OnViolence/");
 		bufferArr = [Buffer.read(s, basicPath ++ "/AlgoScore/samples/hihat.wav"), 
 		Buffer.read(s, basicPath ++ "/AlgoScore/samples/woodblock.wav"), 
 		Buffer.read(s, basicPath ++ "/AlgoScore/samples/ride.wav"),
@@ -26,56 +28,29 @@ OnViolenceScore {var <>perfMode, headOut, adjScore, s, basicPath, <>score, globa
 		Buffer.read(s, basicPath ++ "/AlgoScore/samples/crash.aif"),
 		Buffer.read(s, basicPath ++ "/AlgoScore/samples/ride_open.wav")];
 		
-		{node = NodeProxy.audio(s, 2);
-		node.play(headOut);
-		0.1.yield;
-		node.put(0, \synthPiano, extraArgs:[\note, rrand(60,80), \dur, 0.01,\amp,0]);
-		node.put(1, \headmonitor, extraArgs:[\bufnum, bufferArr[0].bufnum, \vol,0]);
-		0.5.yield;
-		{this.displayScore(1);}.defer;
-		}.fork;
-		
-		if(perfMode == \concert, {
-		chooseSamples = [];
-		//recive data through midi from computer 2
-		//MIDIIn.noteOn = { arg src, chan, num, vel;  chooseSamples = chooseSamples.add(vel.postln); };
-//		MIDIIn.noteOff = { arg src, chan, num, vel; 	
-//			case
-//			{num == 0} {{this.funcPage(vel);}
-//			{num == 1} {countPedalUp = vel;}
-//			{num == 2} {countPedalDown = vel;};
-//		};
-//			
-//		MIDIIn.polytouch = { arg src, chan, num, vel; 	
-//			case
-//			{num == 1} {this.readyToStart;}
-//			{num == 2} {{this.displayScore(vel,adjScore);}.defer}
-//			{num == 3} {this.remove};
-//		};
-//		
-//		MIDIIn.sysrt = { arg src, chan, val;  tempo = val; };
-		}, {
-		chooseSamples = Array.fill(26, {rrand(1,10)}); 
-		chooseSamples = chooseSamples-1;
-		
-		motorSound = OnViolenceMotor(0,1);
-		});
-		
 		partials = NodePT(512, 5);  //a partial tracker
 		
 		percArray = Array.fill(7, {rrand(0,9)}); //random numbers for rhythmic (clusters) sections
 		
 		//data for rythmic sections
 		percglobalTimesGlob = (basicPath ++ "/data/AlgoScore/percTimes.rtf").loadPath;
-
-	}
-	
-	readyToStart {	
-	
-		if(chooseSamples == [], {'ERROR: Array version not reciverd from other computer'.postln}, {chooseSamples = chooseSamples-1;});
-		//MIDIIn.noteOn = nil;
 		
-				
+		{node = NodeProxy.audio(s, 2);
+		node.play(headOut);
+		0.1.yield;
+		node.put(0, \synthPiano, extraArgs:[\note, rrand(60,80), \dur, 0.01,\amp,0]);
+		node.put(1, \headmonitor, extraArgs:[\bufnum, bufferArr[0].bufnum, \vol,0]);
+		0.5.yield;
+		this.displayScore(1);
+		0.1.yield;
+		
+		chooseSamples = Array.fill(26, {rrand(1,10)}); 
+		chooseSamples = chooseSamples-1;
+		
+		motorSound = OnViolenceMotor(motorOut, motorVol, lowVal, highVal, leftVal, rightVal);
+		
+		}.fork(clock);
+
 	}
 	
 	pageFunc {arg page=1;
@@ -106,25 +81,27 @@ OnViolenceScore {var <>perfMode, headOut, adjScore, s, basicPath, <>score, globa
 		partials.startsynth(1); //use AudioIn to track loadest partials
 		if(chooseSamples != [], {score = AlgorithmicScore.screenBounds;});
 		this.funcPage(page);
-		score.w.view.keyDownAction = {arg view, char, modifiers; 
+	 	
+	 	{
+		0.2.yield;
+	 	score.click4(winAdd: 0, leftWin: 20, scaleSize:0.4, name:"pedal");
+		this.rightWin = 1.2;
+		0.2.yield;
+		score.w5.alwaysOnTop = true;
+		score.w5.view.keyDownAction = {arg view, char, modifiers; 
 		case
-		{char == $p} {}
+		{char == $p} {"Go to page".postln;}
 		{char == $q} {this.pedalFwd}
 		{char == $a} {this.pedalBck}
 		
 		{char == $w} {this.pedalHigh}
 		{char == $s} {this.pedalLow}
-		 };
-	 	
-	 	score.click4(winAdd: 0, leftWin: 20, scaleSize:0.4, name:"pedal");
-		this.rightWin = 1.2;
-		{0.2.yield;
-		{score.w5.alwaysOnTop;}.defer;
+		 };	
 		0.2.yield;
 		this.startPedals;
-		2.6.yield;
+		0.5.yield;
 		this.getPartials;
-		}.fork;
+		}.fork(clock);
 	
 	}
 	
@@ -190,7 +167,7 @@ OnViolenceScore {var <>perfMode, headOut, adjScore, s, basicPath, <>score, globa
 	
 	funcSample {arg sample;
 		var pitchData;
-		pitchData = (basicPath ++ "/AlgoScore/data/pitchData.rtf").loadPath[sample-1];
+		pitchData = (basicPath ++ "/data/AlgoScore/pitchData.rtf").loadPath[sample-1];
 		
 		globalMIDI = pitchData[0];
 		globalTimes = pitchData[1]; 
@@ -227,12 +204,19 @@ OnViolenceScore {var <>perfMode, headOut, adjScore, s, basicPath, <>score, globa
 		{score.image((basicPath ++ "/AlgoScore/score/onviolencescore" ++ page.asString ++ ".jpg"), 1.1, -10);}.defer;
 		stepPedal = page;
 		this.pageFunc(page);
+		if(motorSound.notNil, {
+		if(page < 16, {
+		{if(motorSound.window.visible.not, {motorSound.window.visible = true;});}.defer; 
+		}, {
+		{if(motorSound.window.visible, {motorSound.window.visible = false;});}.defer;
+		});	
+		});
 	}
 
 	//use percussion sounds as triggers
 	funcAlgoScore {arg sample=1,page=1, tempo=176, repeat=1,pagePartial=0;
 		var step=0, color, tempo2, sampleEnd;
-		{ 
+		{
 		partialTrig = 1;
 		sampleEnd = sample;
 		repeat.do({
@@ -268,8 +252,12 @@ OnViolenceScore {var <>perfMode, headOut, adjScore, s, basicPath, <>score, globa
 		//send midi instead of using percussion sounds
 	funcAlgoScoreMIDI {arg sample=1,page=1, tempo=176, repeat=1,pagePartial=0;
 		var step=0, color, tempo2, sampleEnd, bufferTimesMIDI,pattMIDI;
+		
 		bufferTimesMIDI = [ 0.025, 0.039185800697256, 0.061421079051404, 0.096273366492749, 0.15090195807355, 0.21139096075449, 0.33134096229308, 0.51935443645014, 0.81405277751885, 1.2759723958761, 2 ];
 		pattMIDI = Pseq((0,1..16), inf).asStream;
+		
+		{if(motorSound.window.visible, {motorSound.window.visible = false;});}.defer;
+
 		{ 
 		partialTrig = 1;
 		sampleEnd = sample;
@@ -405,7 +393,12 @@ OnViolenceScore {var <>perfMode, headOut, adjScore, s, basicPath, <>score, globa
 		
 		if(countPedalDown != pedalDownOld, {
 		'pedalDown '.post; countPedalDown.postln;
+		
 		if((38..59).includes(countPedalDown), {countPedalUp = countPedalDown+5;});
+		
+
+		if((2..36).includes(countPedalDown), {motorSound.pedalOff;});
+		
 		case
 		{countPedalDown == 51} {this.funcPerc(0, percArray[0], tempo);}
 		{countPedalDown == 52} {this.funcPerc(1, percArray[1], tempo);}
@@ -428,6 +421,12 @@ OnViolenceScore {var <>perfMode, headOut, adjScore, s, basicPath, <>score, globa
 		'pedalUp '.post; countPedalUp.postln;
 		
 		if((43..100).includes(countPedalUp), {(countPedalDown = countPedalUp-6);});
+		
+		case
+		{(4..7).includes(countPedalUp)} {motorSound.pedalOn(countPedalUp-3);}
+		{(9..19).includes(countPedalUp)} {motorSound.pedalOn(countPedalUp-4);}
+		{(21..40).includes(countPedalUp)} {motorSound.pedalOn(countPedalUp-5);};
+		
 		case
 		{countPedalUp == 1} {this.funcPage(2);}
 		{countPedalUp == 2} {this.funcPage(3);}
@@ -499,37 +498,33 @@ OnViolenceScore {var <>perfMode, headOut, adjScore, s, basicPath, <>score, globa
 		//countPedalDown.postln;
 		}
 	
-	startPedals {
-		if(perfMode == \concert, {
-		
-		//ebody...
-		//ccResponder = CCResponder({ |src,chan,num,value|
-//		if(value == 0, {
-//		case
-//		{num == 1} {this.pedalLow}
-//		{num == 2} {this.pedalHigh};
-//		});
-//		});
-	
-		}, {
-		
-		//ebody...
-		ccResponder = CCResponder({ |src,chan,num,value|
-		case
-		{(num == 1).and(value == 0)} {this.pedalLow; this.score.click4Note(0.05);}
-		{(num == 2).and(value == 0)} {this.pedalHigh; this.score.click4Note(0.05);};
-		
-		});
-		});
-		
+	startPedals {var pedalNum=1, number1, number2;
+
+		MIDIdef.cc(\pedal1, {arg val; 
+			if(val == 0, {this.pedalLow; this.score.click4Note(0.05);});
+			}, 1, srcID: src); 
+		MIDIdef.cc(\pedal2, {arg val; 
+			if(val == 0, {this.pedalHigh; this.score.click4Note(0.05);});
+			}, 2, srcID: src);
+			
+		MIDIdef.cc(\sensorUp, {arg val; 
+				case
+				{val < motorSound.lowVal} {number2 = motorSound.lowVal}
+				{val > motorSound.highVal} {number2 = motorSound.highVal}
+				{(val >= motorSound.lowVal).and(val <= motorSound.highVal)} {number2 = val};
+				motorSound.sensorLag1.set(\num, number2);
+			}, 4, srcID: src);
+		MIDIdef.cc(\sensorSide, {arg val; 
+				case
+					{val < motorSound.leftVal} {number1 = motorSound.leftVal}
+					{val > motorSound.rightVal} {number1 = motorSound.rightVal}
+					{(val >= motorSound.leftVal).and(val <= motorSound.rightVal)} {number1 = val};
+				motorSound.sensorLag2.set(\num, number1);
+			}, 5, srcID: src);	
 	}
 	
 	removePedals {
-	if(perfMode == \concert, {
-	ccResponder.remove;
-	}, {
-	ccResponder.remove;
-	});
+	MIDIdef.freeAll;
 	}
 
 	//turns keyboard on instead of midi pedal
