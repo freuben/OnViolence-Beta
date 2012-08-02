@@ -1,11 +1,10 @@
-OnViolence {var <>audioIn, s, <>ampIn, midiOut, offset, funcRec, d, newMacroArray, newMacroArray2, amplitude, <>tempo=176, countGlob, <>stepGlob, notes, <>pedalOffGlob, <>pedalOnGlob, gap, <>piano, osc, oscMax, <>volScream1, <>volScream2, <>volScream3, <>volScream4, <>volMetal, <>volMotor, <>volWagner1,<>volWagner2, <>volWagner3, <>volWagner4, <>volBuxta, <>volParsifal, <>sensorVal1=0, <>sensorVal2=63, <>grito1, <>grito2,<>grito3,<>grito4, <>motor, <>metal, <>wagner1,<>wagner2, <>wagner3,<>wagner4,<>buxtahude,<>parsifal, pedalOn, pedalOff, tempoLock, metalOn, sensor, sensor1, sensor2, sensorLag1, sensorLag2, bend1, bend2, lowVal=43.276000976562, highVal=46.995998382568, leftVal=41.668201446533,basicPath, rightVal=46.628700256348, <>algoVersion, <>rrandArray, differ, tempoStart=0,stepTempo=0,wagner1MIDITime, wagner1MIDINotes, wagner1MIDIVel, wagner1MIDIEnd,wagner2MIDITime, wagner2MIDINotes, wagner2MIDIVel, wagner2MIDIEnd,wagner3MIDITime, wagner3MIDINotes, wagner3MIDIVel, wagner3MIDIEnd,wagner4MIDITime, wagner4MIDINotes, wagner4MIDIVel, wagner4MIDIEnd,document, <>bufferArr, <>randBuffArr;
+OnViolence {var <>audioIn, s, <>ampIn, midiOut, funcRec, d, newMacroArray, newMacroArray2, amplitude, <>tempo=176, countGlob, <>stepGlob, notes, <>pedalOffGlob, <>pedalOnGlob, gap, <>piano, osc, oscMax, <>volScream1, <>volScream2, <>volScream3, <>volScream4, <>volMetal, <>volMotor, <>volWagner1,<>volWagner2, <>volWagner3, <>volWagner4, <>volBuxta, <>volParsifal, <>sensorVal1=0, <>sensorVal2=63, <>grito1, <>grito2,<>grito3,<>grito4, <>motor, <>metal, <>wagner1,<>wagner2, <>wagner3,<>wagner4,<>buxtahude,<>parsifal, pedalOn, pedalOff, tempoLock, metalOn, sensor, sensor1, sensor2, sensorLag1, sensorLag2, bend1, bend2, lowVal=43.276000976562, highVal=46.995998382568, leftVal=41.668201446533,basicPath, rightVal=46.628700256348, <>algoVersion, <>rrandArray, differ, tempoStart=0,stepTempo=0,wagner1MIDITime, wagner1MIDINotes, wagner1MIDIVel, wagner1MIDIEnd,wagner2MIDITime, wagner2MIDINotes, wagner2MIDIVel, wagner2MIDIEnd,wagner3MIDITime, wagner3MIDINotes, wagner3MIDIVel, wagner3MIDIEnd,wagner4MIDITime, wagner4MIDINotes, wagner4MIDIVel, wagner4MIDIEnd,document, <>bufferArr, <>randBuffArr;
 	
-	*new {arg audioIn = 1, ampIn=0.0, volMetal=1.7, volScream1 = 1.5, volScream2 = 0.5, volScream3 = 0.9, volScream4 = 1.0, volMotor = 1.0, volWagner1=0.2, volWagner2=0.2, volWagner3=0.2, volWagner4=0.2, volBuxta=1.0, volParsifal=0.9;
+	*new {arg audioIn = 0, ampIn=0.0, volMetal=1.7, volScream1 = 1.5, volScream2 = 0.5, volScream3 = 0.9, volScream4 = 1.0, volMotor = 1.0, volWagner1=0.2, volWagner2=0.2, volWagner3=0.2, volWagner4=0.2, volBuxta=1.0, volParsifal=0.9;
 		^super.new.initOnViolence(audioIn, ampIn, volMetal, volScream1, volScream2, volScream3, volScream4, volMotor,volWagner1, volWagner2, volWagner3, volWagner4, volBuxta, volParsifal)
 	}
 
-	initOnViolence {arg in=1, amplitudeIn=1.0, metalAmp = 2, screamAmp1=0.8, screamAmp2=0.8, screamAmp3=0.8, screamAmp4=0.8, motorAmp=0.8,wagner1Amp=1.0,wagner2Amp=1.0,wagner3Amp=1.0, wagner4Amp=1.0, buxtaAmp=1.0, parsifalAmp=1.0;
-		offset = 35 + 20;
+	initOnViolence {arg in, amplitudeIn, metalAmp, screamAmp1, screamAmp2, screamAmp3, screamAmp4, motorAmp, wagner1Amp, wagner2Amp, wagner3Amp, wagner4Amp, buxtaAmp, parsifalAmp;
 		s = Server.default;
 		audioIn = in;
 		ampIn = amplitudeIn;
@@ -1257,42 +1256,38 @@ var number1, number2;
 	
 }
 
-wagnerAlgo {arg wagnerSynth,wagnerBuffer,wagnerPan,wagnerTimes,wagnerNotes,wagnerVelocity,wagnerEnd, wagnerMult,wagnerOffset=0,wagnerMidiOff=0,ampWagner=1;
-var step = 0,rate,index,wagnerArray,wagnerDiff,wagnerRateTime,wagnerRate,wagnerRoutine,wagnerPatt;
-wagnerDiff = wagnerTimes.differentiate;
-wagnerPatt = Pseq([0,1],inf).asStream;
-wagnerRate = [];
-wagnerNotes.do({|item|wagnerRate = wagnerRate.add( (item.midicps/(wagnerNotes[0].midicps+12)))});
-wagnerRateTime = (wagnerDiff.copyRange(1,wagnerDiff.size-1)/wagnerRate).integrate;
-
-wagnerRoutine = Routine({
-1.do({
-index = wagnerPatt.next;
-rate = (wagnerNotes[step].midicps/((55+wagnerMidiOff).midicps));
-wagnerSynth.put(index,\playWagner, 0, [\rate, rate, \amp, (wagnerVelocity[step]/wagnerVelocity.maxItem)*ampWagner, \start, (0+wagnerOffset)*44100, \atk, rrand(0.05,0.3), \dec, rrand(0.2,0.5), \buffer, wagnerBuffer, \pan, wagnerPan]);
-step = step + 1;
-wagnerArray = Array.fill((wagnerTimes.size/wagnerMult).round(1), {rrand(0, wagnerTimes.size)});
-wagnerArray.sort.postln;
-(wagnerTimes.size-1).do({
-if(wagnerArray.includes(step), {
-rate = (wagnerNotes[step].midicps/((55+wagnerMidiOff).midicps));
-wagnerSynth.objects[index].set(\gate, 0);
-index = wagnerPatt.next;
-wagnerSynth.put(index,\playWagner, 0, [\rate, rate, \amp, (wagnerVelocity[step]/wagnerVelocity.maxItem)*ampWagner, \start, (wagnerRateTime[step]+wagnerOffset)*44100, \atk, rrand(0.05,0.3), \dec, rrand(0.2,0.5), \buffer, wagnerBuffer, \pan, wagnerPan]);
-});
-wagnerDiff[step].yield;
-
-//step.postln;
-step = step + 1;
-});
-wagnerEnd.yield;
-wagnerSynth.objects[index].set(\gate, 0, \dec, rrand(0.4,0.8));
-});
-}).play;
-}
-		
-	pedalStereo {arg in = 5, pan=0;
-	{Pan2.ar(AudioIn.ar(in), pan)}.play;
+	wagnerAlgo {arg wagnerSynth, wagnerBuffer, wagnerPan, wagnerTimes, wagnerNotes, wagnerVelocity, wagnerEnd, wagnerMult, wagnerOffset=0, wagnerMidiOff=0, ampWagner=1;
+	var step = 0,rate,index,wagnerArray,wagnerDiff,wagnerRateTime,wagnerRate,wagnerRoutine,wagnerPatt;
+	wagnerDiff = wagnerTimes.differentiate;
+	wagnerPatt = Pseq([0,1],inf).asStream;
+	wagnerRate = [];
+	wagnerNotes.do({|item|wagnerRate = wagnerRate.add( (item.midicps/(wagnerNotes[0].midicps+12)))});
+	wagnerRateTime = (wagnerDiff.copyRange(1,wagnerDiff.size-1)/wagnerRate).integrate;
+	
+	wagnerRoutine = Routine({
+	1.do({
+	index = wagnerPatt.next;
+	rate = (wagnerNotes[step].midicps/((55+wagnerMidiOff).midicps));
+	wagnerSynth.put(index,\playWagner, 0, [\rate, rate, \amp, (wagnerVelocity[step]/wagnerVelocity.maxItem)*ampWagner, \start, (0+wagnerOffset)*44100, \atk, rrand(0.05,0.3), \dec, rrand(0.2,0.5), \buffer, wagnerBuffer, \pan, wagnerPan]);
+	step = step + 1;
+	wagnerArray = Array.fill((wagnerTimes.size/wagnerMult).round(1), {rrand(0, wagnerTimes.size)});
+	wagnerArray.sort.postln;
+	(wagnerTimes.size-1).do({
+	if(wagnerArray.includes(step), {
+	rate = (wagnerNotes[step].midicps/((55+wagnerMidiOff).midicps));
+	wagnerSynth.objects[index].set(\gate, 0);
+	index = wagnerPatt.next;
+	wagnerSynth.put(index,\playWagner, 0, [\rate, rate, \amp, (wagnerVelocity[step]/wagnerVelocity.maxItem)*ampWagner, \start, (wagnerRateTime[step]+wagnerOffset)*44100, \atk, rrand(0.05,0.3), \dec, rrand(0.2,0.5), \buffer, wagnerBuffer, \pan, wagnerPan]);
+	});
+	wagnerDiff[step].yield;
+	
+	//step.postln;
+	step = step + 1;
+	});
+	wagnerEnd.yield;
+	wagnerSynth.objects[index].set(\gate, 0, \dec, rrand(0.4,0.8));
+	});
+	}).play;
 	}
 	
 	changePedalNum {arg pedalDown = 1, pedalUp = 1;
@@ -1305,7 +1300,7 @@ wagnerSynth.objects[index].set(\gate, 0, \dec, rrand(0.4,0.8));
 	changeLocation {arg page=1, pedalDown = 1, pedalUp = 1;
 	this.funcPage(page);
 	this.changePedalNum(pedalDown, pedalUp);
-}	
+	}	
 
 	//funcPage {arg page;
 	//message to computer 2: send page number
@@ -1313,223 +1308,224 @@ wagnerSynth.objects[index].set(\gate, 0, \dec, rrand(0.4,0.8));
 	//}
 	
 	mixer {var controlSpec, mixWindow;
-mixWindow = GUI.window.new("Mixer - OnViolence", Rect(800, 700, 440, 280));
-mixWindow.front;
-mixWindow.view.decorator = FlowLayout(mixWindow.view.bounds);
-controlSpec = ControlSpec(0.0, 2.0);
-//piano slider
-EZSlider(mixWindow, // window
-				400 @ 24, // dimensions
-				"pianoVol", // label
-				controlSpec, // control spec
-				{|ez| piano.set(\globamp, ez.value) },// action
-				1.0 // initVal
-				);
-//metal slider				
-EZSlider(mixWindow, // window
-				400 @ 24, // dimensions
-				"metalVol", // label
-				controlSpec, // control spec
-				{|ez| metal.set(\globamp, ez.value) },// action
-				1.0 // initVal
-				);
-//scream slider					
-EZSlider(mixWindow, // window
-				400 @ 24, // dimensions
-				"screamVol", // label
-				controlSpec, // control spec
-				{|ez| 	grito1.set(\globamp, ez.value);
-						grito2.set(\globamp, ez.value);
-						grito3.set(\globamp, ez.value);
-				
-				 },// action
-				1.0 // initVal
-				);
-//guitar slider					
-EZSlider(mixWindow, // window
-				400 @ 24, // dimensions
-				"guitarVol", // label
-				controlSpec, // control spec
-				{|ez| grito4.set(\globamp, ez.value) },// action
-				1.0 // initVal
-				);
-//motor slider					
-EZSlider(mixWindow, // window
-				400 @ 24, // dimensions
-				"volMotor", // label
-				controlSpec, // control spec
-				{|ez| motor.set(\globamp, ez.value) },// action
-				1.0 // initVal
-				);
-//wagner slider					
-EZSlider(mixWindow, // window
-				400 @ 24, // dimensions
-				"volWagner", // label
-				controlSpec, // control spec
-				{|ez|	wagner1.set(\globamp, ez.value);
-						wagner2.set(\globamp, ez.value);
-						wagner3.set(\globamp, ez.value);
-						wagner4.set(\globamp, ez.value);
-				},// action
-				1.0 // initVal
-				);
-//buxtahude slider				
-EZSlider(mixWindow, // window
-				400 @ 24, // dimensions
-				"buxtahude", // label
-				controlSpec, // control spec
-				{|ez| buxtahude.set(\globamp, ez.value) },// action
-				1.0 // initVal
-				);
-//parsifal slider				
-EZSlider(mixWindow, // window
-				400 @ 24, // dimensions
-				"parsifal", // label
-				controlSpec, // control spec
-				{|ez| parsifal.set(\globamp, ez.value) },// action
-				1.0 // initVal
-				);
-									
-}
+	mixWindow = GUI.window.new("Mixer - OnViolence", Rect(800, 700, 440, 280));
+	mixWindow.front;
+	mixWindow.view.decorator = FlowLayout(mixWindow.view.bounds);
+	controlSpec = ControlSpec(0.0, 2.0);
+	//piano slider
+	EZSlider(mixWindow, // window
+					400 @ 24, // dimensions
+					"pianoVol", // label
+					controlSpec, // control spec
+					{|ez| piano.set(\globamp, ez.value) },// action
+					1.0 // initVal
+					);
+	//metal slider				
+	EZSlider(mixWindow, // window
+					400 @ 24, // dimensions
+					"metalVol", // label
+					controlSpec, // control spec
+					{|ez| metal.set(\globamp, ez.value) },// action
+					1.0 // initVal
+					);
+	//scream slider					
+	EZSlider(mixWindow, // window
+					400 @ 24, // dimensions
+					"screamVol", // label
+					controlSpec, // control spec
+					{|ez| 	grito1.set(\globamp, ez.value);
+							grito2.set(\globamp, ez.value);
+							grito3.set(\globamp, ez.value);
+					
+					 },// action
+					1.0 // initVal
+					);
+	//guitar slider					
+	EZSlider(mixWindow, // window
+					400 @ 24, // dimensions
+					"guitarVol", // label
+					controlSpec, // control spec
+					{|ez| grito4.set(\globamp, ez.value) },// action
+					1.0 // initVal
+					);
+	//motor slider					
+	EZSlider(mixWindow, // window
+					400 @ 24, // dimensions
+					"volMotor", // label
+					controlSpec, // control spec
+					{|ez| motor.set(\globamp, ez.value) },// action
+					1.0 // initVal
+					);
+	//wagner slider					
+	EZSlider(mixWindow, // window
+					400 @ 24, // dimensions
+					"volWagner", // label
+					controlSpec, // control spec
+					{|ez|	wagner1.set(\globamp, ez.value);
+							wagner2.set(\globamp, ez.value);
+							wagner3.set(\globamp, ez.value);
+							wagner4.set(\globamp, ez.value);
+					},// action
+					1.0 // initVal
+					);
+	//buxtahude slider				
+	EZSlider(mixWindow, // window
+					400 @ 24, // dimensions
+					"buxtahude", // label
+					controlSpec, // control spec
+					{|ez| buxtahude.set(\globamp, ez.value) },// action
+					1.0 // initVal
+					);
+	//parsifal slider				
+	EZSlider(mixWindow, // window
+					400 @ 24, // dimensions
+					"parsifal", // label
+					controlSpec, // control spec
+					{|ez| parsifal.set(\globamp, ez.value) },// action
+					1.0 // initVal
+					);
+										
+	}
 
-mixer2 {var mixWindow;
-mixWindow = GUI.window.new("Mixer2 - OnViolence", Rect(800, 155, 440, 400));
-mixWindow.front;
-mixWindow.view.decorator = FlowLayout(mixWindow.view.bounds);
-
-EZSlider(mixWindow, // window
-				400 @ 24, // dimensions
-				"pianoVol", // label
-				ControlSpec(0.0, 1.0), // control spec
-				{|ez|	ampIn = ez.value;
-						piano.set(\amp, ampIn);
-				},// action
-				ampIn // initVal
-				);
-				
-EZSlider(mixWindow, // window
-				400 @ 24, // dimensions
-				"metalVol", // label
-				ControlSpec(0.0, 3.0), // control spec
-				{|ez|	volMetal = ez.value;
-						metal.set(\amp, volMetal);
-				},// action
-				volMetal // initVal
-				);
-				
-EZSlider(mixWindow, // window
-				400 @ 24, // dimensions
-				"volScream1", // label
-				ControlSpec(0.0, 3.0), // control spec
-				{|ez|	volScream1 = ez.value;
-						grito1.set(\amp, volScream1);
-				},// action
-				volScream1 // initVal
-				);
-				
-EZSlider(mixWindow, // window
-				400 @ 24, // dimensions
-				"volScream2", // label
-				ControlSpec(0.0, 1.0), // control spec
-				{|ez|	volScream2 = ez.value;
-						grito2.set(\amp, volScream2);
-				},// action
-				volScream2 // initVal
-				);
-				
-EZSlider(mixWindow, // window
-				400 @ 24, // dimensions
-				"volScream3", // label
-				ControlSpec(0.0, 2.0), // control spec
-				{|ez|	volScream3 = ez.value;
-						grito3.set(\amp, volScream3);
-				},// action
-				volScream3 // initVal
-				);
-				
-EZSlider(mixWindow, // window
-				400 @ 24, // dimensions
-				"volScream4", // label
-				ControlSpec(0.0, 2.0), // control spec
-				{|ez|	volScream4 = ez.value;
-						grito4.set(\amp, volScream4);
-				},// action
-				volScream4 // initVal
-				);
-				
-EZSlider(mixWindow, // window
-				400 @ 24, // dimensions
-				"volMotor", // label
-				ControlSpec(0.0, 4.0), // control spec
-				{|ez|	volMotor = ez.value;
-						motor.set(\amp, volMotor);
-				},// action
-				volMotor // initVal
-				);
-				
-EZSlider(mixWindow, // window
-				400 @ 24, // dimensions
-				"volWagner1", // label
-				ControlSpec(0.0, 1.0), // control spec
-				{|ez|	volWagner1 = ez.value;
-						wagner1.set(\amp, volWagner1);
-				},// action
-				volWagner1 // initVal
-				);
-EZSlider(mixWindow, // window
-				400 @ 24, // dimensions
-				"volWagner2", // label
-				ControlSpec(0.0, 1.0), // control spec
-				{|ez|	volWagner2 = ez.value;
-						wagner2.set(\amp, volWagner2);
-				},// action
-				volWagner2 // initVal
-				);
-				
-EZSlider(mixWindow, // window
-				400 @ 24, // dimensions
-				"volWagner3", // label
-				ControlSpec(0.0, 1.0), // control spec
-				{|ez|	volWagner3 = ez.value;
-						wagner3.set(\amp, volWagner3);
-				},// action
-				volWagner3 // initVal
-				);
-				
-EZSlider(mixWindow, // window
-				400 @ 24, // dimensions
-				"volWagner4", // label
-				ControlSpec(0.0, 1.0), // control spec
-				{|ez|	volWagner4 = ez.value;
-						wagner4.set(\amp, volWagner4);
-				},// action
-				volWagner4 // initVal
-				);
-
-EZSlider(mixWindow, // window
-				400 @ 24, // dimensions
-				"buxtahude", // label
-				ControlSpec(0.0, 1.0), // control spec
-				{|ez|	volBuxta = ez.value;
-						buxtahude.set(\amp, volBuxta);
-				},// action
-				volBuxta // initVal
-				);
-				
-EZSlider(mixWindow, // window
-				400 @ 24, // dimensions
-				"parsifal", // label
-				ControlSpec(0.0, 1.0), // control spec
-				{|ez|	volParsifal = ez.value;
-						parsifal.set(\amp, volParsifal);
-				},// action
-				volParsifal // initVal
-				);
-}
+	mixer2 {var mixWindow;
+	mixWindow = GUI.window.new("Mixer2 - OnViolence", Rect(800, 155, 440, 400));
+	mixWindow.front;
+	mixWindow.view.decorator = FlowLayout(mixWindow.view.bounds);
+	
+	EZSlider(mixWindow, // window
+					400 @ 24, // dimensions
+					"pianoVol", // label
+					ControlSpec(0.0, 1.0), // control spec
+					{|ez|	ampIn = ez.value;
+							piano.set(\amp, ampIn);
+					},// action
+					ampIn // initVal
+					);
+					
+	EZSlider(mixWindow, // window
+					400 @ 24, // dimensions
+					"metalVol", // label
+					ControlSpec(0.0, 3.0), // control spec
+					{|ez|	volMetal = ez.value;
+							metal.set(\amp, volMetal);
+					},// action
+					volMetal // initVal
+					);
+					
+	EZSlider(mixWindow, // window
+					400 @ 24, // dimensions
+					"volScream1", // label
+					ControlSpec(0.0, 3.0), // control spec
+					{|ez|	volScream1 = ez.value;
+							grito1.set(\amp, volScream1);
+					},// action
+					volScream1 // initVal
+					);
+					
+	EZSlider(mixWindow, // window
+					400 @ 24, // dimensions
+					"volScream2", // label
+					ControlSpec(0.0, 1.0), // control spec
+					{|ez|	volScream2 = ez.value;
+							grito2.set(\amp, volScream2);
+					},// action
+					volScream2 // initVal
+					);
+					
+	EZSlider(mixWindow, // window
+					400 @ 24, // dimensions
+					"volScream3", // label
+					ControlSpec(0.0, 2.0), // control spec
+					{|ez|	volScream3 = ez.value;
+							grito3.set(\amp, volScream3);
+					},// action
+					volScream3 // initVal
+					);
+					
+	EZSlider(mixWindow, // window
+					400 @ 24, // dimensions
+					"volScream4", // label
+					ControlSpec(0.0, 2.0), // control spec
+					{|ez|	volScream4 = ez.value;
+							grito4.set(\amp, volScream4);
+					},// action
+					volScream4 // initVal
+					);
+					
+	EZSlider(mixWindow, // window
+					400 @ 24, // dimensions
+					"volMotor", // label
+					ControlSpec(0.0, 4.0), // control spec
+					{|ez|	volMotor = ez.value;
+							motor.set(\amp, volMotor);
+					},// action
+					volMotor // initVal
+					);
+					
+	EZSlider(mixWindow, // window
+					400 @ 24, // dimensions
+					"volWagner1", // label
+					ControlSpec(0.0, 1.0), // control spec
+					{|ez|	volWagner1 = ez.value;
+							wagner1.set(\amp, volWagner1);
+					},// action
+					volWagner1 // initVal
+					);
+	EZSlider(mixWindow, // window
+					400 @ 24, // dimensions
+					"volWagner2", // label
+					ControlSpec(0.0, 1.0), // control spec
+					{|ez|	volWagner2 = ez.value;
+							wagner2.set(\amp, volWagner2);
+					},// action
+					volWagner2 // initVal
+					);
+					
+	EZSlider(mixWindow, // window
+					400 @ 24, // dimensions
+					"volWagner3", // label
+					ControlSpec(0.0, 1.0), // control spec
+					{|ez|	volWagner3 = ez.value;
+							wagner3.set(\amp, volWagner3);
+					},// action
+					volWagner3 // initVal
+					);
+					
+	EZSlider(mixWindow, // window
+					400 @ 24, // dimensions
+					"volWagner4", // label
+					ControlSpec(0.0, 1.0), // control spec
+					{|ez|	volWagner4 = ez.value;
+							wagner4.set(\amp, volWagner4);
+					},// action
+					volWagner4 // initVal
+					);
+	
+	EZSlider(mixWindow, // window
+					400 @ 24, // dimensions
+					"buxtahude", // label
+					ControlSpec(0.0, 1.0), // control spec
+					{|ez|	volBuxta = ez.value;
+							buxtahude.set(\amp, volBuxta);
+					},// action
+					volBuxta // initVal
+					);
+					
+	EZSlider(mixWindow, // window
+					400 @ 24, // dimensions
+					"parsifal", // label
+					ControlSpec(0.0, 1.0), // control spec
+					{|ez|	volParsifal = ez.value;
+							parsifal.set(\amp, volParsifal);
+					},// action
+					volParsifal // initVal
+					);
+	}
 	
 	
 	*initClass {
-		SynthDef.writeOnce("pvrecOnViolence", { arg recBuf=1, soundBufnum=2;
+		
+	SynthDef.writeOnce("pvrecOnViolence", { arg recBuf=1, soundBufnum=2;
 	var in, chain, bufnum;
 	Line.kr(1, 1, BufDur.kr(soundBufnum), doneAction: 2);
 	in = PlayBuf.ar(1, soundBufnum, BufRateScale.kr(soundBufnum), loop: 0);
@@ -1610,11 +1606,11 @@ EZSlider(mixWindow, // window
 	Out.ar(out, (signal2*amp).softclip(1)*globamp);
 	});
 
-	SynthDef.writeOnce(\detect,{arg out = 0, in = 1, thresh1=1, rate=200, lock=0, freq=0.1, micOn=0, impOn=0, initTempo=2.0, initImpOn=1.0;
+	SynthDef.writeOnce(\detect,{arg out = 0, in = 0, thresh1=1, rate=200, lock=0, freq=0.1, micOn=0, impOn=0, initTempo=2.0, initImpOn=1.0;
 	var signal, signal2, chain1, onsets1, trig, amplitude, buffer;
 	var trackb,trackh,trackq,tempo;
 	trig = Impulse.kr(rate);
-	signal = AudioIn.ar(in);
+	signal = SoundIn.ar(in);
 	#trackb,trackh,trackq,tempo=AutoTrack.kr(signal, lock);
 	signal2 = (signal*micOn)+(Impulse.ar(tempo)*impOn)+(Impulse.ar(initTempo)*initImpOn);
 	buffer = LocalBuf.new(512, 1);
@@ -1638,13 +1634,13 @@ EZSlider(mixWindow, // window
 	});
 
 	SynthDef.writeOnce("playWagner", {arg rate=1, gate=1, amp = 1.0, start=0,atk=0.1, dec=0.2,trig=1,pan=0,buffer=0,out=0, globamp=1.0;
-var signal, env;
-signal = PlayBuf.ar(1,buffer, rate, trig, startPos: start, loop:1); 
-env = EnvGen.kr(Env.asr(atk, 1.0, dec), gate, doneAction:2);
-Out.ar(out, Pan2.ar((signal*env),pan,amp*globamp));
-});
+	var signal, env;
+	signal = PlayBuf.ar(1,buffer, rate, trig, startPos: start, loop:1); 
+	env = EnvGen.kr(Env.asr(atk, 1.0, dec), gate, doneAction:2);
+	Out.ar(out, Pan2.ar((signal*env),pan,amp*globamp));
+	});
 
-SynthDef.writeOnce("pvplayBuxta2", { arg out=0, recBuf=1,amp=1,gate=1,rate=1,dec=2.0, pos=0.0, globamp=1.0;
+	SynthDef.writeOnce("pvplayBuxta2", { arg out=0, recBuf=1,amp=1,gate=1,rate=1,dec=2.0, pos=0.0, globamp=1.0;
 	var in, chain, signal, env, bufnum;
 	bufnum = LocalBuf.new(2048, 1);
 	chain = PV_PlayBuf(bufnum, recBuf, rate, 0, 0);
