@@ -1,13 +1,11 @@
-OnViolence {var <>audioIn, s, <>ampIn, midiOut, offset, funcRec, funcPlay, d, newMacroArray, newMacroArray2, amplitude, <>tempo=176, countGlob, <>stepGlob, notes, <>pedalOffGlob, <>pedalOnGlob, gap, <>piano, osc, oscMax, <>volScream1, <>volScream2, <>volScream3, <>volScream4, <>volMetal, <>volMotor, <>volWagner1,<>volWagner2, <>volWagner3, <>volWagner4, <>volBuxta, <>volParsifal, <>sensorVal1=0, <>sensorVal2=63, <>grito1, <>grito2,<>grito3,<>grito4, <>motor, <>metal, <>wagner1,<>wagner2, <>wagner3,<>wagner4,<>buxtahude,<>parsifal, pedalOn, pedalOff, pattern, <>bufBang, tempoLock, metalOn, sensor, sensor1, sensor2, sensorLag1, sensorLag2, bend1, bend2, lowVal=43.276000976562, highVal=46.995998382568, leftVal=41.668201446533,basicPath, rightVal=46.628700256348, <>algoVersion, <>rrandArray, differ, tempoStart=0,stepTempo=0,wagner1MIDITime, wagner1MIDINotes, wagner1MIDIVel, wagner1MIDIEnd,wagner2MIDITime, wagner2MIDINotes, wagner2MIDIVel, wagner2MIDIEnd,wagner3MIDITime, wagner3MIDINotes, wagner3MIDIVel, wagner3MIDIEnd,wagner4MIDITime, wagner4MIDINotes, wagner4MIDIVel, wagner4MIDIEnd,document;
+OnViolence {var <>audioIn, s, <>ampIn, midiOut, offset, funcRec, d, newMacroArray, newMacroArray2, amplitude, <>tempo=176, countGlob, <>stepGlob, notes, <>pedalOffGlob, <>pedalOnGlob, gap, <>piano, osc, oscMax, <>volScream1, <>volScream2, <>volScream3, <>volScream4, <>volMetal, <>volMotor, <>volWagner1,<>volWagner2, <>volWagner3, <>volWagner4, <>volBuxta, <>volParsifal, <>sensorVal1=0, <>sensorVal2=63, <>grito1, <>grito2,<>grito3,<>grito4, <>motor, <>metal, <>wagner1,<>wagner2, <>wagner3,<>wagner4,<>buxtahude,<>parsifal, pedalOn, pedalOff, tempoLock, metalOn, sensor, sensor1, sensor2, sensorLag1, sensorLag2, bend1, bend2, lowVal=43.276000976562, highVal=46.995998382568, leftVal=41.668201446533,basicPath, rightVal=46.628700256348, <>algoVersion, <>rrandArray, differ, tempoStart=0,stepTempo=0,wagner1MIDITime, wagner1MIDINotes, wagner1MIDIVel, wagner1MIDIEnd,wagner2MIDITime, wagner2MIDINotes, wagner2MIDIVel, wagner2MIDIEnd,wagner3MIDITime, wagner3MIDINotes, wagner3MIDIVel, wagner3MIDIEnd,wagner4MIDITime, wagner4MIDINotes, wagner4MIDIVel, wagner4MIDIEnd,document, <>bufferArr, <>randBuffArr;
 	
 	*new {arg audioIn = 1, ampIn=0.0, volMetal=1.7, volScream1 = 1.5, volScream2 = 0.5, volScream3 = 0.9, volScream4 = 1.0, volMotor = 1.0, volWagner1=0.2, volWagner2=0.2, volWagner3=0.2, volWagner4=0.2, volBuxta=1.0, volParsifal=0.9;
 		^super.new.initOnViolence(audioIn, ampIn, volMetal, volScream1, volScream2, volScream3, volScream4, volMotor,volWagner1, volWagner2, volWagner3, volWagner4, volBuxta, volParsifal)
 	}
 
 	initOnViolence {arg in=1, amplitudeIn=1.0, metalAmp = 2, screamAmp1=0.8, screamAmp2=0.8, screamAmp3=0.8, screamAmp4=0.8, motorAmp=0.8,wagner1Amp=1.0,wagner2Amp=1.0,wagner3Amp=1.0, wagner4Amp=1.0, buxtaAmp=1.0, parsifalAmp=1.0;
-		var step = 35, numBuf=20, sensorPitch;
-		bufBang = step;
-		offset = step + numBuf;
+		offset = 35 + 20;
 		s = Server.default;
 		audioIn = in;
 		ampIn = amplitudeIn;
@@ -23,199 +21,171 @@ OnViolence {var <>audioIn, s, <>ampIn, midiOut, offset, funcRec, funcPlay, d, ne
 		volWagner4 = wagner4Amp;
 		volBuxta = buxtaAmp;
 		volParsifal = parsifalAmp;
-		basicPath = Document.current.path.dirname;
-		if(MIDIClient.destinations != [], {
-		midiOut =  MIDIOut(0,MIDIClient.destinations[0].uid);}, {
-	"ERROR: MIDI Connection not found!".postln;});
-		pattern = Pseq((step..(step+(numBuf-1))), inf).asStream;
-		Buffer.alloc(s, 512, bufnum: 0);
-		Buffer.alloc(s, 512, bufnum: 1);
-		Buffer.read(s, basicPath ++ "/OnViolenceSamples/metal/metal_bang.scpv", bufnum: 2);
-		Buffer.read(s, basicPath ++ "/OnViolenceSamples/metal/metal_bang2.scpv", bufnum: 3);
-		Buffer.read(s, basicPath ++ "/OnViolenceSamples/metal/metal_bang3.scpv", bufnum: 4);
-		Buffer.read(s, basicPath ++ "/OnViolenceSamples/scream/hitlerSpeech.aif", bufnum: 5);
-		Buffer.read(s, basicPath ++ "/OnViolenceSamples/scream/screaming.scpv", 0, (9.37*2)*44100, bufnum: 6);
-		Buffer.read(s, basicPath ++ "/OnViolenceSamples/wagner/parsifal_kom.scpv", bufnum: 7);
-		Buffer.read(s, basicPath ++ "/OnViolenceSamples/wagner/parsifal_komkom.aif", bufnum: 8);
-		Buffer.read(s, basicPath ++ "/OnViolenceSamples/wagner/tristan_gate.aif", bufnum: 9);
-		Buffer.read(s, basicPath ++ "/OnViolenceSamples/wagner/tristan_shepardspipe.aif", bufnum: 10);
-		Buffer.read(s, basicPath ++ "/OnViolenceSamples/wagner/tristan_gatetrans1.aif", bufnum: 11);
-		Buffer.read(s, basicPath ++ "/OnViolenceSamples/wagner/tristan_gatetrans2.aif", bufnum: 12);
-		Buffer.read(s, basicPath ++ "/OnViolenceSamples/wagner/parsifal_transformation.aif", bufnum: 13);
-		Buffer.read(s, basicPath ++ "/OnViolenceSamples/wagner/parsifal_nun_achte_wohl.aif", bufnum: 14);
-		Buffer.read(s, basicPath ++ "/OnViolenceSamples/wagner/parsifal_heho.aif", bufnum: 15);
-		Buffer.read(s, basicPath ++ "/OnViolenceSamples/wagner/tristan_sol_ich_lauchen.aif", bufnum: 16);
-		Buffer.read(s, basicPath ++ "/OnViolenceSamples/wagner/tristan_preludeII.aif", bufnum: 17);
-		Buffer.read(s, basicPath ++ "/OnViolenceSamples/wagner/parsifal_ihr_schonen_kinder.aif", bufnum: 18);
-		Buffer.read(s, basicPath ++ "/OnViolenceSamples/wagner/tristan_lausch.aif", bufnum: 19);
-		Buffer.read(s, basicPath ++ "/OnViolenceSamples/wagner/parsifal_van_bade_kehrt.aif", bufnum: 20);
-		Buffer.read(s, basicPath ++ "/OnViolenceSamples/wagner/parsifal_preludeII.aif", bufnum: 21);
-		Buffer.read(s, basicPath ++ "/OnViolenceSamples/wagner/tristan_auf_as_tan.aif", bufnum: 22);
-		Buffer.read(s, basicPath ++ "/OnViolenceSamples/wagner/tristan_konig_merke_hei.aif", bufnum: 23);
-		Buffer.read(s, basicPath ++ "/OnViolenceSamples/wagner/tristan_verrater_ha.aif", bufnum: 24);
-		Buffer.read(s, basicPath ++ "/OnViolenceSamples/wagner/parsifal_vergeh.aif", bufnum: 25);
-		Buffer.read(s, basicPath ++ "/OnViolenceSamples/wagner/parsifal_weh_hoho.aif", bufnum: 26);
-		Buffer.read(s, basicPath ++ "/OnViolenceSamples/wagner/parsifal_met_diesem.aif", bufnum: 27);
-		Buffer.read(s, basicPath ++ "/OnViolenceSamples/buxtahude/buxtahude_left.scpv", bufnum: 28);
-		Buffer.read(s, basicPath ++ "/OnViolenceSamples/buxtahude/buxtahude_right.scpv", bufnum: 29);
-		Buffer.read(s, basicPath ++ "/OnViolenceSamples/wagner/parsifal_actIII_left.scpv", bufnum: 30);
-		Buffer.read(s, basicPath ++ "/OnViolenceSamples/wagner/parsifal_actIII_right.scpv", bufnum: 31);
-		Buffer.alloc(s, 2048, bufnum: 32);
-		Buffer.alloc(s, 2048, bufnum: 33);
+		basicPath =  Document.standardizePath("~/Library/Application Support/SuperCollider/Extensions/FedeClasses/OnViolence/");
 		
+		s.makeBundle(nil, {
+		bufferArr = [
+		Buffer.read(s, basicPath ++ "/OnViolenceSamples/metal/metal_bang.scpv"),
+		Buffer.read(s, basicPath ++ "/OnViolenceSamples/metal/metal_bang2.scpv"),
+		Buffer.read(s, basicPath ++ "/OnViolenceSamples/metal/metal_bang3.scpv"),
+		Buffer.read(s, basicPath ++ "/OnViolenceSamples/scream/hitlerSpeech.aif"),
+		Buffer.read(s, basicPath ++ "/OnViolenceSamples/scream/screaming.scpv", 0, (9.37*2)*44100),
+		Buffer.read(s, basicPath ++ "/OnViolenceSamples/wagner/parsifal_kom.scpv"),
+		Buffer.read(s, basicPath ++ "/OnViolenceSamples/wagner/parsifal_komkom.aif"),
+		Buffer.read(s, basicPath ++ "/OnViolenceSamples/wagner/tristan_gate.aif"),
+		Buffer.read(s, basicPath ++ "/OnViolenceSamples/wagner/tristan_shepardspipe.aif"),
+		Buffer.read(s, basicPath ++ "/OnViolenceSamples/wagner/tristan_gatetrans1.aif"),
+		Buffer.read(s, basicPath ++ "/OnViolenceSamples/wagner/tristan_gatetrans2.aif"),
+		Buffer.read(s, basicPath ++ "/OnViolenceSamples/wagner/parsifal_transformation.aif"),
+		Buffer.read(s, basicPath ++ "/OnViolenceSamples/wagner/parsifal_nun_achte_wohl.aif"),
+		Buffer.read(s, basicPath ++ "/OnViolenceSamples/wagner/parsifal_heho.aif"),
+		Buffer.read(s, basicPath ++ "/OnViolenceSamples/wagner/tristan_sol_ich_lauchen.aif"),
+		Buffer.read(s, basicPath ++ "/OnViolenceSamples/wagner/tristan_preludeII.aif"),
+		Buffer.read(s, basicPath ++ "/OnViolenceSamples/wagner/parsifal_ihr_schonen_kinder.aif"),
+		Buffer.read(s, basicPath ++ "/OnViolenceSamples/wagner/tristan_lausch.aif"),
+		Buffer.read(s, basicPath ++ "/OnViolenceSamples/wagner/parsifal_van_bade_kehrt.aif"),
+		Buffer.read(s, basicPath ++ "/OnViolenceSamples/wagner/parsifal_preludeII.aif"),
+		Buffer.read(s, basicPath ++ "/OnViolenceSamples/wagner/tristan_auf_as_tan.aif"),
+		Buffer.read(s, basicPath ++ "/OnViolenceSamples/wagner/tristan_konig_merke_hei.aif"),
+		Buffer.read(s, basicPath ++ "/OnViolenceSamples/wagner/tristan_verrater_ha.aif"),
+		Buffer.read(s, basicPath ++ "/OnViolenceSamples/wagner/parsifal_vergeh.aif"),
+		Buffer.read(s, basicPath ++ "/OnViolenceSamples/wagner/parsifal_weh_hoho.aif"),
+		Buffer.read(s, basicPath ++ "/OnViolenceSamples/wagner/parsifal_met_diesem.aif"),
+		Buffer.read(s, basicPath ++ "/OnViolenceSamples/buxtahude/buxtahude_left.scpv"),
+		Buffer.read(s, basicPath ++ "/OnViolenceSamples/buxtahude/buxtahude_right.scpv"),
+		Buffer.read(s, basicPath ++ "/OnViolenceSamples/wagner/parsifal_actIII_left.scpv"),
+		Buffer.read(s, basicPath ++ "/OnViolenceSamples/wagner/parsifal_actIII_right.scpv")
+		];		
 		
 		//algoscore
 		
-		sensorPitch = (basicPath ++ "/data/sensorPitch.rtf").loadPath;		
-		newMacroArray = sensorPitch[0];
-
-		newMacroArray2 = sensorPitch[1];
+		//sensorPitch = (basicPath ++ "/data/sensorPitch.rtf").loadPath;		
+//		newMacroArray = sensorPitch[0];
+//
+//		newMacroArray2 = sensorPitch[1];
 		
 		
-		Routine({
-		'wait'.postln;
-		numBuf.do({
-		Buffer.alloc(s, 2048, bufnum: step);
-		0.01.yield;
-		step = step + 1;});
-		'ready'.postln;}).play;
+		//Routine({
+//		'wait'.postln;
+//		numBuf.do({
+//		Buffer.alloc(s, 2048, bufnum: step);
+//		0.01.yield;
+//		step = step + 1;});
+//		'ready'.postln;}).play;
 		
 		rrandArray = Array.fill(124, {rrand(1,10)}); //select random samples;
+		
+		s.sync;
+		
+		"Buffers Allocated".postln;
+		
+		this.selectFiles(Array.fill(26, {rrand(1,10)}););
+		
+		});
 		
 	}
 	
 	selectFiles {arg arrayVersion;
-		var step, stepBuf, buf1, buf2, buf3, sampleNumbers, sampleVersion, pathFolder;
+		var sampleNumbers, sampleVersion, pathFolder, condition;
 		pathFolder = basicPath ++ "/OnViolenceSamples/randomSamples/";
 		sampleNumbers = [81, 85, 88, 89, 93, 98, 99, 102, 104, 107, 108, 110, 111, 112, 116, 117, 118, 120, 121, 122, 123]; 
 		algoVersion = arrayVersion; //26 items
 		sampleVersion = algoVersion.copyRange(0, 20);
 		sampleVersion.do({|item, index| rrandArray.put(sampleNumbers[index]-1, item)});
-		step = 1;
-		stepBuf = 0+offset;
-		Routine({
-		'wait'.postln;
-		rrandArray.size.do({
-		var sf, path, frame, hop;
-		if(step != 50, {
-		buf1 = stepBuf;
-		buf2 = stepBuf+1;
-		buf3 = stepBuf+2;
-		path = (pathFolder ++ step.asString ++ "/" ++ step.asString ++ "ruidito" ++ rrandArray[step-1].asString ++ ".aiff");
-		frame = 1024*2; 
-		hop = 0.5;
-		sf = SoundFile.new( path );
-		sf.openRead;
-		sf.close;
-		Buffer.alloc(s, frame, bufnum: buf1);
-		Buffer.alloc(s, sf.duration.calcPVRecSize(frame, hop), bufnum: buf2);
-		Buffer.read(s, path, bufnum: buf3);
+		
+		condition = Condition.new(true);
+		randBuffArr = Array.fill(rrandArray.size,0);
+		
+		{
+		"Loading Random Buffers".postln;
+		rrandArray.do({|item,index| 
+		var path;
+		
+		condition.test = false;
+		condition.signal;
+		
+		path = (pathFolder ++ (index+1).asString ++ "ruidito" ++ item.asString ++ ".scpv");
+			
+		if((index+1) != 50, {
+		".".post;
+	
+		randBuffArr[index] = Buffer.read(s, path, 
+		
+		action: {	
+		condition.test = true;
+		condition.signal;
+		}
+		);
+		},{	
+		condition.test = true;
+		condition.signal;
 		});
-		0.01.yield;
-		step = step + 1;
-		stepBuf = stepBuf + 3;
+		
+		condition.wait;
+		
 		});
-		4.0.yield;
-		'ready'.postln;
-		}).play;
+		"\rBuffers Allocated".postln;
+		}.fork;
 
 	}
 	
-	recordFiles {var step = 1;
-		funcRec = {arg soundFile = 1;
-		var bufNum, buf1, buf2, buf3;
-		bufNum = (soundFile-1) * 3 + offset;
-		buf1 = bufNum;
-		buf2 = bufNum+1;
-		buf3 = bufNum+2;
-		Synth("pvrecOnViolence", [\bufnum, buf1, \recBuf, buf2, \soundBufnum, buf3]);
-		};
-		
-		Routine({
-		'wait'.postln;
-		rrandArray.size.do({
-		if(step != 50, {
-		funcRec.value(step);
-		});
-		0.1.yield;
-		step = step + 1;
-		});
-		8.0.yield;
-		'ready'.postln;
-		}).play;
-	}
-	
-	//sendVersion {
-	//message to computer 2: array version 
-	//algoVersion.do({|item| midiOut.noteOn(0,0,item);}); 	//}
-	
-	arrayTimes {var arr, b, c, newEinTimes, something, neew;
-	
-funcPlay = {arg soundFile = 1, time=0.1, rate = 1, amp = 1.0;
-var bufNum, buf1, buf2, buf3, ampScream, scream, pan, ratioDown = 0.7, extraArgs, outType, atNode, adjScream;
+	funcPlay {arg soundFile = 1, time=0.1, rate = 1, amp = 1.0;
+var ampScream, scream, pan, ratioDown = 0.7, extraArgs, outType, atNode, adjScream;
 ampScream = amp.linlin(0,0.1,0.25,0.75);
 scream = ampScream.nearestInList([ 0.25, 0.35, 0.41666666666667, 0.5, 0.55, 0.75 ]);
 adjScream = (soundFile-70).linlin(1,53,1,3.0);
-bufNum = (soundFile-1) * 3 + offset;
-buf1 = bufNum;
-buf2 = bufNum+1;
-buf3 = bufNum+2;
+
 	case 
 	{([10, 25, 38, 44] ++ (51,52..70) ++ [74, 78, 83, 84, 90, 91, 92, 95, 96, 97, 100, 101, 119]).includes(soundFile)} {
-	Routine({1.do({
+	{
 (time*rate).yield;
-grito4.spawn([\bufnum, buf1, \recBuf, buf2, \rate, rate, \amp, scream*volScream4, \thresh, 0.5, \ratioDown, ratioDown, \ratioUp, 0.9, \gates, 1]);  //pvplayMono
-});
-}).play;
+grito4.spawn([\recBuf, randBuffArr[soundFile-1].bufnum, \rate, rate, \amp, scream*volScream4, \thresh, 0.5, \ratioDown, ratioDown, \ratioUp, 0.9, \gates, 1]);  //pvplayMono
+}.fork;
 	}
 	{[1, 71].includes(soundFile)} {
-	Routine({1.do({
+	{
 (time*rate).yield;
-grito3.spawn([\bufnum, buf1, \recBuf, buf2, \rate, rate, \amp, 0.9*volScream3, \thresh, 0.5, \ratioDown, 0.6, \ratioUp, 0.9]);  //pvplayBet
-}); 
-}).play;
+grito3.spawn([\recBuf, randBuffArr[soundFile-1].bufnum, \rate, rate, \amp, 0.9*volScream3, \thresh, 0.5, \ratioDown, 0.6, \ratioUp, 0.9]);  //pvplayBet
+}.fork;
 	}
 	{[2,4,7,11,15,20,36,72,79,82,88,104,107,113, 120].includes(soundFile)} {
-	Routine({1.do({
+	{
 (time*rate).yield;
-grito3.spawn([\bufnum, buf1, \recBuf, buf2, \rate, rate, \amp, scream*volScream3*adjScream, \thresh, 0.5, \ratioDown, 0.6, \ratioUp, 0.9]);  //pvplayBet
-});
-}).play;
+grito3.spawn([\recBuf, randBuffArr[soundFile-1].bufnum, \rate, rate, \amp, scream*volScream3*adjScream, \thresh, 0.5, \ratioDown, 0.6, \ratioUp, 0.9]);  //pvplayBet
+}.fork;
 	}
 	{[8,14,18,21,27,29,30,31,33,75,76].includes(soundFile)} {
-	Routine({1.do({
+	{
 (time*rate).yield;
-grito2.spawn([\bufnum, buf1, \recBuf, buf2, \rate, rate, \amp, scream*volScream2*adjScream, \thresh, 0.5, \ratioDown, ratioDown, \ratioUp, 0.9, \buffer2, pattern.next, \recBuf2, 6, \jefeBuf, 5, \startPos, rrand(0, 820865), \osciOff, rrand(1.25, 0.75), \startOff, rrand(0,403)]);  //pvplayGrito
-});
-}).play;
+grito2.spawn([\recBuf, randBuffArr[soundFile-1].bufnum, \rate, rate, \amp, scream*volScream2*adjScream, \thresh, 0.5, \ratioDown, ratioDown, \ratioUp, 0.9, \recBuf2, bufferArr[4].bufnum, \jefeBuf, bufferArr[3].bufnum, \startPos, rrand(0, 820865), \osciOff, rrand(1.25, 0.75), \startOff, rrand(0,403)]);  //pvplayGrito
+}.fork;
 	
 	}
 	{[80,86,89,105,121,123].includes(soundFile)} {
-	Routine({1.do({
+	{
 (time*rate).yield;
-grito2.spawn([\bufnum, buf1, \recBuf, buf2, \rate, rate, \amp, scream*volScream2*adjScream, \thresh, 0.5, \ratioDown, ratioDown, \ratioUp, 0.9, \buffer2, pattern.next, \recBuf2, 7, \jefeBuf, 5, \startPos, rrand(0, 820865), \osciOff, rrand(1.25, 0.75), \startOff, rrand(0,2021)]);  //pvplayGrito wagner/jefe
-});
-}).play;
+grito2.spawn([\recBuf, randBuffArr[soundFile-1].bufnum, \rate, rate, \amp, scream*volScream2*adjScream, \thresh, 0.5, \ratioDown, ratioDown, \ratioUp, 0.9, \recBuf2, bufferArr[5].bufnum, \jefeBuf, bufferArr[3].bufnum, \startPos, rrand(0, 820865), \osciOff, rrand(1.25, 0.75), \startOff, rrand(0,2021)]);  //pvplayGrito wagner/jefe
+}.fork;
 	
 	}
 	{[94,99,103,106,108,109,111,112,114,115,116,117,118].includes(soundFile)} {
-	Routine({1.do({
+	{
 (time*rate).yield;
-grito2.spawn([\bufnum, buf1, \recBuf, buf2, \rate, rate, \amp, scream*volScream2*adjScream, \thresh, 0.5, \ratioDown, ratioDown, \ratioUp, 0.9, \buffer2, pattern.next, \recBuf2, 7, \jefeBuf, 8, \startPos, rrand(0, 2072700), \osciOff, rrand(1.25, 0.75), \startOff, rrand(0,2021)]);  //pvplayGrito wagner/wagner
-});
-}).play;
+grito2.spawn([\recBuf, randBuffArr[soundFile-1].bufnum, \rate, rate, \amp, scream*volScream2*adjScream, \thresh, 0.5, \ratioDown, ratioDown, \ratioUp, 0.9, \recBuf2, bufferArr[5].bufnum, \jefeBuf, bufferArr[6].bufnum, \startPos, rrand(0, 2072700), \osciOff, rrand(1.25, 0.75), \startOff, rrand(0,2021)]);  //pvplayGrito wagner/wagner
+}.fork;
 	
 	}
 	{[3,5,6,9,12,13,16,17,19,22,23,24,26,28,32,34,35,37,39,40,41,42,43,45,46,47,48,49,73,77,81,85,87,93,98,102,110,122,124].includes(soundFile)} {
-	Routine({1.do({
+	{
 (time*rate).yield;
-grito1.spawn([\bufnum, buf1, \recBuf, buf2, \rate, rate, \amp, scream*volScream1*adjScream, \thresh, 0.5, \ratioDown, ratioDown, \ratioUp, 0.9]);  //pvplayVoc
-});
-}).play;
+grito1.spawn([\recBuf, randBuffArr[soundFile-1].bufnum, \rate, rate, \amp, scream*volScream1*adjScream, \thresh, 0.5, \ratioDown, ratioDown, \ratioUp, 0.9]);  //pvplayVoc
+}.fork;
 	};
 
-};
-
+}
+	
+	arrayTimes {var arr, b, c, newEinTimes, something, neew;
+	
 arr = (0,1..254)*(60/176);
 
 b = [ 0.01140589569161, 2.796485260771, 2.944126984127, 3.2375736961451, 7.1833560090703,11.47, 13.908616780045, 14.24, 16.49, 16.95, 18.120, 18.855, 19.485, 21.24, 23.505, 24.150, 24.86, 25.625, 26.17, 28.9, 31.27, 32.03, 36.93, 42.5, 47.535, 53.48, 55.47, 56.5, 59.35, 60.155, 60.66, 61.475, 62.06, 62.75, 66.16, 67.605, 68.485, 70.805, 72.57, 79.195, 85.285];
@@ -236,14 +206,10 @@ neew = newEinTimes.nearestInMinList(something);
 
 differ = newEinTimes-neew;
 
-
 }
 	
-	startMIDI {arg pianoOut = 0, metalOut=0, grito1Out = 2, grito2Out = 3, grito3Out=4, grito4Out=5, motorOut=5, wagner1Out=4, wagner2Out=4,wagner3Out=4,wagner4Out=4,buxtaOut=4, parsifalOut=4;
-	var step2, step3, findPivot, findPivot2, pivot, pivot2, thisArray, thisArray2, direction, direction2,synth1, synth2, a, b, noteLow, noteHigh, bendLow, bendHigh,whichPedal; 
-var count = 0, oldX=0, oldY=0, first;
-var pedalOffOld, pedalOnOld,pedalSwitch; 
-
+	startNodes {arg pianoOut = 0, metalOut=0, grito1Out = 2, grito2Out = 3, grito3Out=4, grito4Out=5, motorOut=5, wagner1Out=4, wagner2Out=4,wagner3Out=4,wagner4Out=4,buxtaOut=4, parsifalOut=4;
+	
 piano = NodeProxy.audio(s, 2);
 piano.play(pianoOut);
 
@@ -261,9 +227,6 @@ grito3.play(grito3Out);
 
 grito4 = NodeProxy.audio(s, 1);
 grito4.play(grito4Out);
-
-motor = NodeProxy.audio(s, 1);
-motor.play(motorOut); 
 
 wagner1 = NodeProxy.audio(s, 2);
 wagner1.play(wagner1Out); 
@@ -283,12 +246,21 @@ buxtahude.play(buxtaOut);
 parsifal = NodeProxy.audio(s, 2);
 parsifal.play(parsifalOut);
 
-sensor = NodeProxy.control(s, 1);
+//motor = NodeProxy.audio(s, 1);
+//motor.play(motorOut); 
+//
+//sensor = NodeProxy.control(s, 1);
 
+this.arrayTimes;
+}
+
+	startMIDI {var step2, step3, findPivot, findPivot2, pivot, pivot2, thisArray, thisArray2, direction, direction2,synth1, synth2, a, b, noteLow, noteHigh, bendLow, bendHigh,whichPedal; 
+var count = 0, oldX=0, oldY=0, first;
+var pedalOffOld, pedalOnOld,pedalSwitch; 
+	
 bendLow = 0;
 bendHigh = 0;
 
-this.arrayTimes;
 
 //if(midiOut.notNil, {
 //midiOut.control(0,81,63);
@@ -620,58 +592,58 @@ MIDIIn.program = { arg src, chan, prog;
 		{pedalOnGlob == 17} {
 		stepGlob = 51;
 		grito4.set(\gates, 1, \dec, sensorVal2.linlin(0,127,0.4,0.9));
-		funcPlay.value(stepGlob.postln, 0, (tempo/176), (amplitude));
+		this.funcPlay(stepGlob.postln, 0, (tempo/176), (amplitude));
 		}
 		{(pedalOnGlob > 17).and(pedalOnGlob <= 36)} {
 		stepGlob = stepGlob + 1;
 		grito4.set(\gates, 1, \dec, sensorVal2.linlin(0,127,0.4,0.9));
-		funcPlay.value(stepGlob.postln, 0, (tempo/176), (amplitude));
+		this.funcPlay(stepGlob.postln, 0, (tempo/176), (amplitude));
 		}
 		{pedalOnGlob == 38} {
 		stepGlob = 81;
-		funcPlay.value(stepGlob, differ[stepGlob-71], (tempo/176), (amplitude));
+		this.funcPlay(stepGlob, differ[stepGlob-71], (tempo/176), (amplitude));
 		}
 		{pedalOnGlob == 39} {
 		stepGlob = 85;
-		funcPlay.value(stepGlob, differ[stepGlob-71], (tempo/176), (amplitude));
+		this.funcPlay(stepGlob, differ[stepGlob-71], (tempo/176), (amplitude));
 		stepGlob = stepGlob + 1;
-		funcPlay.value(stepGlob, (differ[stepGlob-71]+(2*(60/176))), (tempo/176), (amplitude));
+		this.funcPlay(stepGlob, (differ[stepGlob-71]+(2*(60/176))), (tempo/176), (amplitude));
 		stepGlob = stepGlob + 1;
-		funcPlay.value(stepGlob, (differ[stepGlob-71]+(3*(60/176))), (tempo/176), (amplitude));		}
+		this.funcPlay(stepGlob, (differ[stepGlob-71]+(3*(60/176))), (tempo/176), (amplitude));		}
 		{pedalOnGlob == 40} {
 		stepGlob = 88;
-		funcPlay.value(stepGlob, differ[stepGlob-71], (tempo/176), (amplitude));
+		this.funcPlay(stepGlob, differ[stepGlob-71], (tempo/176), (amplitude));
 		stepGlob = stepGlob + 1;
-		funcPlay.value(stepGlob, (differ[stepGlob-71]+(5*(60/176))), (tempo/176), (amplitude));
+		this.funcPlay(stepGlob, (differ[stepGlob-71]+(5*(60/176))), (tempo/176), (amplitude));
 		stepGlob = stepGlob + 1;
-		funcPlay.value(stepGlob, (differ[stepGlob-71]+(6*(60/176))), (tempo/176), (amplitude));		}
+		this.funcPlay(stepGlob, (differ[stepGlob-71]+(6*(60/176))), (tempo/176), (amplitude));		}
 		{pedalOnGlob == 41} {
 		stepGlob = 93;
-		funcPlay.value(stepGlob, differ[stepGlob-71], (tempo/176), (amplitude));
+		this.funcPlay(stepGlob, differ[stepGlob-71], (tempo/176), (amplitude));
 		}
 		{pedalOnGlob == 42} {
 		stepGlob = 98;
-		funcPlay.value(stepGlob, differ[stepGlob-71], (tempo/176), (amplitude));
+		this.funcPlay(stepGlob, differ[stepGlob-71], (tempo/176), (amplitude));
 		stepGlob = stepGlob + 1;
-		funcPlay.value(stepGlob, (differ[stepGlob-71]+(3*(60/176))), (tempo/176), (amplitude));
+		this.funcPlay(stepGlob, (differ[stepGlob-71]+(3*(60/176))), (tempo/176), (amplitude));
 		}
 		{pedalOnGlob == 43} {
 		stepGlob = 102;
-		funcPlay.value(stepGlob, differ[stepGlob-71], (tempo/176), (amplitude));
+		this.funcPlay(stepGlob, differ[stepGlob-71], (tempo/176), (amplitude));
 		}
 		{pedalOnGlob == 44} {
 		stepGlob = 104;
-		funcPlay.value(stepGlob, differ[stepGlob-71], (tempo/176), (amplitude));
+		this.funcPlay(stepGlob, differ[stepGlob-71], (tempo/176), (amplitude));
 		stepGlob = stepGlob + 1;
-		funcPlay.value(stepGlob, (differ[stepGlob-71]+(1*(60/176))), (tempo/176), (amplitude));
+		this.funcPlay(stepGlob, (differ[stepGlob-71]+(1*(60/176))), (tempo/176), (amplitude));
 		}
 		{pedalOnGlob == 45} {
 		stepGlob = 107;
-		funcPlay.value(stepGlob, differ[stepGlob-71], (tempo/176), (amplitude));
+		this.funcPlay(stepGlob, differ[stepGlob-71], (tempo/176), (amplitude));
 		stepGlob = stepGlob + 1;
-		funcPlay.value(stepGlob, (differ[stepGlob-71]+(2*(60/176))), (tempo/176), (amplitude));
+		this.funcPlay(stepGlob, (differ[stepGlob-71]+(2*(60/176))), (tempo/176), (amplitude));
 		stepGlob = stepGlob + 1;
-		funcPlay.value(stepGlob, (differ[stepGlob-71]+(3*(60/176))), (tempo/176), (amplitude));
+		this.funcPlay(stepGlob, (differ[stepGlob-71]+(3*(60/176))), (tempo/176), (amplitude));
 		
 		//trigger wagner 
 		wagner1MIDITime = [ 0, 0.47406, 0.98773, 1.44011, 1.92125, 2.4123, 2.62227, 2.85021, 3.07428, 3.33516, 3.56156, 3.79795, 4.01052, 4.27658, 4.48633, 4.71209, 4.92802, 5.18882, 5.4036, 5.63429, 5.85886, 6.12091, 6.59246, 7.06605, 8.02378, 8.93659, 10.76226, 12.70385, 14.07918, 14.30404, 14.58499, 15.48375 ];
@@ -685,18 +657,18 @@ wagner1MIDIEnd = 0.96253;
 		}
 		{pedalOnGlob == 46} {
 		stepGlob = 110;
-		funcPlay.value(stepGlob, differ[stepGlob-71], (tempo/176), (amplitude));
+		this.funcPlay(stepGlob, differ[stepGlob-71], (tempo/176), (amplitude));
 		stepGlob = stepGlob + 1;
-		funcPlay.value(stepGlob, (differ[stepGlob-71]+(2*(60/176))), (tempo/176), (amplitude));
+		this.funcPlay(stepGlob, (differ[stepGlob-71]+(2*(60/176))), (tempo/176), (amplitude));
 		stepGlob = stepGlob + 1;
-		funcPlay.value(stepGlob, (differ[stepGlob-71]+(4*(60/176))), (tempo/176), (amplitude));
+		this.funcPlay(stepGlob, (differ[stepGlob-71]+(4*(60/176))), (tempo/176), (amplitude));
 		stepGlob = stepGlob + 1;
-		funcPlay.value(stepGlob, (differ[stepGlob-71]+(6*(60/176))), (tempo/176), (amplitude));		}
+		this.funcPlay(stepGlob, (differ[stepGlob-71]+(6*(60/176))), (tempo/176), (amplitude));		}
 		{pedalOnGlob == 47} {
 		stepGlob = 116;
-		funcPlay.value(stepGlob, differ[stepGlob-71], (tempo/176), (amplitude));
+		this.funcPlay(stepGlob, differ[stepGlob-71], (tempo/176), (amplitude));
 		stepGlob = stepGlob + 1;
-		funcPlay.value(stepGlob, (differ[stepGlob-71]+(5*(60/176))), (tempo/176), (amplitude));
+		this.funcPlay(stepGlob, (differ[stepGlob-71]+(5*(60/176))), (tempo/176), (amplitude));
 		
 		//trigger wagner 
 		wagner4MIDITime = [ 0, 0.45672, 0.9387, 1.39656, 1.84804, 2.30743, 2.51905, 2.77375, 2.99785, 3.2396, 3.47991, 3.70894, 3.9021, 4.16349, 4.39157, 4.62057, 4.84529, 5.09588, 5.33645, 5.54926, 5.77482, 6.01156, 6.4843, 6.94576 ];
@@ -710,21 +682,21 @@ wagner4MIDIEnd = 0.96776;
 		}
 		{pedalOnGlob == 48} {
 		stepGlob = 118;
-		funcPlay.value(stepGlob, differ[stepGlob-71], (tempo/176), (amplitude));
+		this.funcPlay(stepGlob, differ[stepGlob-71], (tempo/176), (amplitude));
 		}
 		{pedalOnGlob == 49} {
 		stepGlob = 120;
-		funcPlay.value(stepGlob, differ[stepGlob-71], (tempo/176), (amplitude));
+		this.funcPlay(stepGlob, differ[stepGlob-71], (tempo/176), (amplitude));
 		stepGlob = stepGlob + 1;
-		funcPlay.value(stepGlob, (differ[stepGlob-71]+(1*(60/176))), (tempo/176), (amplitude));
+		this.funcPlay(stepGlob, (differ[stepGlob-71]+(1*(60/176))), (tempo/176), (amplitude));
 		}
 		{pedalOnGlob == 50} {
 		stepGlob = 122;
-		funcPlay.value(stepGlob, differ[stepGlob-71], (tempo/176), (amplitude));
+		this.funcPlay(stepGlob, differ[stepGlob-71], (tempo/176), (amplitude));
 		stepGlob = stepGlob + 1;
-		funcPlay.value(stepGlob, (differ[stepGlob-71]+(7*(60/176))), (tempo/176), (amplitude));
+		this.funcPlay(stepGlob, (differ[stepGlob-71]+(7*(60/176))), (tempo/176), (amplitude));
 		stepGlob = stepGlob + 1;
-		funcPlay.value(stepGlob, (differ[stepGlob-71]+(11*(60/176))), (tempo/176), (amplitude));
+		this.funcPlay(stepGlob, (differ[stepGlob-71]+(11*(60/176))), (tempo/176), (amplitude));
 		}
 		{pedalOnGlob == 54} {
 		wagner2MIDITime = [ 0, 0.435, 0.93559, 1.40114, 1.86684, 2.34146, 2.56846, 2.78823, 3.01855, 3.24427, 3.46793, 3.71102, 3.92061, 4.17186, 4.38545, 4.63381, 4.85211, 5.1058, 5.3283, 5.55564, 5.78726, 6.03569, 7.20704, 7.46572, 7.69142, 7.93706, 8.16333, 8.38984, 8.61414, 9.86811 ];
@@ -793,40 +765,40 @@ wagner2MIDIEnd = 1.01561;
 			
 			countGlob=1;
 			stepGlob=1;
-			funcPlay.value(stepGlob, d[stepGlob-1], (tempo/176), (amplitude));
+			this.funcPlay(stepGlob, d[stepGlob-1], (tempo/176), (amplitude));
 			notes = [ 8, 9, 10, 22, 34, 41, 42, 49, 50, 54, 56, 58, 63, 69, 71, 73, 76, 77, 85, 92, 94];
 			stepGlob = stepGlob + 1;
 		}
 		{pedalOffGlob == 2;} {
 			stepGlob = 23;
-			funcPlay.value(stepGlob, d[stepGlob-1], (tempo/176), (amplitude));
+			this.funcPlay(stepGlob, d[stepGlob-1], (tempo/176), (amplitude));
 			notes = [];
 		}
 		{pedalOffGlob == 3;} {
 			stepGlob = 24;
-			funcPlay.value(stepGlob, d[stepGlob-1], (tempo/176), (amplitude));
+			this.funcPlay(stepGlob, d[stepGlob-1], (tempo/176), (amplitude));
 			notes = [];
 		}
 		{pedalOffGlob == 4;} {
 			stepGlob = 25;
-			funcPlay.value(stepGlob, d[stepGlob-1], (tempo/176), (amplitude));
+			this.funcPlay(stepGlob, d[stepGlob-1], (tempo/176), (amplitude));
 			notes = [];
 		}
 		{pedalOffGlob == 5;} {
 			countGlob=1;
 			stepGlob = 26;
-			funcPlay.value(stepGlob, d[stepGlob-1], (tempo/176), (amplitude));
+			this.funcPlay(stepGlob, d[stepGlob-1], (tempo/176), (amplitude));
 			notes = [ 7, 10, 19, 21, 22, 25, 27, 29, 39, 43, 45, 52, 57 ];
 			stepGlob = stepGlob + 1;
 		}
 		{pedalOffGlob == 6;} {
 			stepGlob = 40;
-			funcPlay.value(stepGlob, d[stepGlob-1], (tempo/176), (amplitude));
+			this.funcPlay(stepGlob, d[stepGlob-1], (tempo/176), (amplitude));
 			notes = [];
 		}
 		{(pedalOffGlob >= 6).and(pedalOffGlob <= 15)} {
 			stepGlob = stepGlob + 1;
-			funcPlay.value(stepGlob, d[stepGlob-1], (tempo/176), (amplitude));
+			this.funcPlay(stepGlob, d[stepGlob-1], (tempo/176), (amplitude));
 		}
 		//new section
 		{(pedalOffGlob >= 17).and(pedalOffGlob <= 36)} {
@@ -837,7 +809,7 @@ wagner2MIDIEnd = 1.01561;
 		{pedalOffGlob == 37;} {
 			countGlob=1;
 			stepGlob=71;
-			funcPlay.value(stepGlob, differ[stepGlob-71], (tempo/176), (amplitude));
+			this.funcPlay(stepGlob, differ[stepGlob-71], (tempo/176), (amplitude));
 			notes = [2, 3, 11, 12, 16, 18, 23, 29, 30 ];
 			stepGlob = stepGlob + 1;
 		}
@@ -849,14 +821,14 @@ wagner2MIDIEnd = 1.01561;
 		{pedalOffGlob == 40;} {
 			countGlob=1;
 			stepGlob=91;
-			funcPlay.value(stepGlob, differ[stepGlob-71], (tempo/176), (amplitude));
+			this.funcPlay(stepGlob, differ[stepGlob-71], (tempo/176), (amplitude));
 			notes = [2];
 			stepGlob = stepGlob + 1;
 		}
 		{pedalOffGlob == 41;} {
 			countGlob=1;
 			stepGlob=94;
-			funcPlay.value(stepGlob, differ[stepGlob-71], (tempo/176), (amplitude));
+			this.funcPlay(stepGlob, differ[stepGlob-71], (tempo/176), (amplitude));
 			notes = [6, 8, 9 ];
 			stepGlob = stepGlob + 1;
 		}
@@ -867,25 +839,25 @@ wagner2MIDIEnd = 1.01561;
 		}
 		{pedalOffGlob == 43;} {
 			stepGlob=103;
-			funcPlay.value(stepGlob, differ[stepGlob-71], (tempo/176), (amplitude));
+			this.funcPlay(stepGlob, differ[stepGlob-71], (tempo/176), (amplitude));
 			notes = [];
 		}
 		{pedalOffGlob == 44;} {
 			stepGlob=106;
-			funcPlay.value(stepGlob, differ[stepGlob-71], (tempo/176), (amplitude));
+			this.funcPlay(stepGlob, differ[stepGlob-71], (tempo/176), (amplitude));
 			notes = [];
 		}
 		{pedalOffGlob == 46;} {
 			countGlob=1;
 			stepGlob=114;
-			funcPlay.value(stepGlob, differ[stepGlob-71], (tempo/176), (amplitude));
+			this.funcPlay(stepGlob, differ[stepGlob-71], (tempo/176), (amplitude));
 			notes = [3];
 			stepGlob = stepGlob + 1;
 		}
 		{pedalOffGlob == 48;} {
 			countGlob=1;
 			stepGlob=119;
-			funcPlay.value(stepGlob, differ[stepGlob-71], (tempo/176), (amplitude));
+			this.funcPlay(stepGlob, differ[stepGlob-71], (tempo/176), (amplitude));
 			notes = [];
 		}
 		{pedalOffGlob == 49;} {
@@ -982,14 +954,14 @@ wagner1MIDIEnd = 0.32705;
 		{pedalOffGlob == 59;} {
 		//turn wagner off for solo buxtahude
 		//solo buxtahude
-		buxtahude.put(0, \pvplayBuxta2, 0, [\out, 0, \bufnum, 32, \recBuf, 28, \amp, volBuxta, \rate, (tempo/176), \gate, 1, \pos, 1]);
-		buxtahude.put(1, \pvplayBuxta2, 0, [\out, 0, \bufnum, 33, \recBuf, 29, \amp, volBuxta, \rate, (tempo/176), \gate, 1, \pos, -1]);
+		buxtahude.put(0, \pvplayBuxta2, 0, [\out, 0, \recBuf, 28, \amp, volBuxta, \rate, (tempo/176), \gate, 1, \pos, 1]);
+		buxtahude.put(1, \pvplayBuxta2, 0, [\out, 0, \recBuf, 29, \amp, volBuxta, \rate, (tempo/176), \gate, 1, \pos, -1]);
 		}
 		{pedalOffGlob == 60;} {
 		//solo wagner
 		//buxtahude.set(\gate, 1);
-		parsifal.put(0, \pvplayBuxta2, 0, [\out, 0, \bufnum, 32, \recBuf, 30, \amp, volParsifal, \rate, (tempo/176), \gate, 1, \pos, 1]);
-		parsifal.put(1, \pvplayBuxta2, 0, [\out, 0, \bufnum, 33, \recBuf, 31, \amp, volParsifal, \rate, (tempo/176), \gate, 1, \pos, -1]);
+		parsifal.put(0, \pvplayBuxta2, 0, [\out, 0, \recBuf, 30, \amp, volParsifal, \rate, (tempo/176), \gate, 1, \pos, 1]);
+		parsifal.put(1, \pvplayBuxta2, 0, [\out, 0, \recBuf, 31, \amp, volParsifal, \rate, (tempo/176), \gate, 1, \pos, -1]);
 		}
 		;
 		
@@ -1016,7 +988,7 @@ wagner1MIDIEnd = 0.32705;
 			if((time-oldTime) > (60/tempo/ 3*2), {
 			
 			if(metalOn == 1, {
-			metal.spawn([\amp, (ampOnset*volMetal), \recBuf, [2,3,4].choose, \bufnum, pattern.next, \rate, rrand(0.8,1.2)]);
+			metal.spawn([\amp, (ampOnset*volMetal), \recBuf, bufferArr[[0,1,2].choose].bufnum, \rate, rrand(0.8,1.2)]);
 			ampSilence.add(ampOnset*volMetal);
 			ampSilence.removeAt(0);
 			});
@@ -1024,10 +996,10 @@ wagner1MIDIEnd = 0.32705;
 			if(notes.includes(countGlob), { 
 			case
 			{pedalOffGlob < 36} {
-			funcPlay.value(stepGlob, d[stepGlob-1], (tempo/176), amplitude);
+			this.funcPlay(stepGlob, d[stepGlob-1], (tempo/176), amplitude);
 			}
 			{pedalOffGlob >= 36} {
-			funcPlay.value(stepGlob, differ[stepGlob-71], (tempo/176), amplitude);
+			this.funcPlay(stepGlob, differ[stepGlob-71], (tempo/176), amplitude);
 			};	//samples triggered by offset
 			stepGlob = stepGlob + 1; });
 			
@@ -1087,7 +1059,7 @@ wagner1MIDIEnd = 1.40038;
 			difference = ampSilence - ampSilence.mean;
 			
 			if(metalOn == 0, {
-			metal.spawn([\amp, (ampSilence.mean + rrand(difference.minItem, difference.maxItem)), \recBuf, [2,3,4].choose, \bufnum, pattern.next, \rate, rrand(0.8,1.2), \pan, sensorVal2.linlin(0,127,-1, 1)]);
+			metal.spawn([\amp, (ampSilence.mean + rrand(difference.minItem, difference.maxItem)), \recBuf, bufferArr[[0,1,2].choose].bufnum, \rate, rrand(0.8,1.2), \pan, sensorVal2.linlin(0,127,-1, 1)]);
 			
 			});
 			
@@ -1214,17 +1186,18 @@ var number1, number2;
 	readyToStart {arg firstTempo=156, onsetThresh=0.13, page=1, pedalDown=1, pedalUp=1;
 	Routine({1.do({
 	'wait'.postln;
-	piano.put(0, \detect, 0, [\out, 0, \buffer1, 0 , \buffer2, 1, \in, audioIn, \amp, ampIn/2, \thresh1, onsetThresh, \initTempo, firstTempo/60, \micOn, 0, \impOn, 0, \initImpOn, 1]);
-	metal.put(0, \bang, 0, [\out, 0, \amp, 0, \recBuf, [2,3,4].choose;, \bufnum, bufBang, \rate, rrand(0.8,1.2), \adjVol, 1.0]);
-	grito1.put(0, \pvplayVoc, 0, [\out, 0, \bufnum, offset, \recBuf, offset+1, \rate, 1, \amp, 0, \thresh, 0.5, \ratioDown, 0.7, \ratioUp, 0.9, \adjVol, 1.0, \pan, 0]);
-	grito2.put(0, \pvplayGrito, 0, [\out, 0, \bufnum, offset+3, \recBuf, offset+4, \rate, 1, \amp, 0, \thresh, 0.5, \ratioDown, 0.7, \ratioUp, 0.9, \adjVol, 1.0, \pan, 0, \buffer2, bufBang+1, \recBuf2, 6, \jefeBuf, 5, \startPos, rrand(0, 820865), \osciOff, rrand(1.25, 0.75), \startOff, rrand(0,403)]); 
-	grito3.put(0, \pvplayBet, 0, [\out, 0, \bufnum, offset+6, \recBuf, offset+7, \rate, 1, \amp, 0, \thresh, 0.5, \ratioDown, 0.6, \ratioUp, 0.9, \adjVol, 1.0, \pan, 0]);
-	grito4.put(0, \pvplayMono, 0, [\out, 0, \bufnum, offset+9, \recBuf, offset+10, \rate, 1, \amp, 0, \thresh, 0.5, \ratioDown, 0.7, \ratioUp, 0.9, \adjVol, 0.5, \pan, 0]);
-	sensor.put(0, \lagging, 0, [\num, lowVal, \low, lowVal, \high, highVal, \id, 4, \lag, 0.5]);
-	sensor.put(1, \lagging, 0,  [\num, rightVal, \low, leftVal, \high, rightVal, \id, 5, \lag, 0.8]);
+	piano.put(0, \detect, 0, [\out, 0, \in, audioIn, \thresh1, onsetThresh, \initTempo, firstTempo/60, \micOn, 0, \impOn, 0, \initImpOn, 1]);
+	metal.put(0, \bang, 0, [\out, 0, \amp, 0, \recBuf, bufferArr[[0,1,2].choose].bufnum, \rate, rrand(0.8,1.2), \adjVol, 1.0]);
+	grito1.put(0, \pvplayVoc, 0, [\out, 0, \recBuf, randBuffArr[0].bufnum, \rate, 1, \amp, 0, \thresh, 0.5, \ratioDown, 0.7, \ratioUp, 0.9, \adjVol, 1.0, \pan, 0]);
+	grito2.put(0, \pvplayGrito, 0, [\out, 0, \recBuf, randBuffArr[1].bufnum, \rate, 1, \amp, 0, \thresh, 0.5, \ratioDown, 0.7, \ratioUp, 0.9, \adjVol, 1.0, \pan, 0, \recBuf2, bufferArr[4].bufnum, \jefeBuf, bufferArr[3].bufnum, \startPos, rrand(0, 820865), \osciOff, rrand(1.25, 0.75), \startOff, rrand(0,403)]); 
+	grito3.put(0, \pvplayBet, 0, [\out, 0, \recBuf, randBuffArr[2].bufnum, \rate, 1, \amp, 0, \thresh, 0.5, \ratioDown, 0.6, \ratioUp, 0.9, \adjVol, 1.0, \pan, 0]);
+	grito4.put(0, \pvplayMono, 0, [\out, 0, \recBuf, randBuffArr[3].bufnum, \rate, 1, \amp, 0, \thresh, 0.5, \ratioDown, 0.7, \ratioUp, 0.9, \adjVol, 0.5, \pan, 0]);
+	
+	//sensor.put(0, \lagging, 0, [\num, lowVal, \low, lowVal, \high, highVal, \id, 4, \lag, 0.5]);
+//	sensor.put(1, \lagging, 0,  [\num, rightVal, \low, leftVal, \high, rightVal, \id, 5, \lag, 0.8]);
 
-	sensorLag1 = sensor.objects[0];
-	sensorLag2 = sensor.objects[1];
+//	sensorLag1 = sensor.objects[0];
+//	sensorLag2 = sensor.objects[1];
 	
 	wagner1.put(0, \playWagner, 0, [\rate,1,\amp,0,\buffer,7]);
 	wagner1.put(1, \playWagner, 0, [\rate,1,\amp,0,\buffer,7]);
@@ -1234,7 +1207,7 @@ var number1, number2;
 	wagner3.put(1, \playWagner, 0, [\rate,1,\amp,0,\buffer,9]);
 	wagner4.put(0, \playWagner, 0, [\rate,1,\amp,0,\buffer,10]);
 	wagner4.put(1, \playWagner, 0, [\rate,1,\amp,0,\buffer,10]);
-	1.0.yield;
+	0.2.yield;
 	wagner1.objects[0].set(\gate, 0);
 	wagner1.objects[1].set(\gate, 0);
 	wagner2.objects[0].set(\gate, 0);
@@ -1249,37 +1222,37 @@ var number1, number2;
 	'ready'.postln;
 	}).play;
 	
-	case
-{page == \pedal} {this.changePedalNum(pedalDown,pedalUp)}
-{page == 1} {this.changePedalNum(1,1)}
-{[2,3,4].includes(page)} {this.changePedalNum(2,1)}
-{page == 5} {this.changePedalNum(3,3)}
-{page == 6} {this.changePedalNum(5,5)}
-{page == 7} {this.changePedalNum(6,5)}
-{page == 8} {this.changePedalNum(6,6)}
-{page == 9} {this.changePedalNum(8,8)}
-{page == 10} {this.changePedalNum(10,10)}
-{page == 11} {this.changePedalNum(13,13)}
-{page == 12} {this.changePedalNum(17,17)}
-{page == 13} {this.changePedalNum(22,23)}
-{page == 14} {this.changePedalNum(28,29)}
-{page == 15} {this.changePedalNum(34,35)}
-{page == 16} {this.changePedalNum(37,38)}
-{page == 17} {this.changePedalNum(38,38)}
-{page == 18} {this.changePedalNum(38,39)}
-{page == 19} {this.changePedalNum(39,40)}
-{page == 20} {this.changePedalNum(40,41)}
-{page == 21} {this.changePedalNum(41,42)}
-{page == 22} {this.changePedalNum(42,43)}
-{page == 23} {this.changePedalNum(43,44)}
-{page == 24} {this.changePedalNum(44,45)}
-{page == 25} {this.changePedalNum(45,46)}
-{page == 26} {this.changePedalNum(46,47)}
-{page == 27} {this.changePedalNum(47,48)}
-{page == 28} {this.changePedalNum(48,49)}
-{page == 29} {this.changePedalNum(49,50)}
-{page == 30} {this.changePedalNum(50,51)}
-{page == 31} {this.changePedalNum(51,52)};
+	//case
+//{page == \pedal} {this.changePedalNum(pedalDown,pedalUp)}
+//{page == 1} {this.changePedalNum(1,1)}
+//{[2,3,4].includes(page)} {this.changePedalNum(2,1)}
+//{page == 5} {this.changePedalNum(3,3)}
+//{page == 6} {this.changePedalNum(5,5)}
+//{page == 7} {this.changePedalNum(6,5)}
+//{page == 8} {this.changePedalNum(6,6)}
+//{page == 9} {this.changePedalNum(8,8)}
+//{page == 10} {this.changePedalNum(10,10)}
+//{page == 11} {this.changePedalNum(13,13)}
+//{page == 12} {this.changePedalNum(17,17)}
+//{page == 13} {this.changePedalNum(22,23)}
+//{page == 14} {this.changePedalNum(28,29)}
+//{page == 15} {this.changePedalNum(34,35)}
+//{page == 16} {this.changePedalNum(37,38)}
+//{page == 17} {this.changePedalNum(38,38)}
+//{page == 18} {this.changePedalNum(38,39)}
+//{page == 19} {this.changePedalNum(39,40)}
+//{page == 20} {this.changePedalNum(40,41)}
+//{page == 21} {this.changePedalNum(41,42)}
+//{page == 22} {this.changePedalNum(42,43)}
+//{page == 23} {this.changePedalNum(43,44)}
+//{page == 24} {this.changePedalNum(44,45)}
+//{page == 25} {this.changePedalNum(45,46)}
+//{page == 26} {this.changePedalNum(46,47)}
+//{page == 27} {this.changePedalNum(47,48)}
+//{page == 28} {this.changePedalNum(48,49)}
+//{page == 29} {this.changePedalNum(49,50)}
+//{page == 30} {this.changePedalNum(50,51)}
+//{page == 31} {this.changePedalNum(51,52)};
 
 	
 }
@@ -1556,16 +1529,18 @@ EZSlider(mixWindow, // window
 	
 	
 	*initClass {
-		SynthDef.writeOnce("pvrecOnViolence", { arg bufnum=0, recBuf=1, soundBufnum=2;
-	var in, chain;
+		SynthDef.writeOnce("pvrecOnViolence", { arg recBuf=1, soundBufnum=2;
+	var in, chain, bufnum;
 	Line.kr(1, 1, BufDur.kr(soundBufnum), doneAction: 2);
 	in = PlayBuf.ar(1, soundBufnum, BufRateScale.kr(soundBufnum), loop: 0);
+	bufnum = LocalBuf.new(2048, 1);
 	chain = FFT(bufnum, in); 
 	chain = PV_RecordBuf(chain, recBuf, 0, 1);
 	});
 
-	SynthDef.writeOnce("pvplayMono", { arg out=0, bufnum=0, recBuf=1, rate=1.0, amp=1.0, adjVol=1, thresh= 0.1, ratioUp = 1/3, ratioDown=1, pan=0, dec=0.9, gates=1, globamp=1.0;
-	var in, chain, signal, signal2, signal3;
+	SynthDef.writeOnce("pvplayMono", { arg out=0, recBuf=1, rate=1.0, amp=1.0, adjVol=1, thresh= 0.1, ratioUp = 1/3, ratioDown=1, pan=0, dec=0.9, gates=1, globamp=1.0;
+	var in, chain, signal, signal2, signal3, bufnum;
+	bufnum = LocalBuf.new(2048, 1);
 	chain = PV_PlayBuf(bufnum, recBuf, rate);
 	signal = IFFT(chain);
 	signal2 = Compander.ar(signal, signal,
@@ -1580,45 +1555,49 @@ EZSlider(mixWindow, // window
 	Out.ar(out, signal3*amp*globamp);
 	});
 	
-	SynthDef.writeOnce("pvplayVoc", { arg out=0, bufnum=0, recBuf=1, rate=1.0, amp=1.0, adjVol=1, pan=0, globamp=1.0;
-	var in, chain, signal, signal2, signal3, kernel, kernel2, freq, hasFreq;
+	SynthDef.writeOnce("pvplayVoc", { arg out=0, recBuf=1, rate=1.0, amp=1.0, adjVol=1, pan=0, globamp=1.0;
+	var in, chain, signal, signal2, signal3, kernel, kernel2, freq, hasFreq, bufnum;
+	bufnum = LocalBuf.new(2048, 1);
 	chain = PV_PlayBuf(bufnum, recBuf, rate);
 	signal = IFFT(chain);
 	#freq, hasFreq = Pitch.kr(signal);
 	kernel= WeaklyNonlinear.ar(signal,0,1,1,freq*2,0,0,-0.001,3,0,0);
 	kernel2= WeaklyNonlinear2.ar(signal,0,1,1,freq*2,0,0,-0.001,3,0,0);
-	signal2 = Convolution.ar(kernel+signal,kernel2, 2048, 0.0005) * EnvGen.kr(Env.asr(0.01, 1.0, 0.01), Amplitude.kr(signal));	
-	signal3 = Limiter.ar(signal2*adjVol);
+	signal2 = Convolution.ar(kernel+signal,kernel2, 2048, 0.0005);
+	signal3 = Limiter.ar(signal2*adjVol) * EnvGen.kr(Env.asr(0.01, 1.0, 0.01), Amplitude.kr(signal));
 	DetectSilence.ar(signal3, doneAction: 2);
 	Out.ar(out, (signal3*amp*globamp));
 	});
 	
-	SynthDef.writeOnce("pvplayBet", { arg out=0, bufnum=0, recBuf=1, rate=1.0, amp=1.0, adjVol=1, pan=0, globamp=1.0;
-	var in, chain, signal, signal2, signal3, kernel, kernel2, freq, hasFreq;
+	SynthDef.writeOnce("pvplayBet", { arg out=0, recBuf=1, rate=1.0, amp=1.0, adjVol=1, pan=0, globamp=1.0;
+	var in, chain, signal, signal2, signal3, kernel, kernel2, freq, hasFreq, bufnum;
+	bufnum = LocalBuf.new(2048, 1);
 	chain = PV_PlayBuf(bufnum, recBuf, rate);
 	signal = IFFT(chain);
 	#freq, hasFreq = Pitch.kr(signal);
 	kernel= WeaklyNonlinear.ar(signal,0,1,1,freq*2,0,0,-0.001,3,0,0);
 	kernel2= LPCError.ar(signal, signal.linlin(-1,1,64,25));
-	signal2 = Convolution.ar(kernel*3.5,kernel2*1.5, 2048, 0.0005) * EnvGen.kr(Env.asr(0.01, 1.0, 0.01), Amplitude.kr(signal));	
-	signal3 = Limiter.ar(signal2*adjVol);
+	signal2 = Convolution.ar(kernel*3.5,kernel2*1.5, 2048, 0.0005);
+	signal3 = Limiter.ar(signal2*adjVol) * EnvGen.kr(Env.asr(0.01, 1.0, 0.01), Amplitude.kr(signal));
 	DetectSilence.ar(signal3, doneAction: 2);
 	Out.ar(out, (signal3*amp*globamp));
 	});
 	
-	SynthDef.writeOnce("pvplayGrito", {arg out=0, amp=1.0, adjVol=0.9, thresh= 0.5, ratioDown=1, pos=0, bufnum=0, recBuf=4, rate=1, jefeBuf = 1, recBuf2 = 3, buffer2 = 2, startPos = 0, osciOff=1, startOff=0, globamp=1.0;
-	 var input, freq, hasFreq, signal, signal2, input2, chain, output, osci;
+	SynthDef.writeOnce("pvplayGrito", {arg out=0, amp=1.0, adjVol=0.9, thresh= 0.5, ratioDown=1, pos=0, recBuf=4, rate=1, jefeBuf = 1, recBuf2 = 3, startPos = 0, osciOff=1, startOff=0, globamp=1.0;
+	 var input, freq, hasFreq, signal, signal2, input2, chain, output, osci, bufnum, bufnum2;
 	 var gritos, elJefe, osci2, osci3;
+	bufnum = LocalBuf.new(2048, 1);
 	chain = PV_PlayBuf(bufnum, recBuf, rate);
 	input = IFFT(chain);	
 	#freq, hasFreq = Pitch.kr(input*8, 783.9908719635);
 	osci = (freq/"g5".notecps);
 	osci2 = osci.linlin(0,2,2,0) * osciOff; 
-	chain =  PV_PlayBuf(buffer2, recBuf2, osci2.min(1.5).max(0.75), startOff, 1);
+	bufnum2 = LocalBuf.new(2048, 1);
+	chain =  PV_PlayBuf(bufnum2, recBuf2, osci2.min(1.5).max(0.75), startOff, 1);
 	gritos = IFFT(chain, 1);
 	elJefe = PlayBuf.ar(1, jefeBuf, startPos:  startPos, loop:1);
 	input2 = PitchShift.ar((gritos + (elJefe/2)), 0.4, osci.min(1.5).max(0.75));
-	output = HPF.ar(input2, 188) * EnvGen.kr(Env.asr(0.01, 1.0, (0.027*(osci*16))), Amplitude.kr(input))/2;
+	output = HPF.ar(input2, 188);
 	signal = Compander.ar(output, output,
 		thresh: thresh,
 		slopeBelow: 0.7,
@@ -1626,19 +1605,20 @@ EZSlider(mixWindow, // window
 		clampTime: 0.01,
 		relaxTime: 0.01
 	);
-	signal2 = Limiter.ar(signal*adjVol);
+	signal2 = Limiter.ar(signal*adjVol) * EnvGen.kr(Env.asr(0.01, 1.0, (0.027*(osci*16))), Amplitude.kr(input))/2;
 	DetectSilence.ar(signal2, doneAction: 2);
 	Out.ar(out, (signal2*amp).softclip(1)*globamp);
 	});
 
-	SynthDef.writeOnce("detect",{|out = 0, in = 1, buffer1=0, thresh1=1, rate=200, lock=0, amp=1.0, pan=0, freq=0.1, globamp=1.0, micOn=0, impOn=0, initTempo=2.0, initImpOn=1.0|
-	var signal, signal2, chain1, onsets1, trig, amplitude;
+	SynthDef.writeOnce(\detect,{arg out = 0, in = 1, thresh1=1, rate=200, lock=0, freq=0.1, micOn=0, impOn=0, initTempo=2.0, initImpOn=1.0;
+	var signal, signal2, chain1, onsets1, trig, amplitude, buffer;
 	var trackb,trackh,trackq,tempo;
 	trig = Impulse.kr(rate);
 	signal = AudioIn.ar(in);
 	#trackb,trackh,trackq,tempo=AutoTrack.kr(signal, lock);
 	signal2 = (signal*micOn)+(Impulse.ar(tempo)*impOn)+(Impulse.ar(initTempo)*initImpOn);
-	chain1 = FFT(buffer1, signal2);
+	buffer = LocalBuf.new(512, 1);
+	chain1 = FFT(buffer, signal2);
 	onsets1 = Onsets.kr(chain1, thresh1, \rcomplex);
 	amplitude = Amplitude.kr(signal);
 	SendTrig.kr(trig, 0, onsets1);
@@ -1646,29 +1626,16 @@ EZSlider(mixWindow, // window
 	SendTrig.kr(onsets1, 2, amplitude);
 	SendTrig.kr(Impulse.kr(352),3,Decay.kr(trackb,0.05));
 	SendTrig.kr(Impulse.kr(3),6,tempo);
-	Out.ar(out, (Pan2.ar(signal, pan, amp*globamp)));
 	});
 	
-	SynthDef.writeOnce(\bang, {|out=0, amp=0.5, bufnum=0, recBuf=1, pan=0.0, rate=1, adjVol=1.0, lag=0.5, globamp=1.0|
-	var signal, signal2, chain;
+	SynthDef.writeOnce(\bang, {arg out=0, amp=0.5, recBuf=1, pan=0.0, rate=1, adjVol=1.0, lag=0.5, globamp=1.0;
+	var signal, signal2, chain, bufnum;
+	bufnum = LocalBuf.new(2048, 1);
 	chain =  PV_PlayBuf(bufnum, recBuf, rate);
 	signal = IFFT(chain, 1);
 	DetectSilence.ar(signal, doneAction: 2);
 	Out.ar(out, signal*amp*globamp*adjVol);
 	});
-
-	SynthDef.writeOnce(\motor, {|freq=440, amp=0.2, out=0, gates=1, lag=0.1, globamp=1.0|
-	var signal;
-	signal = RLPF.ar(LFPulse.ar(freq/16, 0.2), 100, 0.1).clip2(0.4) 
-	* EnvGen.kr(Env.asr(0.1,1,0.3), gates, doneAction: 2);
-	Out.ar(out, ((signal*amp*globamp)*0.5))
-	});
-	
-	SynthDef.writeOnce("lagging",{arg num=45, rate=500, low=20, high=60, id=0, lag=0.2;
-	var values;
-	values = Ramp.kr(num.linlin(low, high, 0, 127), lag).round(1);
-	SendTrig.kr(Impulse.kr(rate),id,values);
-});
 
 	SynthDef.writeOnce("playWagner", {arg rate=1, gate=1, amp = 1.0, start=0,atk=0.1, dec=0.2,trig=1,pan=0,buffer=0,out=0, globamp=1.0;
 var signal, env;
@@ -1677,8 +1644,9 @@ env = EnvGen.kr(Env.asr(atk, 1.0, dec), gate, doneAction:2);
 Out.ar(out, Pan2.ar((signal*env),pan,amp*globamp));
 });
 
-SynthDef.writeOnce("pvplayBuxta2", { arg out=0, bufnum=0, recBuf=1,amp=1,gate=1,rate=1,dec=2.0, pos=0.0, globamp=1.0;
-	var in, chain, signal, env;
+SynthDef.writeOnce("pvplayBuxta2", { arg out=0, recBuf=1,amp=1,gate=1,rate=1,dec=2.0, pos=0.0, globamp=1.0;
+	var in, chain, signal, env, bufnum;
+	bufnum = LocalBuf.new(2048, 1);
 	chain = PV_PlayBuf(bufnum, recBuf, rate, 0, 0);
 	signal = IFFT(chain, 1);
 	env = EnvGen.kr(Env.asr(0.005, 1.0, dec), gate, doneAction:2);

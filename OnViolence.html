@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Style-Type" content="text/css">
 <title></title>
 <meta name="Generator" content="Cocoa HTML Writer">
-<meta name="CocoaVersion" content="949.46">
+<meta name="CocoaVersion" content="1138.47">
 <style type="text/css">
 p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #663f23}
 p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #663f23; min-height: 12.0px}
@@ -17,8 +17,8 @@ p.p7 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco}
 span.s1 {font: 12.0px Helvetica}
 span.s2 {color: #102da7}
 span.s3 {color: #663f23}
-span.s4 {color: #000000}
-span.s5 {color: #783a1d}
+span.s4 {color: #783a1d}
+span.s5 {color: #000000}
 span.s6 {color: #5d652c}
 span.Apple-tab-span {white-space:pre}
 </style>
@@ -42,9 +42,7 @@ span.Apple-tab-span {white-space:pre}
 <p class="p3">//Synth("oscJO", [\out, 5]);</p>
 <p class="p2"><br></p>
 <p class="p4"><br></p>
-<p class="p5">s.boot;</p>
-<p class="p6"><br></p>
-<p class="p7"><span class="s2">MIDIIn</span>.allsources;</p>
+<p class="p5">s.bootAndMIDI;</p>
 <p class="p6"><br></p>
 <p class="p7">(</p>
 <p class="p7">~violence = <span class="s2">OnViolence</span>(audioIn: 1,<span class="Apple-converted-space"> </span></p>
@@ -52,37 +50,36 @@ span.Apple-tab-span {white-space:pre}
 <p class="p1">//vol: pianoVol, metalVol, grito1Vol, grito2Vol, grito3Vol, grito4Vol, volMotor, volWagner1, volWagner2, volWagner3, volWagner4, buxtahude, parsifal</p>
 <p class="p7">)</p>
 <p class="p6"><br></p>
-<p class="p1">//~version = Array.fill(26, {rrand(1,10)}); //random versions<span class="Apple-converted-space"> </span></p>
-<p class="p7">~version = [ 8, 7, 10, 9, 2, 1, 6, 9, 8, 4, 7, 1, 10, 7, 9, 8, 7, 2, 7, 7, 7, 2, 10, 1, 9, 4 ]; <span class="s3">//to practise a specific version, write the array...</span></p>
 <p class="p6"><br></p>
-<p class="p7">~violence.selectFiles(~version); <span class="s3">//this takes a few seconds</span></p>
+<p class="p7">~violence.startNodes(0,0,0,0,0,0,0,0,0,0,0,0);</p>
 <p class="p6"><br></p>
-<p class="p1"><span class="s4">~violence.recordFiles; </span>//this takes a few seconds</p>
+<p class="p7">~violence.readyToStart;</p>
 <p class="p6"><br></p>
+<p class="p7">~violence.funcPlay(1,0,1,0);</p>
 <p class="p6"><br></p>
 <p class="p6"><br></p>
 <p class="p3">//Huddersfield-Cambridge setup<span class="Apple-converted-space"> </span></p>
 <p class="p7">(</p>
-<p class="p7">~violence.prepare(pianoOut: 0, metalOut: 4, grito1Out: 1, grito2Out: 2, grito3Out: 3, grito4Out:7, motorOut: 6, wagner1Out: 2, wagner2Out: 0, wagner3Out: 0, wagner4Out: 2, buxtaOut: 0, parsifalOut: 2); <span class="s5">//outs: piano, metal, grito1, grito2, grito3, grito4, motor,wagner1,wagner2,wagner3,wagner4,buxta,parsifal</span></p>
+<p class="p7">~violence.prepare(pianoOut: 0, metalOut: 4, grito1Out: 1, grito2Out: 2, grito3Out: 3, grito4Out:7, motorOut: 6, wagner1Out: 2, wagner2Out: 0, wagner3Out: 0, wagner4Out: 2, buxtaOut: 0, parsifalOut: 2); <span class="s4">//outs: piano, metal, grito1, grito2, grito3, grito4, motor,wagner1,wagner2,wagner3,wagner4,buxta,parsifal</span></p>
 <p class="p7">)</p>
 <p class="p6"><br></p>
 <p class="p6"><br></p>
-<p class="p1"><span class="s4">~violence.mixer; </span>//global amplitude mixer</p>
+<p class="p1"><span class="s5">~violence.mixer; </span>//global amplitude mixer</p>
 <p class="p6"><br></p>
-<p class="p1"><span class="s4">~violence.readyToStart(156, 0.13, 1); </span>//firstTempo, onsetThresh, page, pedalDown, pedalUp<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="s5">~violence.readyToStart(156, 0.13, 1); </span>//firstTempo, onsetThresh, page, pedalDown, pedalUp<span class="Apple-converted-space"> </span></p>
 <p class="p6"><br></p>
-<p class="p1"><span class="s4">~violence.readyToStart(156, 0.13, </span><span class="s6">\pedal</span><span class="s4">, 51, 51);</span>//firstTempo, onsetThresh, page, pedalDown, pedalUp</p>
+<p class="p1"><span class="s5">~violence.readyToStart(156, 0.13, </span><span class="s6">\pedal</span><span class="s5">, 51, 51);</span>//firstTempo, onsetThresh, page, pedalDown, pedalUp</p>
 <p class="p6"><br></p>
-<p class="p1"><span class="s4">~violence.readyToStart(156, 0.13, </span><span class="s6">\pedal</span><span class="s4">, 59, 59);</span>//firstTempo, onsetThresh, page, pedalDown, pedalUp</p>
+<p class="p1"><span class="s5">~violence.readyToStart(156, 0.13, </span><span class="s6">\pedal</span><span class="s5">, 59, 59);</span>//firstTempo, onsetThresh, page, pedalDown, pedalUp</p>
 <p class="p6"><br></p>
-<p class="p1"><span class="s4">~violence.readyToStart(156, 0.13, 16);</span>//firstTempo, onsetThresh, page =&gt; notice the change in onsetThresh<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="s5">~violence.readyToStart(156, 0.13, 16);</span>//firstTempo, onsetThresh, page =&gt; notice the change in onsetThresh<span class="Apple-converted-space"> </span></p>
 <p class="p6"><br></p>
 <p class="p7">~violence.remove; <span class="s3">//to stop</span></p>
 <p class="p6"><br></p>
-<p class="p1"><span class="s4">~violence.keyboardPedal; </span>//instead of midi pedal, use letters q and a</p>
+<p class="p1"><span class="s5">~violence.keyboardPedal; </span>//instead of midi pedal, use letters q and a</p>
 <p class="p7">~violence.keyboardPedalOff; <span class="s3">//turn it off</span></p>
 <p class="p6"><br></p>
-<p class="p1"><span class="s4">~violence.mixer2; </span>//a specific amp mixer</p>
+<p class="p1"><span class="s5">~violence.mixer2; </span>//a specific amp mixer</p>
 <p class="p2"><br></p>
 <p class="p6"><br></p>
 <p class="p6"><br></p>
@@ -118,6 +115,17 @@ span.Apple-tab-span {white-space:pre}
 <p class="p7">~violence.pedalOnFunc;</p>
 <p class="p6"><br></p>
 <p class="p1">///////////////////////////////////////////////////////////</p>
+<p class="p2"><br></p>
+<p class="p7">(</p>
+<p class="p7">~violence = <span class="s2">OnViolence</span>(audioIn: 1,<span class="Apple-converted-space"> </span></p>
+<p class="p7">ampIn: 1.0, volMetal: 1.0, volScream1: 1.5, volScream2: 0.5, volScream3: 0.9, volScream4: 1.0, volMotor: 1.0, volWagner1: 0.2, volWagner2: 0.2, volWagner3: 0.2, volWagner4: 0.2, volBuxta:1.0, volParsifal: 0.9); <span class="s3">//ins: audioIn, audioInOnset</span></p>
+<p class="p1">//vol: pianoVol, metalVol, grito1Vol, grito2Vol, grito3Vol, grito4Vol, volMotor, volWagner1, volWagner2, volWagner3, volWagner4, buxtahude, parsifal</p>
+<p class="p7">)</p>
+<p class="p6"><br></p>
+<p class="p1">//~version = Array.fill(26, {rrand(1,10)}); //random versions<span class="Apple-converted-space"> </span></p>
+<p class="p7">~version = [ 8, 7, 10, 9, 2, 1, 6, 9, 8, 4, 7, 1, 10, 7, 9, 8, 7, 2, 7, 7, 7, 2, 10, 1, 9, 4 ]; <span class="s3">//to practise a specific version, write the array...</span></p>
+<p class="p6"><br></p>
+<p class="p7">~violence.selectFiles(~version); <span class="s3">//this takes a few seconds</span></p>
 <p class="p2"><br></p>
 <p class="p2"><br></p>
 <p class="p1">//~violence.sendVersion; //make sure the message is recived in computer2</p>
