@@ -7,19 +7,18 @@
 <meta name="Generator" content="Cocoa HTML Writer">
 <meta name="CocoaVersion" content="1138.47">
 <style type="text/css">
-p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #663f23}
-p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #663f23; min-height: 12.0px}
-p.p3 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #783a1d}
-p.p4 {margin: 0.0px 0.0px 0.0px 0.0px; font: 10.0px Monaco; min-height: 14.0px}
-p.p5 {margin: 0.0px 0.0px 0.0px 0.0px; font: 10.0px Monaco}
-p.p6 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; min-height: 12.0px}
-p.p7 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco}
+p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #d5100d}
+p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; min-height: 12.0px}
+p.p3 {margin: 0.0px 0.0px 0.0px 0.0px; font: 10.0px Monaco; min-height: 14.0px}
+p.p4 {margin: 0.0px 0.0px 0.0px 0.0px; font: 10.0px Monaco}
+p.p5 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #ff7929}
+p.p6 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco}
 span.s1 {font: 12.0px Helvetica}
-span.s2 {color: #102da7}
-span.s3 {color: #663f23}
-span.s4 {color: #783a1d}
-span.s5 {color: #000000}
-span.s6 {color: #5d652c}
+span.s2 {color: #ff7929}
+span.s3 {color: #000000}
+span.s4 {color: #132bc3}
+span.s5 {color: #d5100d}
+span.s6 {color: #008326}
 span.Apple-tab-span {white-space:pre}
 </style>
 </head>
@@ -32,119 +31,125 @@ span.Apple-tab-span {white-space:pre}
 <p class="p1">//Server.local.options.outputStreamsEnabled = "01"<span class="s1"><b>;</b></span></p>
 <p class="p1">//)</p>
 <p class="p2"><br></p>
-<p class="p3">//SynthDef("oscJO", {arg out=0;<span class="Apple-converted-space"> </span></p>
-<p class="p3">//var signal;</p>
-<p class="p3">//signal = SinOsc.ar(440, 0,1.0);</p>
-<p class="p3">//Out.ar(out, signal);</p>
-<p class="p3">//}).send(s)</p>
-<p class="p3">//</p>
-<p class="p3">//</p>
-<p class="p3">//Synth("oscJO", [\out, 5]);</p>
+<p class="p1">//SynthDef("oscJO", {arg out=0;<span class="Apple-converted-space"> </span></p>
+<p class="p1">//var signal;</p>
+<p class="p1">//signal = SinOsc.ar(440, 0,1.0);</p>
+<p class="p1">//Out.ar(out, signal);</p>
+<p class="p1">//}).send(s)</p>
+<p class="p1">//</p>
+<p class="p1">//</p>
+<p class="p1">//Synth("oscJO", [\out, 5]);</p>
 <p class="p2"><br></p>
-<p class="p4"><br></p>
-<p class="p5">s.bootAndMIDI;</p>
-<p class="p6"><br></p>
-<p class="p7">(</p>
-<p class="p7">~violence = <span class="s2">OnViolence</span>(audioIn: 1,<span class="Apple-converted-space"> </span></p>
-<p class="p7">ampIn: 1.0, volMetal: 1.0, volScream1: 1.5, volScream2: 0.5, volScream3: 0.9, volScream4: 1.0, volMotor: 1.0, volWagner1: 0.2, volWagner2: 0.2, volWagner3: 0.2, volWagner4: 0.2, volBuxta:1.0, volParsifal: 0.9); <span class="s3">//ins: audioIn, audioInOnset</span></p>
-<p class="p1">//vol: pianoVol, metalVol, grito1Vol, grito2Vol, grito3Vol, grito4Vol, volMotor, volWagner1, volWagner2, volWagner3, volWagner4, buxtahude, parsifal</p>
-<p class="p7">)</p>
-<p class="p6"><br></p>
-<p class="p6"><br></p>
-<p class="p7">~violence.startNodes(0,0,0,0,0,0,0,0,0,0,0,0);</p>
-<p class="p6"><br></p>
-<p class="p7">~violence.readyToStart;</p>
-<p class="p6"><br></p>
-<p class="p7">~violence.funcPlay(1,0,1,0);</p>
-<p class="p6"><br></p>
-<p class="p6"><br></p>
-<p class="p3">//Huddersfield-Cambridge setup<span class="Apple-converted-space"> </span></p>
-<p class="p7">(</p>
-<p class="p7">~violence.prepare(pianoOut: 0, metalOut: 4, grito1Out: 1, grito2Out: 2, grito3Out: 3, grito4Out:7, motorOut: 6, wagner1Out: 2, wagner2Out: 0, wagner3Out: 0, wagner4Out: 2, buxtaOut: 0, parsifalOut: 2); <span class="s4">//outs: piano, metal, grito1, grito2, grito3, grito4, motor,wagner1,wagner2,wagner3,wagner4,buxta,parsifal</span></p>
-<p class="p7">)</p>
-<p class="p6"><br></p>
-<p class="p6"><br></p>
-<p class="p1"><span class="s5">~violence.mixer; </span>//global amplitude mixer</p>
-<p class="p6"><br></p>
-<p class="p1"><span class="s5">~violence.readyToStart(156, 0.13, 1); </span>//firstTempo, onsetThresh, page, pedalDown, pedalUp<span class="Apple-converted-space"> </span></p>
-<p class="p6"><br></p>
-<p class="p1"><span class="s5">~violence.readyToStart(156, 0.13, </span><span class="s6">\pedal</span><span class="s5">, 51, 51);</span>//firstTempo, onsetThresh, page, pedalDown, pedalUp</p>
-<p class="p6"><br></p>
-<p class="p1"><span class="s5">~violence.readyToStart(156, 0.13, </span><span class="s6">\pedal</span><span class="s5">, 59, 59);</span>//firstTempo, onsetThresh, page, pedalDown, pedalUp</p>
-<p class="p6"><br></p>
-<p class="p1"><span class="s5">~violence.readyToStart(156, 0.13, 16);</span>//firstTempo, onsetThresh, page =&gt; notice the change in onsetThresh<span class="Apple-converted-space"> </span></p>
-<p class="p6"><br></p>
-<p class="p7">~violence.remove; <span class="s3">//to stop</span></p>
-<p class="p6"><br></p>
-<p class="p1"><span class="s5">~violence.keyboardPedal; </span>//instead of midi pedal, use letters q and a</p>
-<p class="p7">~violence.keyboardPedalOff; <span class="s3">//turn it off</span></p>
-<p class="p6"><br></p>
-<p class="p1"><span class="s5">~violence.mixer2; </span>//a specific amp mixer</p>
+<p class="p3"><br></p>
+<p class="p4">s.bootAndMIDI;</p>
 <p class="p2"><br></p>
-<p class="p6"><br></p>
-<p class="p6"><br></p>
-<p class="p7">~violence.algoVersion</p>
-<p class="p6"><br></p>
-<p class="p7">~violence.funcPage(17) <span class="s3">//change page number</span></p>
-<p class="p7">~violence.changePedalNum(16,16) <span class="s3">//args:<span class="Apple-converted-space">  </span>pedalDown, pedalUp</span></p>
-<p class="p6"><br></p>
-<p class="p7">~violence.changeLocation(5,3,3) <span class="s3">//args: page, pedalDown, pedalUp</span></p>
-<p class="p6"><br></p>
-<p class="p7">~violence.funcAlgoScore(4,18,176);<span class="Apple-converted-space"> </span></p>
-<p class="p7">~violence.funcAlgoScore(3,18,176);<span class="Apple-converted-space"> </span></p>
-<p class="p6"><br></p>
-<p class="p6"><br></p>
-<p class="p6"><br></p>
+<p class="p1"><span class="s2">~violence</span><span class="s3"> = </span><span class="s4">OnViolence</span><span class="s3">(audioIn: 0); </span>//ins: audioIn, audioInOnset</p>
+<p class="p2"><br></p>
+<p class="p5">~violence<span class="s3">.mixer2;</span></p>
+<p class="p2"><br></p>
+<p class="p5">~violence<span class="s3">.volArr;</span></p>
+<p class="p2"><br></p>
+<p class="p6"><span class="s2">~violence</span>.startNodes(grito4Out:0, motorOut:0);</p>
+<p class="p2"><br></p>
+<p class="p6"><span class="s2">~violence</span>.readyToStart;</p>
+<p class="p2"><br></p>
+<p class="p6">(</p>
+<p class="p6"><span class="s2">~violence</span>.grito1pan = -0.6;</p>
+<p class="p6"><span class="s2">~violence</span>.grito2pan = 0.6;</p>
+<p class="p6"><span class="s2">~violence</span>.grito3pan = 0;</p>
+<p class="p6"><span class="s2">~violence</span>.grito4pan = -1;</p>
+<p class="p6">)</p>
+<p class="p2"><br></p>
+<p class="p6"><span class="s2">~violence</span>.funcPlay(15,0,1,0);</p>
+<p class="p2"><br></p>
+<p class="p2"><br></p>
+<p class="p1">//Huddersfield-Cambridge setup<span class="Apple-converted-space"> </span></p>
+<p class="p6">(</p>
+<p class="p6"><span class="s2">~violence</span>.prepare(pianoOut: 0, metalOut: 4, grito1Out: 1, grito2Out: 2, grito3Out: 3, grito4Out:7, motorOut: 6, wagner1Out: 2, wagner2Out: 0, wagner3Out: 0, wagner4Out: 2, buxtaOut: 0, parsifalOut: 2); <span class="s5">//outs: piano, metal, grito1, grito2, grito3, grito4, motor,wagner1,wagner2,wagner3,wagner4,buxta,parsifal</span></p>
+<p class="p6">)</p>
+<p class="p2"><br></p>
+<p class="p2"><br></p>
+<p class="p1"><span class="s2">~violence</span><span class="s3">.mixer; </span>//global amplitude mixer</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="s2">~violence</span><span class="s3">.readyToStart(156, 0.13, 1); </span>//firstTempo, onsetThresh, page, pedalDown, pedalUp<span class="Apple-converted-space"> </span></p>
+<p class="p2"><br></p>
+<p class="p1"><span class="s2">~violence</span><span class="s3">.readyToStart(156, 0.13, </span><span class="s6">\pedal</span><span class="s3">, 51, 51);</span>//firstTempo, onsetThresh, page, pedalDown, pedalUp</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="s2">~violence</span><span class="s3">.readyToStart(156, 0.13, </span><span class="s6">\pedal</span><span class="s3">, 59, 59);</span>//firstTempo, onsetThresh, page, pedalDown, pedalUp</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="s2">~violence</span><span class="s3">.readyToStart(156, 0.13, 16);</span>//firstTempo, onsetThresh, page =&gt; notice the change in onsetThresh<span class="Apple-converted-space"> </span></p>
+<p class="p2"><br></p>
+<p class="p6"><span class="s2">~violence</span>.remove; <span class="s5">//to stop</span></p>
+<p class="p2"><br></p>
+<p class="p1"><span class="s2">~violence</span><span class="s3">.keyboardPedal; </span>//instead of midi pedal, use letters q and a</p>
+<p class="p6"><span class="s2">~violence</span>.keyboardPedalOff; <span class="s5">//turn it off</span></p>
+<p class="p2"><br></p>
+<p class="p1"><span class="s2">~violence</span><span class="s3">.mixer2; </span>//a specific amp mixer</p>
+<p class="p2"><br></p>
+<p class="p2"><br></p>
+<p class="p2"><br></p>
+<p class="p6"><span class="s2">~violence</span>.algoVersion</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="s2">~violence</span><span class="s3">.funcPage(17) </span>//change page number</p>
+<p class="p1"><span class="s2">~violence</span><span class="s3">.changePedalNum(16,16) </span>//args:<span class="Apple-converted-space">  </span>pedalDown, pedalUp</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="s2">~violence</span><span class="s3">.changeLocation(5,3,3) </span>//args: page, pedalDown, pedalUp</p>
+<p class="p2"><br></p>
+<p class="p6"><span class="s2">~violence</span>.funcAlgoScore(4,18,176);<span class="Apple-converted-space"> </span></p>
+<p class="p6"><span class="s2">~violence</span>.funcAlgoScore(3,18,176);<span class="Apple-converted-space"> </span></p>
+<p class="p2"><br></p>
+<p class="p2"><br></p>
+<p class="p2"><br></p>
 <p class="p1">//restart</p>
-<p class="p7">~violence.prepare(0,0,2,2,2,3,4);</p>
-<p class="p7">~violence.readyToStart(5,3,3);<span class="s3">//page, pedalDown, pedalUp</span></p>
-<p class="p6"><br></p>
-<p class="p7">~violence.remove;</p>
-<p class="p6"><br></p>
+<p class="p6"><span class="s2">~violence</span>.prepare(0,0,2,2,2,3,4);</p>
+<p class="p1"><span class="s2">~violence</span><span class="s3">.readyToStart(5,3,3);</span>//page, pedalDown, pedalUp</p>
+<p class="p2"><br></p>
+<p class="p5">~violence<span class="s3">.remove;</span></p>
+<p class="p2"><br></p>
 <p class="p1">//change volumes</p>
-<p class="p7">~violence.piano.set(<span class="s6">\globamp</span>, 0); <span class="s3">//piano</span></p>
-<p class="p7">~violence.metal.set(<span class="s6">\globamp</span>, 0); <span class="s3">//metal</span></p>
-<p class="p7">~violence.grito1.set(<span class="s6">\globamp</span>, 0.0); <span class="s3">//pvplayVoc</span></p>
-<p class="p7">~violence.grito2.set(<span class="s6">\globamp</span>, 0.0); <span class="s3">//pvplayGrito</span></p>
-<p class="p7">~violence.grito3.set(<span class="s6">\globamp</span>, 4.0); <span class="s3">//pvplayBet</span></p>
-<p class="p6"><br></p>
-<p class="p6"><br></p>
-<p class="p6"><br></p>
-<p class="p7">~violence.pedalOffFunc;</p>
-<p class="p6"><br></p>
-<p class="p7">~violence.pedalOnFunc;</p>
-<p class="p6"><br></p>
+<p class="p6"><span class="s2">~violence</span>.piano.set(<span class="s6">\globamp</span>, 0); <span class="s5">//piano</span></p>
+<p class="p6"><span class="s2">~violence</span>.metal.set(<span class="s6">\globamp</span>, 0); <span class="s5">//metal</span></p>
+<p class="p6"><span class="s2">~violence</span>.grito1.set(<span class="s6">\globamp</span>, 0.0); <span class="s5">//pvplayVoc</span></p>
+<p class="p6"><span class="s2">~violence</span>.grito2.set(<span class="s6">\globamp</span>, 0.0); <span class="s5">//pvplayGrito</span></p>
+<p class="p6"><span class="s2">~violence</span>.grito3.set(<span class="s6">\globamp</span>, 4.0); <span class="s5">//pvplayBet</span></p>
+<p class="p2"><br></p>
+<p class="p2"><br></p>
+<p class="p2"><br></p>
+<p class="p6"><span class="s2">~violence</span>.pedalOffFunc;</p>
+<p class="p2"><br></p>
+<p class="p6"><span class="s2">~violence</span>.pedalOnFunc;</p>
+<p class="p2"><br></p>
 <p class="p1">///////////////////////////////////////////////////////////</p>
 <p class="p2"><br></p>
-<p class="p7">(</p>
-<p class="p7">~violence = <span class="s2">OnViolence</span>(audioIn: 1,<span class="Apple-converted-space"> </span></p>
-<p class="p7">ampIn: 1.0, volMetal: 1.0, volScream1: 1.5, volScream2: 0.5, volScream3: 0.9, volScream4: 1.0, volMotor: 1.0, volWagner1: 0.2, volWagner2: 0.2, volWagner3: 0.2, volWagner4: 0.2, volBuxta:1.0, volParsifal: 0.9); <span class="s3">//ins: audioIn, audioInOnset</span></p>
+<p class="p6">(</p>
+<p class="p6"><span class="s2">~violence</span> = <span class="s4">OnViolence</span>(audioIn: 1,<span class="Apple-converted-space"> </span></p>
+<p class="p6">ampIn: 1.0, volMetal: 1.0, volScream1: 1.5, volScream2: 0.5, volScream3: 0.9, volScream4: 1.0, volMotor: 1.0, volWagner1: 0.2, volWagner2: 0.2, volWagner3: 0.2, volWagner4: 0.2, volBuxta:1.0, volParsifal: 0.9); <span class="s5">//ins: audioIn, audioInOnset</span></p>
 <p class="p1">//vol: pianoVol, metalVol, grito1Vol, grito2Vol, grito3Vol, grito4Vol, volMotor, volWagner1, volWagner2, volWagner3, volWagner4, buxtahude, parsifal</p>
-<p class="p7">)</p>
-<p class="p6"><br></p>
+<p class="p6">)</p>
+<p class="p2"><br></p>
 <p class="p1">//~version = Array.fill(26, {rrand(1,10)}); //random versions<span class="Apple-converted-space"> </span></p>
-<p class="p7">~version = [ 8, 7, 10, 9, 2, 1, 6, 9, 8, 4, 7, 1, 10, 7, 9, 8, 7, 2, 7, 7, 7, 2, 10, 1, 9, 4 ]; <span class="s3">//to practise a specific version, write the array...</span></p>
-<p class="p6"><br></p>
-<p class="p7">~violence.selectFiles(~version); <span class="s3">//this takes a few seconds</span></p>
+<p class="p6"><span class="s2">~version</span> = [ 8, 7, 10, 9, 2, 1, 6, 9, 8, 4, 7, 1, 10, 7, 9, 8, 7, 2, 7, 7, 7, 2, 10, 1, 9, 4 ]; <span class="s5">//to practise a specific version, write the array...</span></p>
+<p class="p2"><br></p>
+<p class="p1"><span class="s2">~violence</span><span class="s3">.selectFiles(</span><span class="s2">~version</span><span class="s3">); </span>//this takes a few seconds</p>
 <p class="p2"><br></p>
 <p class="p2"><br></p>
 <p class="p1">//~violence.sendVersion; //make sure the message is recived in computer2</p>
-<p class="p6"><br></p>
-<p class="p3">//(</p>
-<p class="p3">//~violence.prepare(pianoOut: 0, metalOut: 0, grito1Out: 2, grito2Out: 2, grito3Out: 2, grito4Out:3, motorOut: 4, wagner1Out: 5, wagner2Out: 5, wagner3Out: 5, wagner4Out: 5, buxtaOut: 5, parsifalOut: 5); //outs: piano, metal, grito1, grito2, grito3, grito4, motor,wagner1,wagner2,wagner3,wagner4,buxta,parsifal</p>
-<p class="p3">//)</p>
-<p class="p6"><br></p>
+<p class="p2"><br></p>
+<p class="p1">//(</p>
+<p class="p1">//~violence.prepare(pianoOut: 0, metalOut: 0, grito1Out: 2, grito2Out: 2, grito3Out: 2, grito4Out:3, motorOut: 4, wagner1Out: 5, wagner2Out: 5, wagner3Out: 5, wagner4Out: 5, buxtaOut: 5, parsifalOut: 5); //outs: piano, metal, grito1, grito2, grito3, grito4, motor,wagner1,wagner2,wagner3,wagner4,buxta,parsifal</p>
+<p class="p1">//)</p>
+<p class="p2"><br></p>
 <p class="p1">//~violence.prepare(0,0,0,0,0,1,1,0,0,0,0); //for built in demo</p>
 <p class="p2"><br></p>
 <p class="p1">///////////////////////////////////////////////////////////</p>
 <p class="p2"><br></p>
-<p class="p3">//</p>
-<p class="p3">//SynthDef.writeOnce(\bang, {|out=0, amp=0.5, bufnum=0, recBuf=1, pan=0.0, rate=1, adjVol=1.0, lag=0.5, globamp=1.0|</p>
-<p class="p3">//<span class="Apple-tab-span">	</span>var signal, signal2, chain;</p>
-<p class="p3">//<span class="Apple-tab-span">	</span>chain =<span class="Apple-converted-space">  </span>PV_PlayBuf(bufnum, recBuf, rate);</p>
-<p class="p3">//<span class="Apple-tab-span">	</span>signal = IFFT(chain, 1);</p>
-<p class="p3">//<span class="Apple-tab-span">	</span>DetectSilence.ar(signal, doneAction: 2);</p>
-<p class="p3">//<span class="Apple-tab-span">	</span>Out.ar(out, (Pan2.ar(signal, Ramp.kr(pan, lag), amp*globamp)*adjVol));</p>
-<p class="p3">//<span class="Apple-tab-span">	</span>});</p>
+<p class="p1">//</p>
+<p class="p1">//SynthDef.writeOnce(\bang, {|out=0, amp=0.5, bufnum=0, recBuf=1, pan=0.0, rate=1, adjVol=1.0, lag=0.5, globamp=1.0|</p>
+<p class="p1">//<span class="Apple-tab-span">	</span>var signal, signal2, chain;</p>
+<p class="p1">//<span class="Apple-tab-span">	</span>chain =<span class="Apple-converted-space">  </span>PV_PlayBuf(bufnum, recBuf, rate);</p>
+<p class="p1">//<span class="Apple-tab-span">	</span>signal = IFFT(chain, 1);</p>
+<p class="p1">//<span class="Apple-tab-span">	</span>DetectSilence.ar(signal, doneAction: 2);</p>
+<p class="p1">//<span class="Apple-tab-span">	</span>Out.ar(out, (Pan2.ar(signal, Ramp.kr(pan, lag), amp*globamp)*adjVol));</p>
+<p class="p1">//<span class="Apple-tab-span">	</span>});</p>
 </body>
 </html>
