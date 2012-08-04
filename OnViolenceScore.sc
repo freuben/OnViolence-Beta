@@ -1,14 +1,15 @@
-OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, adjScore, s, basicPath, <>score, globalMIDI, globalTimes, start, end, bufferTimes, selectPitch, buffType, algoTimes, <>stepPedal, <>chooseSamples, countPedalUp, countPedalDown,<>tempo=176, <>partials, <percglobalTimesGlob, partialTrig=0, document, <>bufferArr, <percArray, pedalUpOld, pedalDownOld, ccResponder, <>node, <>rightWin=1, clock, <motorSound, <>src;
+OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, <>motorPan, adjScore, s, basicPath, <>score, globalMIDI, globalTimes, start, end, bufferTimes, selectPitch, buffType, algoTimes, <>stepPedal, <>chooseSamples, countPedalUp, countPedalDown,<>tempo=176, <>partials, <percglobalTimesGlob, partialTrig=0, document, <>bufferArr, <percArray, pedalUpOld, pedalDownOld, ccResponder, <>node, <>rightWin=1, clock, <motorSound, <>src;
 
-	*new {arg headOut=0, motorOut=0, motorVol=2, lowVal=40, highVal=50, leftVal=49, rightVal=31, adjScore= -11.7, src;
-	^super.new.initOnViolenceScore(headOut, motorOut, motorVol, lowVal, highVal, leftVal, rightVal, adjScore, src);
+	*new {arg headOut=0, motorOut=0, motorVol=2, panVol=0, lowVal=40, highVal=50, leftVal=49, rightVal=31, adjScore= -11.7, src;
+	^super.new.initOnViolenceScore(headOut, motorOut, motorVol, panVol, lowVal, highVal, leftVal, rightVal, adjScore, src);
 	}
 	
-	initOnViolenceScore {arg outHead, outMotor, volMotor, lowVal, highVal, leftVal, rightVal,  scoreAdj, srcID;
+	initOnViolenceScore {arg outHead, outMotor, volMotor, panMotor, lowVal, highVal, leftVal, rightVal,  scoreAdj, srcID;
 		//arguments to variables
 		headOut = outHead;
 		motorOut = outMotor;
 		motorVol = volMotor;
+		motorPan = panMotor;
 		adjScore = scoreAdj;
 		src = srcID;
 		src ?? {src = -1927836118};
@@ -47,7 +48,7 @@ OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, adjScore, s, basicPath, 
 		chooseSamples = Array.fill(26, {rrand(1,10)}); 
 		chooseSamples = chooseSamples-1;
 		
-		motorSound = OnViolenceMotor(motorOut, motorVol, lowVal, highVal, leftVal, rightVal);
+		motorSound = OnViolenceMotor(motorOut, motorVol, motorPan, lowVal, highVal, leftVal, rightVal);
 		
 		}.fork(clock);
 
@@ -78,25 +79,48 @@ OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, adjScore, s, basicPath, 
 	}
 	
 	displayScore {arg page=1;
+		var gowin, gotext, gofunc;
 		partials.startsynth(1); //use AudioIn to track loadest partials
 		if(chooseSamples != [], {score = AlgorithmicScore.screenBounds;});
 		this.funcPage(page);
 	 	
+	 	gofunc = {arg view, char, modifiers; 
+		case
+		{char == $p} { 
+			gowin = Window("", Rect(200,500,120,150)).front;
+			gowin.addFlowLayout( 10@10, 20@5 );
+			StaticText(gowin, 100@20).string_("Go to Page:");
+			gotext = TextField(gowin, 60@20);
+			gotext.action = {arg field; "Page: ".post; field.value.postln; 
+			this.displayPage(field.value.asInteger); 
+			gowin.close;
+			};
+			}
+		{char == $a} {
+			gowin = Window("", Rect(200,500,120,150)).front;
+			gowin.addFlowLayout( 10@10, 20@5 );
+			StaticText(gowin, 100@20).string_("AlgoScore Num:");
+			gotext = TextField(gowin, 60@20);
+			gotext.action = {arg field; "AlgoScore: ".post; field.value.postln; 
+			this.displayPage(field.value.asInteger); 
+			gowin.close;
+			};
+			}
+		{char == $f} {this.pedalFwd}
+		{char == $b} {this.pedalBck}
+		
+//		{char == $w} {this.pedalHigh}
+//		{char == $s} {this.pedalLow}
+		};
+		 
 	 	{
 		0.2.yield;
 	 	score.click4(winAdd: 0, leftWin: 20, scaleSize:0.4, name:"pedal");
 		this.rightWin = 1.2;
 		0.2.yield;
+		score.w.view.keyDownAction = gofunc;
 		score.w5.alwaysOnTop = true;
-		score.w5.view.keyDownAction = {arg view, char, modifiers; 
-		case
-		{char == $p} {"Go to page".postln;}
-		{char == $q} {this.pedalFwd}
-		{char == $a} {this.pedalBck}
-		
-		{char == $w} {this.pedalHigh}
-		{char == $s} {this.pedalLow}
-		 };	
+		score.w5.view.keyDownAction = gofunc;	
 		0.2.yield;
 		this.startPedals;
 		0.5.yield;
@@ -213,44 +237,8 @@ OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, adjScore, s, basicPath, 
 		});
 	}
 
-	//use percussion sounds as triggers
+	
 	funcAlgoScore {arg sample=1,page=1, tempo=176, repeat=1,pagePartial=0;
-		var step=0, color, tempo2, sampleEnd;
-		{
-		partialTrig = 1;
-		sampleEnd = sample;
-		repeat.do({
-		tempo2 = 176/tempo;
-		this.funcSample(sampleEnd);
-		this.funcChooseSample(chooseSamples[sampleEnd-1]); //rrand(0,9)
-		color = Array.fill(selectPitch.size, {\black});
-		{score.score([\piano], 1, 1.3);
-		score.expression("f");
-		score.notes(selectPitch, (0,1..selectPitch.size), color);
-		score.timer((start+end)*tempo2, 0.99, rightWin:rightWin);}.defer;
-		(start*tempo2).yield;
-		selectPitch.size.do({
-		(algoTimes[step]*tempo2).yield;
-		color = Array.fill(selectPitch.size, {\black});
-		color[(0..selectPitch.size)[step]] = \red;
-		{score.notes(selectPitch, (0,1..selectPitch.size), color);}.defer;
-		node.spawn([\bufnum, bufferArr[buffType[step]].bufnum], 1);
-		step = step + 1;
-		});
-		((bufferTimes[buffType[step-1]])*tempo2).yield;
-		color = Array.fill(selectPitch.size, {\black});
-		{score.notes(selectPitch, (0,1..selectPitch.size), color);}.defer;
-		(end-algoTimes.sum-(bufferTimes[buffType[step-1]])*tempo2).yield;
-		sampleEnd = sampleEnd + 1;
-		step = 0;
-		{score.expressionClose;}.defer;
-		});
-		if(pagePartial == 0, {this.funcPage(page); partialTrig = 0;}, {this.partialNotes(5.47*tempo2,page,"c 4".notemidi,"c 6".notemidi, "f")});
-		}.fork;
-	}
-
-		//send midi instead of using percussion sounds
-	funcAlgoScoreMIDI {arg sample=1,page=1, tempo=176, repeat=1,pagePartial=0;
 		var step=0, color, tempo2, sampleEnd, bufferTimesMIDI,pattMIDI;
 		
 		bufferTimesMIDI = [ 0.025, 0.039185800697256, 0.061421079051404, 0.096273366492749, 0.15090195807355, 0.21139096075449, 0.33134096229308, 0.51935443645014, 0.81405277751885, 1.2759723958761, 2 ];
@@ -293,7 +281,7 @@ OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, adjScore, s, basicPath, 
 
 	funcPerc {arg percWhich=0, percsample = 4, perctempo = 176, adjEnd = 1, withPedal = 1;
 		var step=0,percglobalTimes,percbufferTimes, percglobalTimes2, percglobalTimes3, percindexesOf,percglobalTimes4,percbuffType, percalgoTimes,percstart,percend;
-		
+
 		percglobalTimes = percglobalTimesGlob[percWhich];
 		
 		percstart = [0.24318181818182,0.053636363636372,0.27500000000001,0.28136363636364,0.33454545454546, 0.12500000000001,0.026363636363641, 0, 0];
@@ -332,47 +320,6 @@ OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, adjScore, s, basicPath, 
 		}.fork;
 	}
 
-	funcPercMIDI {arg percWhich=0, percsample = 4, perctempo = 176, adjEnd = 1, withPedal = 1;
-		var step=0,percglobalTimes,percbufferTimes, percglobalTimes2, percglobalTimes3, percindexesOf,percglobalTimes4,percbuffType, percalgoTimes,percstart,percend;
-		
-		percglobalTimes = percglobalTimesGlob[percWhich];
-		
-		percstart = [0.24318181818182,0.053636363636372,0.27500000000001,0.28136363636364,0.33454545454546, 0.12500000000001,0.026363636363641, 0, 0];
-		percend = [2.825,2.3327272727273,2.7931818181818,4.1504545454545,2.0518181818182,2.2613636363636, 10.541818181818, 3.06289, 7.7944];
-		
-		percbufferTimes = [ 0.025, 0.039185800697256, 0.061421079051404, 0.096273366492749, 0.15090195807355, 0.21139096075449, 0.33134096229308, 0.51935443645014, 0.81405277751885, 1.2759723958761, 2 ];
-		
-		percglobalTimes2 = percglobalTimes[percsample].flat.evenIndex;
-		percglobalTimes3 = percglobalTimes[percsample].flat.evenIndex.sort;
-		
-		percindexesOf = percglobalTimes2.indexOfAll(percglobalTimes3);
-		
-		percglobalTimes4 = percglobalTimes[percsample].itemsAt(percindexesOf);
-		
-		percbuffType = [];
-		percglobalTimes4.do({|item| percbuffType = percbuffType.add(item[1]); });
-		
-		percalgoTimes = [];
-		percglobalTimes4.do({|item| percalgoTimes = percalgoTimes.add(item[0]); });
-		percalgoTimes = percalgoTimes.differentiate;
-		
-		score.timer((percalgoTimes.sum*adjEnd)*(176/perctempo), rightWin:rightWin);
-		score.click1(name:"Trigger");
-		score.click1CloseTime(percstart[percWhich]+percend[percWhich]*(176/perctempo));
-		
-		{
-		percstart[percWhich].yield;
-		percalgoTimes.size.do({
-		{score.click1Note(percbufferTimes[percbuffType[step]]);}.defer;
-		node.spawn([\bufnum, bufferArr[percbuffType[step]].bufnum], 1);
-		(percalgoTimes[step]*(176/perctempo)).yield;
-		step = step + 1;
-		});
-		(percend[percWhich]-(percalgoTimes.sum+percstart[percWhich])*(176/perctempo)).yield;
-		if(withPedal == 1, {{score.tag("Pedal");}.defer;});
-		}.fork;
-	}
-
 	closeTag {	
 		score.tagClose;
 	}
@@ -387,6 +334,57 @@ OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, adjScore, s, basicPath, 
 		score.notes(selectPitch, (0,1..selectPitch.size), color);
 	}
 	
+	funcAlgo {arg algoNum;
+	var arr1;
+	
+	//if(algoNum > 13, {
+//	arr1 = (55..66);	
+//	if(algoNum.even, {
+//		countPedalUp = arr1[(14,16..34).indexOf(algoNum)]; countPedalDown = countPedalUp-6;
+//		}, {
+//		countPedalDown = (arr1-5)[(15,17..35).indexOf(algoNum)]; countPedalUp = countPedalDown+5;
+//		});
+// 	});
+		
+	[countPedalUp, countPedalDown].postln;	
+	
+	case
+	{algoNum == 1} {this.funcAlgoScore(1,18,tempo);}
+	{algoNum == 2} {this.funcAlgoScore(2,19,tempo);}
+	{algoNum == 3} {this.funcAlgoScore(3,20,tempo,2);}
+	{algoNum == 4} {this.funcAlgoScore(5,21,tempo);}
+	{algoNum == 5} {this.funcAlgoScore(6,22,tempo, 2);}
+	{algoNum == 6} {this.funcAlgoScore(8,23,tempo);}
+	{algoNum == 7} {this.funcAlgoScore(9,24,tempo);}
+	{algoNum == 8} {this.funcAlgoScore(10,25,tempo, 2);}
+	{algoNum == 9} {this.funcAlgoScore(12,26,tempo,3);}
+	{algoNum == 10} {this.funcAlgoScore(15,27,tempo,2);}
+	{algoNum == 11} {this.funcAlgoScore(17,28,tempo,1);}
+	{algoNum == 12} {this.funcAlgoScore(18,29,tempo,2);}
+	{algoNum == 13} {this.funcAlgoScore(20,30,tempo,2);}
+	{algoNum == 14} {this.funcAlgoScore(22,31,tempo,1);}
+	{algoNum == 15} {this.funcPage(31);}
+	{algoNum == 16} {score.tagClose; this.funcAlgoScore(23,31,tempo,1);}
+	{algoNum == 17} {this.funcPage(31);}
+	{algoNum == 18} {score.tagClose; this.funcAlgoScore(24,31,tempo,1);}
+	{algoNum == 19} {this.funcPage(31);}
+	{algoNum == 20} {score.tagClose; this.funcAlgoScore(25,32,tempo,1,1); this.partialNum(18);}
+	{algoNum == 21} {this.funcPage(32);}
+	{algoNum == 22} {score.tagClose; this.funcAlgoScore(26,32,tempo,1);}
+	{algoNum == 23} {this.funcPage(32);}
+	{algoNum == 24} {score.tagClose; this.partialNotes(7.17*(176/tempo),32,"c 3".notemidi,"c 6".notemidi, "F");}
+	{algoNum == 25} {this.funcPage(32);}
+	{algoNum == 26} {score.tagClose; this.partialNotes(3.07*(176/tempo),32,"c 2".notemidi,"c 7".notemidi, "F");}
+	{algoNum == 27} {this.funcPage(32);}
+	{algoNum == 28} {score.tagClose; this.partialNotes(6.42*(176/tempo),33,"c 2".notemidi,"c 7".notemidi, "P");}
+	{algoNum == 29} {this.funcPage(33);}
+	{algoNum == 30} {score.tagClose; this.partialNotes(7.5*(176/tempo),34,"c 2".notemidi,"c 7".notemidi, "p", 0); this.funcPerc(8, 0, tempo, 1, 0);}
+	{algoNum == 31} {this.funcPage(34);}
+	{algoNum == 32} {score.tagClose; this.funcPage(35)}	
+	{algoNum == 33} { this.textOnly("FREE IMPROV", 37.5*(176/tempo), 36, 0)};
+			
+	}
+	
 	pedalLow {
 		if(partialTrig == 0, {
 		countPedalDown = countPedalDown + 1;
@@ -398,6 +396,17 @@ OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, adjScore, s, basicPath, 
 		
 
 		if((2..36).includes(countPedalDown), {motorSound.pedalOff;});
+
+		//case
+//		{countPedalDown == 51} {this.funcAlgo(15);}
+//		{countPedalDown == 52} {this.funcAlgo(17);}
+//		{countPedalDown == 53} {this.funcAlgo(19);}
+//		{countPedalDown == 54} {this.funcPerc(3, percArray[3], tempo);}
+//		{countPedalDown == 55} {this.funcPerc(4, percArray[4], tempo); this.partialNum(24);}
+//		{countPedalDown == 56} {this.funcPerc(5, percArray[5], tempo); this.partialNum(9);}
+//		{countPedalDown == 57} {this.funcPerc(6, percArray[6], tempo, 0.85); this.partialNum(19);}
+//		{countPedalDown == 58} {this.funcPerc(7, 0, tempo); this.partialNum(24);}
+//		{countPedalDown == 59} {this.timerOnly(15.0*(176/tempo))};
 		
 		case
 		{countPedalDown == 51} {this.funcPerc(0, percArray[0], tempo);}
@@ -409,6 +418,7 @@ OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, adjScore, s, basicPath, 
 		{countPedalDown == 57} {this.funcPerc(6, percArray[6], tempo, 0.85); this.partialNum(19);}
 		{countPedalDown == 58} {this.funcPerc(7, 0, tempo); this.partialNum(24);}
 		{countPedalDown == 59} {this.timerOnly(15.0*(176/tempo))};
+		
 		});
 		pedalDownOld = countPedalDown;	
 		});
@@ -447,30 +457,57 @@ OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, adjScore, s, basicPath, 
 		{countPedalUp == 42} {this.funcPage(17);}
 		
 		//algoScore
-		{countPedalUp == 43} {this.funcAlgoScoreMIDI(1,18,tempo);}
-		{countPedalUp == 44} {this.funcAlgoScoreMIDI(2,19,tempo);}
-		{countPedalUp == 45} {this.funcAlgoScoreMIDI(3,20,tempo,2);}
-		{countPedalUp == 46} {this.funcAlgoScoreMIDI(5,21,tempo);}
-		{countPedalUp == 47} {this.funcAlgoScoreMIDI(6,22,tempo, 2);}
-		{countPedalUp == 48} {this.funcAlgoScoreMIDI(8,23,tempo);}
-		{countPedalUp == 49} {this.funcAlgoScoreMIDI(9,24,tempo);}
-		{countPedalUp == 50} {this.funcAlgoScoreMIDI(10,25,tempo, 2);}
-		{countPedalUp == 51} {this.funcAlgoScoreMIDI(12,26,tempo,3);}
-		{countPedalUp == 52} {this.funcAlgoScoreMIDI(15,27,tempo,2);}
-		{countPedalUp == 53} {this.funcAlgoScoreMIDI(17,28,tempo,1);}
-		{countPedalUp == 54} {this.funcAlgoScoreMIDI(18,29,tempo,2);}
-		{countPedalUp == 55} {this.funcAlgoScoreMIDI(20,30,tempo,2);}
-		{countPedalUp == 56} {this.funcAlgoScoreMIDI(22,31,tempo,1);}
-		{countPedalUp == 57} {score.tagClose; this.funcAlgoScoreMIDI(23,31,tempo,1);}
-		{countPedalUp == 58} {score.tagClose; this.funcAlgoScoreMIDI(24,31,tempo,1);}
-		{countPedalUp == 59} {score.tagClose; this.funcAlgoScoreMIDI(25,32,tempo,1,1); this.partialNum(18);}
-		{countPedalUp == 60} {score.tagClose; this.funcAlgoScoreMIDI(26,32,tempo,1);}
+	//	{countPedalUp == 43} {this.funcAlgo(1);}
+//		{countPedalUp == 44} {this.funcAlgo(2);}
+//		{countPedalUp == 45} {this.funcAlgo(3);}
+//		{countPedalUp == 46} {this.funcAlgo(4);}
+//		{countPedalUp == 47} {this.funcAlgo(5);}
+//		{countPedalUp == 48} {this.funcAlgo(6);}
+//		{countPedalUp == 49} {this.funcAlgo(7);}
+//		{countPedalUp == 50} {this.funcAlgo(8);}
+//		{countPedalUp == 51} {this.funcAlgo(9);}
+//		{countPedalUp == 52} {this.funcAlgo(10);}
+//		{countPedalUp == 53} {this.funcAlgo(11);}
+//		{countPedalUp == 54} {this.funcAlgo(12);}
+//		{countPedalUp == 55} {this.funcAlgo(13);}
+//		{countPedalUp == 56} {this.funcAlgo(14);}
+//		{countPedalUp == 57} {this.funcAlgo(16);}
+//		{countPedalUp == 58} {this.funcAlgo(18);}
+//		{countPedalUp == 59} {this.funcAlgo(20);}
+//		
+//		{countPedalUp == 60} {this.funcAlgo(22);}
+//		{countPedalUp == 61} {this.funcAlgo(24);}
+//		{countPedalUp == 62} {this.funcAlgo(26);}
+//		{countPedalUp == 63} {this.funcAlgo(28);}
+//		{countPedalUp == 64} {this.funcAlgo(30);}
+//		{countPedalUp == 65} {this.funcAlgo(32);}
+//		{countPedalUp == 66} {this.funcAlgo(33);};
+		
+		{countPedalUp == 43} {this.funcAlgoScore(1,18,tempo);}
+		{countPedalUp == 44} {this.funcAlgoScore(2,19,tempo);}
+		{countPedalUp == 45} {this.funcAlgoScore(3,20,tempo,2);}
+		{countPedalUp == 46} {this.funcAlgoScore(5,21,tempo);}
+		{countPedalUp == 47} {this.funcAlgoScore(6,22,tempo, 2);}
+		{countPedalUp == 48} {this.funcAlgoScore(8,23,tempo);}
+		{countPedalUp == 49} {this.funcAlgoScore(9,24,tempo);}
+		{countPedalUp == 50} {this.funcAlgoScore(10,25,tempo, 2);}
+		{countPedalUp == 51} {this.funcAlgoScore(12,26,tempo,3);}
+		{countPedalUp == 52} {this.funcAlgoScore(15,27,tempo,2);}
+		{countPedalUp == 53} {this.funcAlgoScore(17,28,tempo,1);}
+		{countPedalUp == 54} {this.funcAlgoScore(18,29,tempo,2);}
+		{countPedalUp == 55} {this.funcAlgoScore(20,30,tempo,2);}
+		{countPedalUp == 56} {this.funcAlgoScore(22,31,tempo,1);}
+		{countPedalUp == 57} {score.tagClose; this.funcAlgoScore(23,31,tempo,1);}
+		{countPedalUp == 58} {score.tagClose; this.funcAlgoScore(24,31,tempo,1);}
+		{countPedalUp == 59} {score.tagClose; this.funcAlgoScore(25,32,tempo,1,1); this.partialNum(18);}
+		{countPedalUp == 60} {score.tagClose; this.funcAlgoScore(26,32,tempo,1);}
 		{countPedalUp == 61} {score.tagClose; this.partialNotes(7.17*(176/tempo),32,"c 3".notemidi,"c 6".notemidi, "F");}
 		{countPedalUp == 62} {score.tagClose; this.partialNotes(3.07*(176/tempo),32,"c 2".notemidi,"c 7".notemidi, "F");}
 		{countPedalUp == 63} {score.tagClose; this.partialNotes(6.42*(176/tempo),33,"c 2".notemidi,"c 7".notemidi, "P");}
 		{countPedalUp == 64} {score.tagClose; this.partialNotes(7.5*(176/tempo),34,"c 2".notemidi,"c 7".notemidi, "p", 0); this.funcPerc(8, 0, tempo, 1, 0);}
 		{countPedalUp == 65} {score.tagClose; this.funcPage(35)}
 		{countPedalUp == 66} { this.textOnly("FREE IMPROV", 37.5*(176/tempo), 36, 0) };
+
 		});
 			pedalUpOld = countPedalUp;
 	

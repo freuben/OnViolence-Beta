@@ -1,13 +1,14 @@
-OnViolenceMotor {var s, <out, basicPath, motor, sensor, <>lowVal, <>highVal, <>leftVal, <>rightVal, bendLow, bendHigh, newMacroArray1, newMacroArray2, arrA, arrB, pivot1, pivot2, step1, step2, thisArray1, thisArray2, <>direction1, <>direction2, oscNode, sensorVal1, sensorVal2, <>sensorLag1, <>sensorLag2, whichPedal, noteLow, noteHigh, <>volMotor, <synth1, <synth2, <>sensorWin, <slider, <window; 
+OnViolenceMotor {var s, <out, basicPath, motor, sensor, <>lowVal, <>highVal, <>leftVal, <>rightVal, bendLow, bendHigh, newMacroArray1, newMacroArray2, arrA, arrB, pivot1, pivot2, step1, step2, thisArray1, thisArray2, <>direction1, <>direction2, oscNode, sensorVal1, sensorVal2, <>sensorLag1, <>sensorLag2, whichPedal, noteLow, noteHigh, <>volMotor, <synth1, <synth2, <>sensorWin, <slider, <window, <>panMotor; 
 		
-	*new {arg outBus=0, vol=1, lowVal=43.276000976562, highVal=46.995998382568, leftVal=41.668201446533, rightVal=46.628700256348, pathName;
-		^super.new.initOnViolenceMotor(outBus, vol, lowVal, highVal, leftVal, rightVal, pathName);
+	*new {arg outBus=0, vol=1, panMotor=0, lowVal=43.276000976562, highVal=46.995998382568, leftVal=41.668201446533, rightVal=46.628700256348, pathName;
+		^super.new.initOnViolenceMotor(outBus, vol, panMotor, lowVal, highVal, leftVal, rightVal, pathName);
 	}
 	
-	initOnViolenceMotor {arg outBus, vol, valLow, valHigh, valLeft,valRight,pathName;
+	initOnViolenceMotor {arg outBus, vol, pan, valLow, valHigh, valLeft,valRight,pathName;
 		var sensorPitch;
 		out = outBus;
 		volMotor = vol;
+		panMotor = pan;
 		lowVal = valLow;
 		highVal = valHigh;
 		leftVal = valLeft;
@@ -17,7 +18,7 @@ OnViolenceMotor {var s, <out, basicPath, motor, sensor, <>lowVal, <>highVal, <>l
 
 		s = Server.default;
 		sensor = NodeProxy.control(s, 1);
-		motor = NodeProxy.audio(s, 1);
+		motor = NodeProxy.audio(s, 2);
 		motor.play(out);
 		
 		bendLow = 0;
@@ -81,21 +82,21 @@ OnViolenceMotor {var s, <out, basicPath, motor, sensor, <>lowVal, <>highVal, <>l
 		
 		if(direction1 == 0, {
 		noteLow = thisArray1[1][0];
-		motor.put(0, \motor, 0, [\freq, (noteLow+bendLow).midicps.expexp(110, 1760, 55, 56320), \out, 0, \amp, volMotor]);
+		motor.put(0, \motor, 0, [\freq, (noteLow+bendLow).midicps.expexp(110, 1760, 55, 56320), \out, 0, \amp, volMotor, \pan, panMotor]);
 		synth1 =  motor.objects[0];
 		}, {
 		noteLow = thisArray1[1][1];
-		motor.put(0, \motor, 0, [\freq, (noteLow+bendLow).midicps.expexp(110, 1760, 55, 56320), \out, 0, \amp, volMotor]);
+		motor.put(0, \motor, 0, [\freq, (noteLow+bendLow).midicps.expexp(110, 1760, 55, 56320), \out, 0, \amp, volMotor, \pan, panMotor]);
 		synth1 =  motor.objects[0];
 		});
 		
 		if(direction2 == 0, {
 		noteHigh = thisArray2[1][0];
-		motor.put(1, \motor, 0, [\freq, (noteHigh+bendHigh).midicps.expexp(110, 1760, 55, 56320), \out, 0, \amp, volMotor]);
+		motor.put(1, \motor, 0, [\freq, (noteHigh+bendHigh).midicps.expexp(110, 1760, 55, 56320), \out, 0, \amp, volMotor, \pan, panMotor]);
 		synth2 =  motor.objects[1];
 		}, {
 		noteHigh = thisArray2[1][1];
-		motor.put(1, \motor, 0, [\freq, (noteHigh+bendHigh).midicps.expexp(110, 1760, 55, 56320), \out, 0, \amp, volMotor]);
+		motor.put(1, \motor, 0, [\freq, (noteHigh+bendHigh).midicps.expexp(110, 1760, 55, 56320), \out, 0, \amp, volMotor, \pan, panMotor]);
 		synth2 =  motor.objects[1];
 		});
 	}	
@@ -253,14 +254,13 @@ OnViolenceMotor {var s, <out, basicPath, motor, sensor, <>lowVal, <>highVal, <>l
 	motor.set(\amp, amp);	
 	}
 
-
 	*initClass {
 	
-	SynthDef.writeOnce(\motor, {|freq=440, amp=0.2, out=0, gates=1, lag=0.1, globamp=1.0|
+	SynthDef.writeOnce(\motor, {arg freq=440, amp=0.2, out=0, gates=1, lag=0.1, globamp=1.0, pan=0;
 	var signal;
 	signal = RLPF.ar(LFPulse.ar(freq/16, 0.2), 100, 0.1).clip2(0.4) 
 	* EnvGen.kr(Env.asr(0.1,1,0.3), gates, doneAction: 2);
-	Out.ar(out, ((signal*amp*globamp)*0.5))
+	Out.ar(out, Pan2.ar((signal*0.8), pan, amp*globamp));
 	});
 	
 	SynthDef.writeOnce(\lagging,{arg num=45, rate=500, low=20, high=60, id=0, lag=0.2;
