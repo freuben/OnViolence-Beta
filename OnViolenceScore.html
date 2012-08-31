@@ -15,8 +15,9 @@ p.p5 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco}
 span.s1 {color: #737373}
 span.s2 {color: #000000}
 span.s3 {color: #132bc3}
-span.s4 {color: #a8220e}
-span.s5 {color: #0013bb}
+span.s4 {font: 9.0px Monaco; color: #008326}
+span.s5 {color: #a8220e}
+span.s6 {color: #0013bb}
 </style>
 </head>
 <body>
@@ -32,11 +33,16 @@ span.s5 {color: #0013bb}
 <p class="p2"><br></p>
 <p class="p4">//practice mode:</p>
 <p class="p2"><br></p>
-<p class="p1"><span class="s2">a = </span><span class="s3">OnViolenceScore</span><span class="s2">(0,0.5,0,2,0,55,71,49,31); </span>//start Score. arg: headOut, headVol, motorOut, motorVol, motorPan</p>
+<p class="p1"><span class="s2">a = </span><span class="s3">OnViolenceScore</span><span class="s2">(0,0,2,0,55,71,49,31, scoreType: </span><span class="s4">\macBookAir11Sim</span><span class="s2">); </span>//start Score. arg: outHead, outMotor, volMotor, panMotor, lowVal, highVal, leftVal, rightVal, srcID, scoreType;</p>
+<p class="p2"><br></p>
+<p class="p3">a = <span class="s3">OnViolenceScore</span>(0,0,2,0,55,71,49,31, scoreType: <span class="s4">\macBookPro15</span>);</p>
+<p class="p2"><br></p>
+<p class="p2"><br></p>
+<p class="p1"><span class="s2">a.show; </span>//show score if you hide it</p>
 <p class="p2"><br></p>
 <p class="p4">//while practicing</p>
-<p class="p3">a.displayPage(12); <span class="s4">//go to page 12</span></p>
-<p class="p3">a.displayPage(30); <span class="s4">//go to page 30</span></p>
+<p class="p3">a.displayPage(12); <span class="s5">//go to page 12</span></p>
+<p class="p3">a.displayPage(30); <span class="s5">//go to page 30</span></p>
 <p class="p3">a.displayPage(26);</p>
 <p class="p2"><br></p>
 <p class="p3">~tempo = 176;</p>
@@ -102,7 +108,7 @@ span.s5 {color: #0013bb}
 <p class="p2"><br></p>
 <p class="p4">//concert version</p>
 <p class="p2"><br></p>
-<p class="p4"><span class="s2">a = </span><span class="s5">OnViolenceScore</span><span class="s2">(0,1,1.5,0,55,71,49,31); </span>//start Score. args: perfMode, headOut, adjScore</p>
+<p class="p4"><span class="s2">a = </span><span class="s6">OnViolenceScore</span><span class="s2">(0,1,1.5,0,55,71,49,31); </span>//start Score. args: perfMode, headOut, adjScore</p>
 <p class="p2"><br></p>
 <p class="p4">//starts MIDI pedals and comunication with other computer</p>
 <p class="p3">a.startPedals;</p>

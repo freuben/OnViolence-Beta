@@ -1,10 +1,10 @@
 OnViolenceMotor {var s, <out, basicPath, motor, sensor, <>lowVal, <>highVal, <>leftVal, <>rightVal, bendLow, bendHigh, newMacroArray1, newMacroArray2, arrA, arrB, pivot1, pivot2, step1, step2, thisArray1, thisArray2, <>direction1, <>direction2, oscNode, sensorVal1, sensorVal2, <>sensorLag1, <>sensorLag2, whichPedal, noteLow, noteHigh, <>volMotor, <synth1, <synth2, <>sensorWin, <slider, <window, <>panMotor; 
 		
-	*new {arg outBus=0, vol=1, panMotor=0, lowVal=43.276000976562, highVal=46.995998382568, leftVal=41.668201446533, rightVal=46.628700256348, pathName;
-		^super.new.initOnViolenceMotor(outBus, vol, panMotor, lowVal, highVal, leftVal, rightVal, pathName);
+	*new {arg outBus=0, vol=1, panMotor=0, lowVal=43.276000976562, highVal=46.995998382568, leftVal=41.668201446533, rightVal=46.628700256348, pathName, rectArr;
+		^super.new.initOnViolenceMotor(outBus, vol, panMotor, lowVal, highVal, leftVal, rightVal, pathName, rectArr);
 	}
 	
-	initOnViolenceMotor {arg outBus, vol, pan, valLow, valHigh, valLeft,valRight,pathName;
+	initOnViolenceMotor {arg outBus, vol, pan, valLow, valHigh, valLeft,valRight,pathName, rectArr;
 		var sensorPitch;
 		out = outBus;
 		volMotor = vol;
@@ -29,7 +29,7 @@ OnViolenceMotor {var s, <out, basicPath, motor, sensor, <>lowVal, <>highVal, <>l
 		newMacroArray2 = sensorPitch[1];
 		
 		this.readyToStart;
-		this.oscRespNode;
+		this.oscRespNode(rectArr);
  
 	}
 	
@@ -252,6 +252,18 @@ OnViolenceMotor {var s, <out, basicPath, motor, sensor, <>lowVal, <>highVal, <>l
 	
 	vol {arg amp=1;
 	motor.set(\amp, amp);	
+	}
+	
+	closeWin {
+	if(window.notNil, {window.close});	
+	}
+	
+	hideWin {
+	if(window.notNil, {window.visible = false});	
+	}
+	
+	showWin {
+	if(window.notNil, {window.visible = true});		
 	}
 
 	*initClass {

@@ -1,16 +1,15 @@
-OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, <>motorPan, adjScore, s, basicPath, <>score, globalMIDI, globalTimes, start, end, bufferTimes, selectPitch, buffType, algoTimes, <>stepPedal, countPedalUp, countPedalDown,<>tempo=176, <>partials, <percglobalTimesGlob, partialTrig=0, document, <>bufferArr, pedalUpOld, pedalDownOld, ccResponder, <>node, <>rightWin=1, clock, <motorSound, movwin, <>src;
+OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, <>motorPan, s, basicPath, <>score, globalMIDI, globalTimes, start, end, bufferTimes, selectPitch, buffType, algoTimes, <>stepPedal, countPedalUp, countPedalDown,<>tempo=176, <>partials, <percglobalTimesGlob, partialTrig=0, document, <>bufferArr, pedalUpOld, pedalDownOld, ccResponder, <>node, <>rightWin, clock, <motorSound, movwin, <>src, <>imageScale, <>imageAdj, movieScale, movieWinScale;
 
-	*new {arg headOut=0, motorOut=0, motorVol=2, panVol=0, lowVal=40, highVal=50, leftVal=49, rightVal=31, adjScore= -11.7, src;
-	^super.new.initOnViolenceScore(headOut, motorOut, motorVol, panVol, lowVal, highVal, leftVal, rightVal, adjScore, src);
+	*new {arg headOut=0, motorOut=0, motorVol=3, panVal=0, lowVal=40, highVal=50, leftVal=49, rightVal=31, src, scoreType=\macBookPro15;
+	^super.new.initOnViolenceScore(headOut, motorOut, motorVol, panVal, lowVal, highVal, leftVal, rightVal, src, scoreType);
 	}
 	
-	initOnViolenceScore {arg outHead, outMotor, volMotor, panMotor, lowVal, highVal, leftVal, rightVal,  scoreAdj, srcID;
+	initOnViolenceScore {arg outHead, outMotor, volMotor, panMotor, lowVal, highVal, leftVal, rightVal, srcID, scoreType;
 		//arguments to variables
 		headOut = outHead;
 		motorOut = outMotor;
 		motorVol = volMotor;
 		motorPan = panMotor;
-		adjScore = scoreAdj;
 		src = srcID;
 		src ?? {src = -1927836118};
 		s = Server.default;
@@ -40,10 +39,10 @@ OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, <>motorPan, adjScore, s,
 		node.put(0, \synthPiano, extraArgs:[\note, rrand(60,80), \dur, 0.01,\amp,0]);
 		node.put(1, \headmonitor, extraArgs:[\bufnum, bufferArr[0].bufnum, \vol,0]);
 		0.5.yield;
-		this.displayScore(1);
+		this.displayScore(1, scoreType);
 		0.1.yield;
 		
-		motorSound = OnViolenceMotor(motorOut, motorVol, motorPan, lowVal, highVal, leftVal, rightVal);
+		motorSound = OnViolenceMotor(motorOut, motorVol, motorPan, lowVal, highVal, leftVal, rightVal, rectArr: ([ -40, (((score.w.bounds.height/2) - (252*score.resize/2+60)))] ++ ([ 21, 252 ]*score.resize)) );
 		
 		}.fork(clock);
 
@@ -73,16 +72,42 @@ OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, <>motorPan, adjScore, s,
 		{(18..46).includes(page)} {countPedalUp = page+25; countPedalDown = page+19};
 	}
 	
-	displayScore {arg page=1;
-		var gowin, gotext, gofunc;
+	displayScore {arg page=1, type=\macBookPro15;
+		var gowin, gotext, gofunc, clickPos;
 		partials.startsynth(1); //use AudioIn to track loadest partials
-		score = AlgorithmicScore.screenBounds;
+		
+		case
+		{type == \macBookPro15} {
+			score = AlgorithmicScore.screenBounds("On Violence");
+			imageScale = 1.1;
+			imageAdj = -10;
+			clickPos = 20;
+			movieScale = 1.6;
+			movieWinScale = 1
+			}
+		{type == \macBookAir11} {
+			score = AlgorithmicScore.screenBounds("On Violence", 1.2);
+			imageScale = 0.9;
+			imageAdj = -35;
+			clickPos = 14;
+			movieScale = 1.2;
+			movieWinScale = 0.8;
+			}
+		{type == \macBookAir11Sim} {
+			score = AlgorithmicScore.screenSet("On Violence", 0,0,1362,728,1.2);
+			imageScale = 0.9;
+			imageAdj = -35;
+			clickPos = 13.15;
+			movieScale = 1.2;
+			movieWinScale = 0.8;
+		};
+		
 		this.funcPage(page);
 	 	
 	 	gofunc = {arg view, char, modifiers; 
 		case
 		{char == $p} { 
-			gowin = Window("", Rect(200,500,120,150)).front;
+			gowin = Window("", Rect((score.w.bounds.width/2),(score.w.bounds.height/2),120,150)).front;
 			gowin.addFlowLayout( 10@10, 20@5 );
 			StaticText(gowin, 100@20).string_("Go to Page:");
 			gotext = TextField(gowin, 60@20);
@@ -90,19 +115,22 @@ OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, <>motorPan, adjScore, s,
 			this.displayPage(field.value.asInteger); 
 			gowin.close;
 			};
+			gotext.focus;
 			}
-		//{char == $a} {}
 		{char == $f} {this.pedalFwd}
 		{char == $b} {this.pedalBck}
 		
 		{char == $u} {this.pedalHigh}
 		{char == $d} {this.pedalLow}
+		
+		{char == $h} {{this.hide}.defer}
+		
 		};
 		 
 	 	{
 		0.2.yield;
-	 	score.click4(winAdd: 0, leftWin: 20, scaleSize:0.4, name:"pedal");
-		this.rightWin = 1.2;
+	 	score.click4(winAdd: 0, leftWin: clickPos, scaleSize:0.4, name:"pedal");
+		rightWin = 1.2;
 		0.2.yield;
 		score.w.view.keyDownAction = gofunc;
 		score.w5.alwaysOnTop = true;
@@ -213,7 +241,7 @@ OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, <>motorPan, adjScore, s,
 	}
 
 	funcPage {arg page=0; 
-		{score.image((basicPath ++ "/AlgoScore/score/onviolencescore" ++ page.asString ++ ".jpg"), 1.1, -10);}.defer;
+		{score.image((basicPath ++ "/AlgoScore/score/onviolencescore" ++ page.asString ++ ".jpg"), imageScale, imageAdj);}.defer;
 		stepPedal = page;
 		//"Page: ".post; page.postln;
 		this.pageFunc(page);
@@ -413,7 +441,7 @@ OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, <>motorPan, adjScore, s,
 		{countPedalUp == 66} { this.textOnly("FREE IMPROV", 37.5*(176/tempo), 41) }
 		
 		{countPedalUp == 67} {this.funcPage(42);}
-		{countPedalUp == 68} {this.movie(1,176/tempo,1,43,false);}
+		{countPedalUp == 68} {this.movie(1,176/tempo,movieScale,43,false);}
 
 		});
 			pedalUpOld = countPedalUp;
@@ -514,9 +542,9 @@ OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, <>motorPan, adjScore, s,
 		{	
 		score.clearWindow;
 		0.1.yield;
-		score.playMovie(moviePath, rate,	(score.w.bounds.width-100)*scale, (score.w.bounds.height-100)*scale, 50*scale);
-		
-		this.movieWin(whichMovie);
+		score.playMovie(moviePath, rate,	(1280-100)*(scale/1.2), (720-100)*(scale/1.2), 50*(scale/1.2));
+
+		this.movieWin(whichMovie, movieWinScale);
 		
 		(movieTimes[whichMovie-1]/rate).yield;
 		0.5.yield;
@@ -526,40 +554,43 @@ OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, <>motorPan, adjScore, s,
 		this.funcPage(page);
 		});
 		partialTrig = 0;
-		}.fork(AppClock);
+		}.fork(clock);
 		
 	}
 	
-	movieWin {arg whichMovie=1;
+	movieWin {arg whichMovie=1, scale=1;
 		var movflow, top, left;
-		top = score.w.bounds.height - 370 - 100;
-		left = 100; 
-		movwin = Window("", Rect(left, top, 300, 370), border:false).front;
+		top = score.w.bounds.height - (370*scale) - 100;
+		left = score.movie.bounds.left + (50*scale); 
+		movwin = Window("", Rect(left, top, 300*scale, 370*scale), border:false).front;
 		movwin.background_((Color.grey(alpha:0.2)));
 		movwin.alwaysOnTop = true;
 		movflow = movwin.addFlowLayout(10@10, 10@10, 0);
 		
 		case
 		{whichMovie == 1}{
-		StaticText(movwin, 240@30).string_("When you hear:").font_(Font("Helvetica", size: 25)).stringColor_(Color.red);
-		StaticText(movwin, 280@220).string_("BULLETS - play two notes a semitone a part on in each hand, each hand should not be further than a minor 3rd apart, all notes between c4 and c5.\r\rONE BULLET -> play two hands at the same time.\r\rREPEATED BULLETS -> alternate between two hands.\r\r\r\r").font_(Font("Helvetica", size: 16)).stringColor_(Color.green);
-		StaticText(movwin, 280@60).string_("BOMB -> play cluster with one hand bellow c2").font_(Font("Helvetica", size: 16)).stringColor_(Color.yellow);
+		StaticText(movwin, 240@30*scale).string_("When you hear:").font_(Font("Helvetica", size: 25*scale)).stringColor_(Color.red);
+		StaticText(movwin, 280@230*scale).string_("BULLETS - play two notes a semitone a part on in each hand, each hand should not be further than a minor 3rd apart, all notes between c4 and c5.\r\rONE BULLET -> play two hands at the same time.\r\rREPEATED BULLETS -> alternate between two hands.\r\r\r\r").font_(Font("Helvetica", size: 16*scale)).stringColor_(Color.green);
+		StaticText(movwin, 280@60*scale).string_("BOMB -> play cluster with one hand bellow c2").font_(Font("Helvetica", size: 16*scale)).stringColor_(Color.yellow);
 		}
 		{whichMovie == 2}{
-		StaticText(movwin, 240@30).string_("When you hear:").font_(Font("Helvetica", size: 25)).stringColor_(Color.red);
-		StaticText(movwin, 280@60).string_("YOUR OWN BULLETS - play cluster with one hand between c4 and c5").font_(Font("Helvetica", size: 16)).stringColor_(Color.blue);
-		StaticText(movwin, 280@100).string_("BULLETS FROM OTHER COMBATANTS - play two notes a semitone apart alternating between hands, all above c6.\r\r").font_(Font("Helvetica", size: 16)).stringColor_(Color.green);
-		StaticText(movwin, 280@60).string_("BOMB -> play cluster with one hand bellow c2").font_(Font("Helvetica", size: 16)).stringColor_(Color.yellow);
+		StaticText(movwin, 240@30*scale).string_("When you hear:").font_(Font("Helvetica", size: 25*scale)).stringColor_(Color.red);
+		StaticText(movwin, 280@60*scale).string_("YOUR OWN BULLETS - play cluster with one hand between c4 and c5").font_(Font("Helvetica", size: 16*scale)).stringColor_(Color.blue);
+		StaticText(movwin, 280@100*scale).string_("BULLETS FROM OTHER COMBATANTS - play two notes a semitone apart alternating between hands, all above c6.\r\r").font_(Font("Helvetica", size: 16*scale)).stringColor_(Color.green);
+		StaticText(movwin, 280@60*scale).string_("BOMB -> play cluster with one hand bellow c2").font_(Font("Helvetica", size: 16*scale)).stringColor_(Color.yellow);
 	
 	}
 	
 	}
 	
+	show {
+		score.show; motorSound.showWin;
+	}
 	
-	//sensors:
-	
-	
-	
+	hide {
+		score.hide; motorSound.hideWin;
+	}
+		
 	
 	*initClass {
 		
