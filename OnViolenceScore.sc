@@ -78,10 +78,11 @@ OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, <>motorPan, s, basicPath
 		{page == 16} {countPedalUp = 41; countPedalDown = 36}
 		{page == 17} {countPedalUp = 42; countPedalDown = 37}
 		
-		{(18..51).includes(page)} {countPedalUp = page+25; countPedalDown = page+19}
+		{(18..45).includes(page)} {countPedalUp = page+25; countPedalDown = page+19}
+		{(46..47).includes(page)} {countPedalUp = page+25; countPedalDown = page+18}
+		{(48..54).includes(page)} {countPedalUp = page+25; countPedalDown = page+17}
 		
-		{page == 52} {countPedalUp = 77; countPedalDown = 71}
-		{page == 53} {countPedalUp = 78; countPedalDown = 73}
+		{page == 55} {countPedalUp = 80; countPedalDown = 73}
 		
 		;
 	}
@@ -188,8 +189,8 @@ OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, <>motorPan, s, basicPath
 			{page == 37}{pagetag = 'partials 3'}
 			{page == 38}{pagetag = 'partials 4'}
 			{page == 39}{pagetag = 'partials 5'}
-			{page == 47}{pagetag = 'partials 6'}
-			{page == 49}{pagetag = 'partials 7'};
+			{page == 49}{pagetag = 'partials 6'}
+			{page == 51}{pagetag = 'partials 7'};
 			
 		network.sendMsg('/page', pagetag);
 		});
@@ -414,9 +415,8 @@ OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, <>motorPan, s, basicPath
 		network.sendMsg('/pedalDown', countPedalUp);
 		});
 		
-		if((38..59).includes(countPedalDown), {countPedalUp = countPedalDown+5;});
+		//if((38..59).includes(countPedalDown), {countPedalUp = countPedalDown+5;});
 		
-
 		if((2..36).includes(countPedalDown), {motorSound.pedalOff;});
 		
 		case
@@ -450,7 +450,10 @@ OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, <>motorPan, s, basicPath
 		network.sendMsg('/pedalUp', countPedalUp);
 		});
 		
-		if((43..100).includes(countPedalUp), {(countPedalDown = countPedalUp-6);});
+//		if(((43..71) ++ [81]).includes(countPedalUp), {(countPedalDown = countPedalUp-6);});
+//		if([ 72, 73, 80 ].includes(countPedalUp), {(countPedalDown = countPedalUp-7);});
+//		if((74..79).includes(countPedalUp), {(countPedalDown = countPedalUp-8);});
+		
 		
 		case
 		{(4..7).includes(countPedalUp)} {motorSound.pedalOn(countPedalUp-3);}
@@ -505,16 +508,18 @@ OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, <>motorPan, s, basicPath
 		{countPedalUp == 68} {this.movie(1,1/tempo,movieScale,43);}
 		{countPedalUp == 69} {this.movie(2,1/tempo,movieScale,44);}
 		{countPedalUp == 70} { this.textOnly("FREE IMPROV", 13.45*(1/tempo), 45); }
-		{countPedalUp == 71} {this.movie(3,1/tempo,movieScale,46);}
-		{countPedalUp == 72} {this.partialNotes(5.67*(1/tempo),47,"c 2".notemidi,"c 7".notemidi, "P");}
-		{countPedalUp == 73} {this.movie(4,1/tempo,movieScale,48);}
-		{countPedalUp == 74} {this.partialNotes(11.83*(1/tempo),49,"c 2".notemidi,"c 7".notemidi, "P", false); }
-		{countPedalUp == 75} {this.funcAlgoScore(22,50,tempo,1)}
-		{countPedalUp == 76} {this.funcAlgoScore(22,51,tempo,1)}
-		
-		{countPedalUp == 77} {this.funcPage(52);}
-		{countPedalUp == 78} {this.funcPage(53);}
-		{countPedalUp == 79} { this.textOnly("DON'T PLAY", 25*(1/tempo), 54, false); {(26*(1/tempo)).yield; score.text("THE END", "Helvetica", 90, 1, 1)}.fork(clock)}
+		{countPedalUp == 71} {this.funcPage(46);}
+		{countPedalUp == 72} {this.movie(3,1/tempo,movieScale,47);}
+		{countPedalUp == 73} {this.funcPage(48);}
+		{countPedalUp == 74} {this.partialNotes(5.67*(1/tempo),49,"c 2".notemidi,"c 7".notemidi, "P");}
+		{countPedalUp == 75} {this.movie(4,1/tempo,movieScale,50);}
+		{countPedalUp == 76} {this.partialNotes(11.83*(1/tempo),51,"c 2".notemidi,"c 7".notemidi, "P"); }
+		{countPedalUp == 77} {this.funcAlgoScore(22,52,tempo,1)}
+		{countPedalUp == 78} {this.funcAlgoScore(22,53,tempo,1)}
+		{countPedalUp == 79} {this.funcPage(54);}
+		{countPedalUp == 80} {this.funcPage(55);}
+		{countPedalUp == 81} { this.textOnly("DON'T PLAY", 25*(1/tempo), 54, false); {(26*(1/tempo)).yield; score.text("THE END", "Helvetica", 90, 1, 1); 10.yield; score.textClose;
+			}.fork(clock)}
 		
 		});
 			pedalUpOld = countPedalUp;
@@ -540,7 +545,10 @@ OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, <>motorPan, s, basicPath
 		{(5..8).includes(countPedalUp)}{countPedalDown = countPedalUp - 3}
 		{(9..20).includes(countPedalUp)}{countPedalDown = countPedalUp - 4}
 		{(21..42).includes(countPedalUp)}{countPedalDown = countPedalUp - 5}
-		{(43..56).includes(countPedalUp)}{countPedalDown = countPedalUp - 6};
+		{((43..71) ++ [81]).includes(countPedalUp)}{countPedalDown = countPedalUp - 6}
+		{[ 72, 73, 80 ].includes(countPedalUp)}{countPedalDown = countPedalUp-7}
+		{(74..79).includes(countPedalUp)}{countPedalDown = countPedalUp-8}
+		;
 		
 		//countPedalDown.postln;
 		}
