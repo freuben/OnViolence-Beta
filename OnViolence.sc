@@ -5,6 +5,15 @@ OnViolence {var <>audioIn, s, <>ampIn, midiOut, funcRec, d, newMacroArray, newMa
 	}
 
 	initOnViolence {arg in, arrVol, arrPan;
+		
+		//if(connect, {
+			if(NetAddr.langPort != 57120, {("SC Language port in not 57120, close other open applications and restart or change it in other computer to: " ++ NetAddr.langPort).warn; 
+			});	
+		//networkError=true;}, {
+//		this.connect(hostcomputer, port);
+//			});
+//		});
+		
 		s = Server.default;
 		audioIn = in;
 		

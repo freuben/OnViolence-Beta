@@ -1,10 +1,12 @@
-OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, <>motorPan, s, basicPath, <>score, globalMIDI, globalTimes, start, end, bufferTimes, selectPitch, buffType, algoTimes, <>stepPedal, countPedalUp, countPedalDown,<>tempo=176, <>partials, <percglobalTimesGlob, partialTrig=0, document, <>bufferArr, pedalUpOld, pedalDownOld, ccResponder, <>node, <>rightWin, clock, <motorSound, movwin, <>src, <>imageScale, <>imageAdj, movieScale, movieWinScale;
-
-	*new {arg headOut=0, motorOut=0, motorVol=3, panVal=0, lowVal=40, highVal=50, leftVal=49, rightVal=31, src, scoreType=\macBookPro15;
-	^super.new.initOnViolenceScore(headOut, motorOut, motorVol, panVal, lowVal, highVal, leftVal, rightVal, src, scoreType);
+OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, <>motorPan, s, basicPath, <>score, globalMIDI, globalTimes, start, end, bufferTimes, selectPitch, buffType, algoTimes, <>stepPedal, countPedalUp, countPedalDown,<>tempo=1, <>partials, <percglobalTimesGlob, partialTrig=0, document, <>bufferArr, pedalUpOld, pedalDownOld, ccResponder, <>node, <>rightWin, clock, <motorSound, movwin, <>src, <>imageScale, <>imageAdj, movieScale, movieWinScale, <>network;
+	
+	*new {arg headOut=0, motorOut=0, motorVol=3, panVal=0, lowVal=40, highVal=50, leftVal=49, rightVal=31, src, scoreType=\macBookPro15, connect=false, hostcomputer="tremmac56150", port=57120;
+	^super.new.initOnViolenceScore(headOut, motorOut, motorVol, panVal, lowVal, highVal, leftVal, rightVal, src, scoreType, connect, hostcomputer, port);
 	}
 	
-	initOnViolenceScore {arg outHead, outMotor, volMotor, panMotor, lowVal, highVal, leftVal, rightVal, srcID, scoreType;
+	initOnViolenceScore {arg outHead, outMotor, volMotor, panMotor, lowVal, highVal, leftVal, rightVal, srcID, scoreType, connect, hostcomputer, port;
+		var networkError;
+		networkError = false;
 		//arguments to variables
 		headOut = outHead;
 		motorOut = outMotor;
@@ -30,9 +32,16 @@ OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, <>motorPan, s, basicPath
 		
 		partials = NodePT(512, 5);  //a partial tracker
 		
+		if(connect, {
+			if(NetAddr.langPort != 57120, {("SC Language port in not 57120, close other open applications and restart SuperCollider").warn; networkError=true;}, {
+		this.connect(hostcomputer, port);
+			});
+		});
+		
 		//data for rythmic sections
 		percglobalTimesGlob = (basicPath ++ "/data/AlgoScore/percTimes.rtf").loadPath;
 		
+		if(networkError.not, {
 		{node = NodeProxy.audio(s, 2);
 		node.play(headOut);
 		0.1.yield;
@@ -45,7 +54,7 @@ OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, <>motorPan, s, basicPath
 		motorSound = OnViolenceMotor(motorOut, motorVol, motorPan, lowVal, highVal, leftVal, rightVal, rectArr: ([ -40, (((score.w.bounds.height/2) - (252*score.resize/2+60)))] ++ ([ 21, 252 ]*score.resize)) );
 		
 		}.fork(clock);
-
+		});
 	}
 	
 	pageFunc {arg page=1;
@@ -69,7 +78,12 @@ OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, <>motorPan, s, basicPath
 		{page == 16} {countPedalUp = 41; countPedalDown = 36}
 		{page == 17} {countPedalUp = 42; countPedalDown = 37}
 		
-		{(18..46).includes(page)} {countPedalUp = page+25; countPedalDown = page+19};
+		{(18..51).includes(page)} {countPedalUp = page+25; countPedalDown = page+19}
+		
+		{page == 52} {countPedalUp = 77; countPedalDown = 71}
+		{page == 53} {countPedalUp = 78; countPedalDown = 73}
+		
+		;
 	}
 	
 	displayScore {arg page=1, type=\macBookPro15;
@@ -97,7 +111,7 @@ OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, <>motorPan, s, basicPath
 			score = AlgorithmicScore.screenSet("On Violence", 0,0,1362,728,1.2);
 			imageScale = 0.9;
 			imageAdj = -35;
-			clickPos = 13.15;
+			clickPos = 13.16;
 			movieScale = 1.2;
 			movieWinScale = 0.8;
 		};
@@ -120,8 +134,8 @@ OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, <>motorPan, s, basicPath
 		{char == $f} {this.pedalFwd}
 		{char == $b} {this.pedalBck}
 		
-		{char == $u} {this.pedalHigh}
-		{char == $d} {this.pedalLow}
+		{char == $u} {this.pedalHigh; this.score.click4Note(0.05);}
+		{char == $d} {this.pedalLow; this.score.click4Note(0.05);}
 		
 		{char == $h} {{this.hide}.defer}
 		
@@ -143,6 +157,19 @@ OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, <>motorPan, s, basicPath
 	
 	}
 	
+	connect {arg hostcomputer="tremmac56150", port;
+		var ip;
+		
+	port ?? {port = 57120};
+	ip = hostcomputer.ipAddr;
+	if(ip.notNil, {
+	network = NetAddr(hostcomputer.ipAddr, port);
+	OSCdef(\tempotrack, {|msg, time, addr, recvPort| tempo = msg[1].postln}, '/tempo', network); 
+	}, {
+	Error("Connection Failed").throw;
+	}); 
+	}
+	
 	displayPage {arg page=1;
 	this.funcPage(page);
 	}
@@ -152,7 +179,21 @@ OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, <>motorPan, s, basicPath
 	}
 	
 	partialNotes {arg time=1.0, page=1, low=60, high=84, expression="P", displayNext=true;
-		var notes;
+		var notes, pagetag;
+		
+		if(network.notNil, {
+			case
+			{page == 34}{pagetag = 'partials 1'}
+			{page == 36}{pagetag = 'partials 2'}
+			{page == 37}{pagetag = 'partials 3'}
+			{page == 38}{pagetag = 'partials 4'}
+			{page == 39}{pagetag = 'partials 5'}
+			{page == 47}{pagetag = 'partials 6'}
+			{page == 49}{pagetag = 'partials 7'};
+			
+		network.sendMsg('/page', pagetag);
+		});
+
 		partialTrig = 1;
 		notes = partials.frequencies.cpsmidi.round(1);
 		notes.do({|item, index|
@@ -177,7 +218,20 @@ OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, <>motorPan, s, basicPath
 	}
 	
 	textOnly {arg string="SILENCE", time=1.0,  page=32, displayNext=true;
+		var pagetag;
+		
 		partialTrig = 1;
+		
+		if(network.notNil, {
+			case
+			{page == 41}{pagetag = 'improv 1'}
+			{page == 45}{pagetag = 'improv 2'}
+			{page == 54}{pagetag = 'end'}
+			;
+			
+		network.sendMsg('/page', pagetag);
+		});
+		
 		{
 		if(score.picture.notNil, {score.picture.free});
 		score.w.refresh;
@@ -243,8 +297,10 @@ OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, <>motorPan, s, basicPath
 	funcPage {arg page=0; 
 		{score.image((basicPath ++ "/AlgoScore/score/onviolencescore" ++ page.asString ++ ".jpg"), imageScale, imageAdj);}.defer;
 		stepPedal = page;
-		//"Page: ".post; page.postln;
 		this.pageFunc(page);
+		if(network.notNil, {
+		network.sendMsg('/page', page);
+		});
 		if(motorSound.notNil, {
 		if(page < 16, {
 		{if(motorSound.window.visible.not, {motorSound.window.visible = true;});}.defer; 
@@ -255,19 +311,23 @@ OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, <>motorPan, s, basicPath
 	}
 
 	
-	funcAlgoScore {arg sample=1,page=1, tempo=176, repeat=1,pagePartial=0;
+	funcAlgoScore {arg sample=1,page=1, tempo1=1, repeat=1,pagePartial=0;
 		var step=0, color, tempo2, sampleEnd, bufferTimesMIDI,pattMIDI;
 
 		bufferTimesMIDI = [ 0.025, 0.039185800697256, 0.061421079051404, 0.096273366492749, 0.15090195807355, 0.21139096075449, 0.33134096229308, 0.51935443645014, 0.81405277751885, 1.2759723958761, 2 ];
 		pattMIDI = Pseq((0,1..16), inf).asStream;
 
 		{if(motorSound.window.visible, {motorSound.window.visible = false;});}.defer;
+		
+		if(network.notNil, {
+		network.sendMsg('/page', ('algoScore ' ++ sample));
+		});
 
 		{ 
 		partialTrig = 1;
 		sampleEnd = sample;
 		repeat.do({
-		tempo2 = 176/tempo;
+		tempo2 = 1/tempo1;
 		this.funcSample(sampleEnd);
 		this.funcChooseSample(rrand(0,9)); 
 		color = Array.fill(selectPitch.size, {\black});
@@ -296,7 +356,7 @@ OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, <>motorPan, s, basicPath
 		}.fork;
 	}
 	
-	funcPerc {arg percWhich=0, percsample = 4, perctempo = 176, adjEnd = 1, withPedal = 1;
+	funcPerc {arg percWhich=0, percsample = 4, perctempo = 1, adjEnd = 1, withPedal = 1;
 		var step=0,percglobalTimes,percbufferTimes, percglobalTimes2, percglobalTimes3, percindexesOf,percglobalTimes4,percbuffType, percalgoTimes,percstart,percend;
 
 		percglobalTimes = percglobalTimesGlob[percWhich];
@@ -320,9 +380,9 @@ OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, <>motorPan, s, basicPath
 		percglobalTimes4.do({|item| percalgoTimes = percalgoTimes.add(item[0]); });
 		percalgoTimes = percalgoTimes.differentiate;
 
-		{score.timer((percalgoTimes.sum*adjEnd)*(176/perctempo), rightWin:rightWin);
+		{score.timer((percalgoTimes.sum*adjEnd)*(1/perctempo), rightWin:rightWin);
 		score.click1(name:"Trigger");
-		score.click1CloseTime(percstart[percWhich]+percend[percWhich]*(176/perctempo));}.defer;
+		score.click1CloseTime(percstart[percWhich]+percend[percWhich]*(1/perctempo));}.defer;
 
 		{
 		percstart[percWhich].yield;
@@ -331,26 +391,16 @@ OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, <>motorPan, s, basicPath
 			{score.click1Note(percbufferTimes[percbuffType[step]])});
 		}.defer;
 		node.spawn([\bufnum, bufferArr[percbuffType[step]].bufnum], 1);
-		(percalgoTimes[step]*(176/perctempo)).yield;
+		(percalgoTimes[step]*(1/perctempo)).yield;
 		step = step + 1;
 		});
-		(percend[percWhich]-(percalgoTimes.sum+percstart[percWhich])*(176/perctempo)).yield;
+		(percend[percWhich]-(percalgoTimes.sum+percstart[percWhich])*(1/perctempo)).yield;
 		if(withPedal == 1, {{score.tag("Pedal");}.defer;});
 		}.fork;
 	}
 	
 	closeTag {	
 		score.tagClose;
-	}
-
-	practiceAlgoScore {arg sample=1,page=1, tempo=176, repeat=1;
-		var color, tempo2, sampleEnd;
-		sampleEnd = sample;
-		this.funcSample(sampleEnd);
-		this.funcChooseSample(rrand(0,9)); 
-		score.score([\piano], 1, 1.3);
-		color = Array.fill(selectPitch.size, {\black});
-		score.notes(selectPitch, (0,1..selectPitch.size), color);
 	}
 	
 	pedalLow {
@@ -359,6 +409,10 @@ OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, <>motorPan, s, basicPath
 		
 		if(countPedalDown != pedalDownOld, {
 		'pedalDown '.post; countPedalDown.postln;
+		
+		if(network.notNil, {
+		network.sendMsg('/pedalDown', countPedalUp);
+		});
 		
 		if((38..59).includes(countPedalDown), {countPedalUp = countPedalDown+5;});
 		
@@ -374,7 +428,10 @@ OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, <>motorPan, s, basicPath
 		{countPedalDown == 56} {this.funcPerc(5, rrand(0,9), tempo); this.partialNum(9);}
 		{countPedalDown == 57} {this.funcPerc(6, rrand(0,9), tempo, 0.85); this.partialNum(19);}
 		{countPedalDown == 58} {this.funcPerc(7, 0, tempo); this.partialNum(24);}
-		{countPedalDown == 59} {this.timerOnly(15.0*(176/tempo))};
+		{countPedalDown == 59} {this.timerOnly(15.0*(1/tempo))}
+		
+		{countPedalDown == 66} {this.partialNum(13);}
+		{countPedalDown == 68} {this.partialNum(21);}
 		
 		});
 		pedalDownOld = countPedalDown;	
@@ -388,6 +445,10 @@ OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, <>motorPan, s, basicPath
 		
 		if(countPedalUp != pedalUpOld, {
 		'pedalUp '.post; countPedalUp.postln;
+		
+		if(network.notNil, {
+		network.sendMsg('/pedalUp', countPedalUp);
+		});
 		
 		if((43..100).includes(countPedalUp), {(countPedalDown = countPedalUp-6);});
 		
@@ -433,16 +494,28 @@ OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, <>motorPan, s, basicPath
 		{countPedalUp == 58} {score.tagClose; this.funcAlgoScore(24,33,tempo,1);}
 		{countPedalUp == 59} {score.tagClose; this.funcAlgoScore(25,34,tempo,1,1); this.partialNum(18);}
 		{countPedalUp == 60} {score.tagClose; this.funcAlgoScore(26,35,tempo,1);}
-		{countPedalUp == 61} {score.tagClose; this.partialNotes(7.17*(176/tempo),36,"c 3".notemidi,"c 6".notemidi, "F");}
-		{countPedalUp == 62} {score.tagClose; this.partialNotes(3.07*(176/tempo),37,"c 2".notemidi,"c 7".notemidi, "F");}
-		{countPedalUp == 63} {score.tagClose; this.partialNotes(6.42*(176/tempo),38,"c 2".notemidi,"c 7".notemidi, "P");}
-		{countPedalUp == 64} {score.tagClose; this.partialNotes(7.5*(176/tempo),39,"c 2".notemidi,"c 7".notemidi, "p", false); this.funcPerc(8, 0, tempo, 1, 0);}
+		{countPedalUp == 61} {score.tagClose; this.partialNotes(7.17*(1/tempo),36,"c 3".notemidi,"c 6".notemidi, "F");}
+		{countPedalUp == 62} {score.tagClose; this.partialNotes(3.07*(1/tempo),37,"c 2".notemidi,"c 7".notemidi, "F");}
+		{countPedalUp == 63} {score.tagClose; this.partialNotes(6.42*(1/tempo),38,"c 2".notemidi,"c 7".notemidi, "P");}
+		{countPedalUp == 64} {score.tagClose; this.partialNotes(7.5*(1/tempo),39,"c 2".notemidi,"c 7".notemidi, "p", false); this.funcPerc(8, 0, tempo, 1, 0);}
 		{countPedalUp == 65} {score.tagClose; this.funcPage(40)}
-		{countPedalUp == 66} { this.textOnly("FREE IMPROV", 37.5*(176/tempo), 41) }
+		{countPedalUp == 66} { this.textOnly("FREE IMPROV", 37.5*(1/tempo), 41); }
 		
 		{countPedalUp == 67} {this.funcPage(42);}
-		{countPedalUp == 68} {this.movie(1,176/tempo,movieScale,43,false);}
-
+		{countPedalUp == 68} {this.movie(1,1/tempo,movieScale,43);}
+		{countPedalUp == 69} {this.movie(2,1/tempo,movieScale,44);}
+		{countPedalUp == 70} { this.textOnly("FREE IMPROV", 13.45*(1/tempo), 45); }
+		{countPedalUp == 71} {this.movie(3,1/tempo,movieScale,46);}
+		{countPedalUp == 72} {this.partialNotes(5.67*(1/tempo),47,"c 2".notemidi,"c 7".notemidi, "P");}
+		{countPedalUp == 73} {this.movie(4,1/tempo,movieScale,48);}
+		{countPedalUp == 74} {this.partialNotes(11.83*(1/tempo),49,"c 2".notemidi,"c 7".notemidi, "P", false); }
+		{countPedalUp == 75} {this.funcAlgoScore(22,50,tempo,1)}
+		{countPedalUp == 76} {this.funcAlgoScore(22,51,tempo,1)}
+		
+		{countPedalUp == 77} {this.funcPage(52);}
+		{countPedalUp == 78} {this.funcPage(53);}
+		{countPedalUp == 79} { this.textOnly("DON'T PLAY", 25*(1/tempo), 54, false); {(26*(1/tempo)).yield; score.text("THE END", "Helvetica", 90, 1, 1)}.fork(clock)}
+		
 		});
 			pedalUpOld = countPedalUp;
 	
@@ -487,6 +560,11 @@ OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, <>motorPan, s, basicPath
 				{val > motorSound.highVal} {number2 = motorSound.highVal}
 				{(val >= motorSound.lowVal).and(val <= motorSound.highVal)} {number2 = val};
 				motorSound.sensorLag1.set(\num, number2);
+				
+				if(network.notNil, {
+				network.sendMsg('/sensorUp', number2);
+				});
+				
 			}, 4, srcID: src);
 		MIDIdef.cc(\sensorSide, {arg val; 
 				case
@@ -494,38 +572,16 @@ OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, <>motorPan, s, basicPath
 					{val > motorSound.rightVal} {number1 = motorSound.rightVal}
 					{(val >= motorSound.leftVal).and(val <= motorSound.rightVal)} {number1 = val};
 				motorSound.sensorLag2.set(\num, number1);
+				
+				if(network.notNil, {
+				network.sendMsg('/sensorSide', number1);
+				});
+				
 			}, 5, srcID: src);	
 	}
 	
 	removePedals {
 	MIDIdef.freeAll;
-	}
-
-	//turns keyboard on instead of midi pedal
-	keyboardPedal {
-		document = Document.new("");
-		document.keyDownAction_({arg doc, key, modifiers, keycode;
-		
-		case
-		//instead of pedals use keyboard:
-		//when 's' is pressed:
-		{keycode == 115} {this.pedalFwd}
-		//when 'w' is pressed:
-		{keycode == 119} {this.pedalBck}
-		//pedals for sensors, algorithmic score, pages:
-		//when 'a' is pressed:
-		{keycode == 97} {this.pedalLow}
-		//when 'q' is pressed:
-		{keycode == 113} {this.pedalHigh};
-		
-		});
-			
-	}
-
-	//turns keyboard off - when used instead of pedal
-	keyboardpedalDown {
-		document.keyDownAction_(nil);
-		document.close;
 	}
 
 	remove {	
@@ -537,8 +593,12 @@ OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, <>motorPan, s, basicPath
 		var moviePath, movieTimes;
 		partialTrig = 1;
 		moviePath = basicPath ++ "/AlgoScore/videos/battle" ++ whichMovie.asString ++ ".mov";
-		movieTimes = [42.706665039062];
-	
+		movieTimes = [42.706665039062, 33.934603174603, 14.552584157024, 8.3358450927186];
+		
+		if(network.notNil, {
+		network.sendMsg('/page', ('movie ' ++ whichMovie));
+		});
+		
 		{	
 		score.clearWindow;
 		0.1.yield;
@@ -573,14 +633,19 @@ OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, <>motorPan, s, basicPath
 		StaticText(movwin, 280@230*scale).string_("BULLETS - play two notes a semitone a part on in each hand, each hand should not be further than a minor 3rd apart, all notes between c4 and c5.\r\rONE BULLET -> play two hands at the same time.\r\rREPEATED BULLETS -> alternate between two hands.\r\r\r\r").font_(Font("Helvetica", size: 16*scale)).stringColor_(Color.green);
 		StaticText(movwin, 280@60*scale).string_("BOMB -> play cluster with one hand bellow c2").font_(Font("Helvetica", size: 16*scale)).stringColor_(Color.yellow);
 		}
-		{whichMovie == 2}{
+		{[2,3].includes(whichMovie)}{
 		StaticText(movwin, 240@30*scale).string_("When you hear:").font_(Font("Helvetica", size: 25*scale)).stringColor_(Color.red);
 		StaticText(movwin, 280@60*scale).string_("YOUR OWN BULLETS - play cluster with one hand between c4 and c5").font_(Font("Helvetica", size: 16*scale)).stringColor_(Color.blue);
 		StaticText(movwin, 280@100*scale).string_("BULLETS FROM OTHER COMBATANTS - play two notes a semitone apart alternating between hands, all above c6.\r\r").font_(Font("Helvetica", size: 16*scale)).stringColor_(Color.green);
 		StaticText(movwin, 280@60*scale).string_("BOMB -> play cluster with one hand bellow c2").font_(Font("Helvetica", size: 16*scale)).stringColor_(Color.yellow);
 	
-	}
+		}
+		{whichMovie == 4}{
+		StaticText(movwin, 240@30*scale).string_("When you hear:").font_(Font("Helvetica", size: 25*scale)).stringColor_(Color.red);
+		StaticText(movwin, 280@60*scale).string_("YOUR OWN BULLETS - play cluster with one hand between c4 and c5").font_(Font("Helvetica", size: 16*scale)).stringColor_(Color.blue);
+		StaticText(movwin, 280@100*scale).string_("BULLETS FROM OTHER COMBATANTS - play two notes a semitone apart alternating between hands, all above c6.\r\r").font_(Font("Helvetica", size: 16*scale)).stringColor_(Color.green);
 	
+		}
 	}
 	
 	show {
