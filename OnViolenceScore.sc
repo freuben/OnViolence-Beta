@@ -1,4 +1,4 @@
-OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, <>motorPan, s, basicPath, <>score, globalMIDI, globalTimes, start, end, bufferTimes, selectPitch, buffType, algoTimes, <>stepPedal, countPedalUp, countPedalDown,<>tempo=1, <>partials, <percglobalTimesGlob, partialTrig=0, document, <>bufferArr, pedalUpOld, pedalDownOld, ccResponder, <>node, <>rightWin, clock, <motorSound, movwin, <>src, <>imageScale, <>imageAdj, movieScale, movieWinScale, <>network;
+OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, <>motorPan, s, basicPath, <>score, globalMIDI, globalTimes, start, end, bufferTimes, selectPitch, buffType, algoTimes, <>stepPedal, countPedalUp, countPedalDown,<>tempo=1, <>partials, <percglobalTimesGlob, partialTrig=0, document, <>bufferArr, <>node, <>rightWin, clock, <motorSound, movwin, <>src, <>imageScale, <>imageAdj, movieScale, movieWinScale, <>network, snapshot, <>pedalTime, pedalDownMistake, pedalUpMistake;
 	
 	*new {arg headOut=0, motorOut=0, motorVol=3, panVal=0, lowVal=40, highVal=50, leftVal=49, rightVal=31, src, scoreType=\macBookPro15, connect=false, hostcomputer="tremmac56150", port=57120;
 	^super.new.initOnViolenceScore(headOut, motorOut, motorVol, panVal, lowVal, highVal, leftVal, rightVal, src, scoreType, connect, hostcomputer, port);
@@ -16,6 +16,10 @@ OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, <>motorPan, s, basicPath
 		src ?? {src = -1927836118};
 		s = Server.default;
 		clock = AppClock;
+		pedalDownMistake = false;
+		pedalUpMistake = false;
+		pedalTime=0.5;
+		
 		basicPath =  Document.standardizePath("~/Library/Application Support/SuperCollider/Extensions/FedeClasses/OnViolence/");
 		bufferArr = [Buffer.read(s, basicPath ++ "/AlgoScore/samples/hihat.wav"), 
 		Buffer.read(s, basicPath ++ "/AlgoScore/samples/woodblock.wav"), 
@@ -138,7 +142,20 @@ OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, <>motorPan, s, basicPath
 		{char == $u} {this.pedalHigh; this.score.click4Note(0.05);}
 		{char == $d} {this.pedalLow; this.score.click4Note(0.05);}
 		
-		{char == $h} {{this.hide}.defer}
+		{char == $m} {{this.hide}.defer}
+		
+		{char == $t} { 
+			gowin = Window("", Rect((score.w.bounds.width/2),(score.w.bounds.height/2),120,150)).front;
+			gowin.addFlowLayout( 10@10, 20@5 );
+			StaticText(gowin, 100@20).string_("New Tempo:");
+			gotext = TextField(gowin, 60@20);
+			gotext.string = "1";
+			gotext.action = {arg field; "Tempo: ".post; field.value.postln; 
+			tempo = field.value.asFloat; 
+			gowin.close;
+			};
+			gotext.focus;
+			}
 		
 		};
 		 
@@ -162,7 +179,7 @@ OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, <>motorPan, s, basicPath
 		var ip;
 		
 	port ?? {port = 57120};
-	ip = hostcomputer.ipAddr;
+	ip = hostcomputer.ipAddr(\ethernet);
 	if(ip.notNil, {
 	network = NetAddr(hostcomputer.ipAddr, port);
 	OSCdef(\tempotrack, {|msg, time, addr, recvPort| tempo = msg[1].postln}, '/tempo', network); 
@@ -208,6 +225,8 @@ OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, <>motorPan, s, basicPath
 		score.timer(time*0.833333, rightWin:rightWin);
 		if(displayNext, {
 		score.text("Improvise with pitch material", "Helvetica", 50, 0.5, 0.7);
+		}, {
+		score.text("Improvise with pitch and rhythm", "Helvetica", 50, 1, 0.9);
 		});
 		score.expression(expression);
 		time.yield;
@@ -218,7 +237,7 @@ OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, <>motorPan, s, basicPath
 		}.fork(clock);
 	}
 	
-	textOnly {arg string="SILENCE", time=1.0,  page=32, displayNext=true;
+	textOnly {arg string="SILENCE", time=1.0,  page=32, displayNext=true, fontSize=90;
 		var pagetag;
 		
 		partialTrig = 1;
@@ -227,7 +246,7 @@ OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, <>motorPan, s, basicPath
 			case
 			{page == 41}{pagetag = 'improv 1'}
 			{page == 45}{pagetag = 'improv 2'}
-			{page == 54}{pagetag = 'end'}
+			{page == 56}{pagetag = 'end'}
 			;
 			
 		network.sendMsg('/page', pagetag);
@@ -236,7 +255,7 @@ OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, <>motorPan, s, basicPath
 		{
 		if(score.picture.notNil, {score.picture.free});
 		score.w.refresh;
-		score.text(string, "Helvetica", 90, 1, 1);
+		score.text(string, "Helvetica", fontSize, 1, 1);
 		score.timer(time*0.833333, rightWin:rightWin);
 		time.yield;
 		if(displayNext, {
@@ -313,15 +332,16 @@ OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, <>motorPan, s, basicPath
 
 	
 	funcAlgoScore {arg sample=1,page=1, tempo1=1, repeat=1,pagePartial=0;
-		var step=0, color, tempo2, sampleEnd, bufferTimesMIDI,pattMIDI;
+		var step=0, color, tempo2, sampleEnd, bufferTimesMIDI,randNum;
 
 		bufferTimesMIDI = [ 0.025, 0.039185800697256, 0.061421079051404, 0.096273366492749, 0.15090195807355, 0.21139096075449, 0.33134096229308, 0.51935443645014, 0.81405277751885, 1.2759723958761, 2 ];
-		pattMIDI = Pseq((0,1..16), inf).asStream;
-
+		
+		randNum = rrand(0,9);
+		
 		{if(motorSound.window.visible, {motorSound.window.visible = false;});}.defer;
 		
 		if(network.notNil, {
-		network.sendMsg('/page', ('algoScore ' ++ sample));
+		network.sendMsg('/page', ('algoScore ' ++ sample ++ ' rand ' ++ randNum));
 		});
 
 		{ 
@@ -330,7 +350,7 @@ OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, <>motorPan, s, basicPath
 		repeat.do({
 		tempo2 = 1/tempo1;
 		this.funcSample(sampleEnd);
-		this.funcChooseSample(rrand(0,9)); 
+		this.funcChooseSample(randNum); 
 		color = Array.fill(selectPitch.size, {\black});
 		{score.score([\piano], 1, 1.3);
 		score.expression("f");
@@ -353,13 +373,21 @@ OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, <>motorPan, s, basicPath
 		step = 0;
 		{score.expressionClose;}.defer;
 		});
-		if(pagePartial == 0, {this.funcPage(page); partialTrig = 0;}, {this.partialNotes(5.47*tempo2,page,"c 4".notemidi,"c 6".notemidi, "f")});
+		case
+		{pagePartial == 0} {this.funcPage(page); partialTrig = 0;}
+		{pagePartial == 1} {this.partialNotes(5.47*tempo2,page,"c 4".notemidi,"c 6".notemidi, "f")}
+		{pagePartial == 2} {this.partialNotes(7.69*tempo2,51,"c 2".notemidi,"c 7".notemidi, "P")} //11.83
 		}.fork;
 	}
+
 	
 	funcPerc {arg percWhich=0, percsample = 4, perctempo = 1, adjEnd = 1, withPedal = 1;
 		var step=0,percglobalTimes,percbufferTimes, percglobalTimes2, percglobalTimes3, percindexesOf,percglobalTimes4,percbuffType, percalgoTimes,percstart,percend;
-
+		
+		if(network.notNil, {
+		network.sendMsg('/page', ('perc ' ++ percWhich ++ ' rand ' ++ percsample));
+		});
+		
 		percglobalTimes = percglobalTimesGlob[percWhich];
 
 		percstart = [0.24318181818182,0.053636363636372,0.27500000000001,0.28136363636364,0.33454545454546, 0.12500000000001,0.026363636363641, 0, 0];
@@ -406,13 +434,20 @@ OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, <>motorPan, s, basicPath
 	
 	pedalLow {
 		if(partialTrig == 0, {
+			
+		if(pedalDownMistake.not, {
+				
+		{pedalDownMistake = true;
+		pedalTime.yield; 
+		pedalDownMistake = false;
+		}.fork;		
+				
 		countPedalDown = countPedalDown + 1;
 		
-		if(countPedalDown != pedalDownOld, {
 		'pedalDown '.post; countPedalDown.postln;
 		
 		if(network.notNil, {
-		network.sendMsg('/pedalDown', countPedalUp);
+		network.sendMsg('/pedalDown', countPedalDown);
 		});
 		
 		//if((38..59).includes(countPedalDown), {countPedalUp = countPedalDown+5;});
@@ -430,30 +465,30 @@ OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, <>motorPan, s, basicPath
 		{countPedalDown == 58} {this.funcPerc(7, 0, tempo); this.partialNum(24);}
 		{countPedalDown == 59} {this.timerOnly(15.0*(1/tempo))}
 		
-		{countPedalDown == 66} {this.partialNum(13);}
-		{countPedalDown == 68} {this.partialNum(21);}
+		{countPedalDown == 66} {this.partialNum(17);}
 		
 		});
-		pedalDownOld = countPedalDown;	
 		});
 	}
 	
 	pedalHigh {
 		if(partialTrig == 0, {
 			
+			
+		if(pedalUpMistake.not, {
+				
+		{pedalUpMistake = true;
+		pedalTime.yield; 
+		pedalUpMistake = false;
+		}.fork;	
+			
 		countPedalUp = countPedalUp + 1;
 		
-		if(countPedalUp != pedalUpOld, {
 		'pedalUp '.post; countPedalUp.postln;
 		
 		if(network.notNil, {
 		network.sendMsg('/pedalUp', countPedalUp);
 		});
-		
-//		if(((43..71) ++ [81]).includes(countPedalUp), {(countPedalDown = countPedalUp-6);});
-//		if([ 72, 73, 80 ].includes(countPedalUp), {(countPedalDown = countPedalUp-7);});
-//		if((74..79).includes(countPedalUp), {(countPedalDown = countPedalUp-8);});
-		
 		
 		case
 		{(4..7).includes(countPedalUp)} {motorSound.pedalOn(countPedalUp-3);}
@@ -513,19 +548,17 @@ OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, <>motorPan, s, basicPath
 		{countPedalUp == 73} {this.funcPage(48);}
 		{countPedalUp == 74} {this.partialNotes(5.67*(1/tempo),49,"c 2".notemidi,"c 7".notemidi, "P");}
 		{countPedalUp == 75} {this.movie(4,1/tempo,movieScale,50);}
-		{countPedalUp == 76} {this.partialNotes(11.83*(1/tempo),51,"c 2".notemidi,"c 7".notemidi, "P"); }
-		{countPedalUp == 77} {this.funcAlgoScore(22,52,tempo,1)}
-		{countPedalUp == 78} {this.funcAlgoScore(22,53,tempo,1)}
+		{countPedalUp == 76} {this.funcAlgoScore(27,34,tempo,1,2); this.partialNum(24); }
+		{countPedalUp == 77} {this.funcAlgoScore(28,52,tempo,1)}
+		{countPedalUp == 78} {this.funcAlgoScore(29,53,tempo,1)}
 		{countPedalUp == 79} {this.funcPage(54);}
 		{countPedalUp == 80} {this.funcPage(55);}
-		{countPedalUp == 81} { this.textOnly("DON'T PLAY", 25*(1/tempo), 54, false); {(26*(1/tempo)).yield; score.text("THE END", "Helvetica", 90, 1, 1); 10.yield; score.textClose;
-			}.fork(clock)}
-		
-		});
-			pedalUpOld = countPedalUp;
+		{countPedalUp == 81} { this.textOnly("Don't play, solo electronics", 25*(1/tempo), 56, false, 60); {(26*(1/tempo)).yield; score.text("THE END", "Helvetica", 90, 1, 1); 10.yield; score.textClose;
+			}.fork(clock)};
 	
 			this.arrangePedal;
-			
+		
+		});
 		});
 	}
 	
@@ -631,7 +664,7 @@ OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, <>motorPan, s, basicPath
 		top = score.w.bounds.height - (370*scale) - 100;
 		left = score.movie.bounds.left + (50*scale); 
 		movwin = Window("", Rect(left, top, 300*scale, 370*scale), border:false).front;
-		movwin.background_((Color.grey(alpha:0.2)));
+		movwin.view.background_((Color.black));
 		movwin.alwaysOnTop = true;
 		movflow = movwin.addFlowLayout(10@10, 10@10, 0);
 		
@@ -663,7 +696,6 @@ OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, <>motorPan, s, basicPath
 	hide {
 		score.hide; motorSound.hideWin;
 	}
-		
 	
 	*initClass {
 		
