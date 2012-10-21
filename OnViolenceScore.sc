@@ -1,4 +1,4 @@
-OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, <>motorPan, s, basicPath, <>score, globalMIDI, globalTimes, start, end, bufferTimes, selectPitch, buffType, algoTimes, <>stepPedal, countPedalUp, countPedalDown,<>tempo=1, <>partials, <percglobalTimesGlob, partialTrig=0, document, <>bufferArr, <>node, <>rightWin, clock, <motorSound, movwin, <>src, <>imageScale, <>imageAdj, movieScale, movieWinScale, <>network, snapshot, <>pedalTime, pedalDownMistake, pedalUpMistake;
+OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, <>motorPan, s, basicPath, <>score, globalMIDI, globalTimes, start, end, bufferTimes, selectPitch, buffType, algoTimes, <>stepPedal, countPedalUp, countPedalDown,<>tempo=1, <>partials, <percglobalTimesGlob, partialTrig=0, document, <>bufferArr, <>node, <>rightWin, clock, <motorSound, movwin, <>src, <>imageScale, <>imageAdj, movieScale, movieWinScale, <>network, snapshot, <>pedalTime, pedalDownMistake, pedalUpMistake, netConnect, <>rrandArray;
 	
 	*new {arg headOut=0, motorOut=0, motorVol=3, panVal=0, lowVal=40, highVal=50, leftVal=49, rightVal=31, src, scoreType=\macBookPro15, connect=false, hostcomputer="tremmac56150", port=57120;
 	^super.new.initOnViolenceScore(headOut, motorOut, motorVol, panVal, lowVal, highVal, leftVal, rightVal, src, scoreType, connect, hostcomputer, port);
@@ -36,7 +36,9 @@ OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, <>motorPan, s, basicPath
 		
 		partials = NodePT(512, 5);  //a partial tracker
 		
-		if(connect, {
+		netConnect = connect;
+		
+		if(netConnect, {
 			if(NetAddr.langPort != 57120, {("SC Language port in not 57120, close other open applications and restart SuperCollider").warn; networkError=true;}, {
 		this.connect(hostcomputer, port);
 			});
@@ -176,13 +178,18 @@ OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, <>motorPan, s, basicPath
 	}
 	
 	connect {arg hostcomputer="tremmac56150", port;
-		var ip;
+		var ip, stringArr;
 		
 	port ?? {port = 57120};
 	ip = hostcomputer.ipAddr(\ethernet);
 	if(ip.notNil, {
 	network = NetAddr(hostcomputer.ipAddr, port);
-	OSCdef(\tempotrack, {|msg, time, addr, recvPort| tempo = msg[1].postln}, '/tempo', network); 
+	OSCdef(\tempotrack, {|msg, time, addr, recvPort| tempo = msg[1].postln}, '/tempo', network);
+	OSCdef(\randArr, {|msg, time, addr, recvPort| stringArr = msg[1].postln;
+		stringArr = stringArr.asString.findReplaceAll(" ");
+		stringArr = stringArr.findReplace("[","").findReplace("]","");
+		rrandArray = stringArr.split($,);
+		}, '/randArr', network); 
 	}, {
 	Error("Connection Failed").throw;
 	}); 
@@ -229,6 +236,8 @@ OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, <>motorPan, s, basicPath
 		score.text("Improvise with pitch and rhythm", "Helvetica", 50, 1, 0.9);
 		});
 		score.expression(expression);
+		("partialNotes: : time : ").post;
+		time.postln;
 		time.yield;
 		this.funcPage(page);
 		score.textClose;
@@ -336,13 +345,8 @@ OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, <>motorPan, s, basicPath
 
 		bufferTimesMIDI = [ 0.025, 0.039185800697256, 0.061421079051404, 0.096273366492749, 0.15090195807355, 0.21139096075449, 0.33134096229308, 0.51935443645014, 0.81405277751885, 1.2759723958761, 2 ];
 		
-		randNum = rrand(0,9);
-		
+				
 		{if(motorSound.window.visible, {motorSound.window.visible = false;});}.defer;
-		
-		if(network.notNil, {
-		network.sendMsg('/page', ('algoScore ' ++ sample ++ ' rand ' ++ randNum));
-		});
 
 		{ 
 		partialTrig = 1;
@@ -350,12 +354,25 @@ OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, <>motorPan, s, basicPath
 		repeat.do({
 		tempo2 = 1/tempo1;
 		this.funcSample(sampleEnd);
+		
+		//score algo choices
+		if(netConnect, {
+		randNum = (rrandArray[sampleEnd-1].asInteger);}, {
+		randNum = rrand(0,9);
+		});
+		
+		//send network message
+		if(network.notNil, {
+		network.sendMsg('/page', ('algoScore ' ++ sample ++ ' rand ' ++ randNum));
+		});
+		
 		this.funcChooseSample(randNum); 
 		color = Array.fill(selectPitch.size, {\black});
 		{score.score([\piano], 1, 1.3);
 		score.expression("f");
 		score.notes(selectPitch, (0,1..selectPitch.size), color);
-		score.timer((start+end)*tempo2, 0.99, rightWin:rightWin);}.defer;
+		("funcAlgoScore: " ++ sample ++ " : time : ").post;
+		score.timer((start+end).postln*tempo2, 0.99, rightWin:rightWin);}.defer;
 		(start*tempo2).yield;
 		selectPitch.size.do({
 		(algoTimes[step]*tempo2).yield;
@@ -411,7 +428,8 @@ OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, <>motorPan, s, basicPath
 
 		{score.timer((percalgoTimes.sum*adjEnd)*(1/perctempo), rightWin:rightWin);
 		score.click1(name:"Trigger");
-		score.click1CloseTime(percstart[percWhich]+percend[percWhich]*(1/perctempo));}.defer;
+		("funcPerc: " ++ percWhich ++ " : time : ").post;
+		score.click1CloseTime((percstart[percWhich]+percend[percWhich]*(1/perctempo)).postln);}.defer;
 
 		{
 		percstart[percWhich].yield;
