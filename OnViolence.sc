@@ -1,4 +1,4 @@
-OnViolence {var <>audioIn, s, <>ampIn, midiOut, d, <>amplitude, <>ampOnset, <>ampSilence, <>tempo=176, <>countGlob=1, <>stepGlob=1, <>notes, <>pedalOffGlob, <>pedalOnGlob, gap, <>piano, osc, oscMax, <>sensorVal1=0, <>sensorVal2=63, <>grito1, <>grito2,<>grito3,<>grito4, <>motor, <>metal, <>wagner1,<>wagner2, <>wagner3,<>wagner4,<>buxtahude,<>parsifal, tempoLock, <>metalOn, sensor, sensor1, sensor2, bend1, bend2, lowVal=43.276000976562, highVal=46.995998382568, leftVal=41.668201446533,basicPath, rightVal=46.628700256348, <>algoVersion, <>rrandArray, <>differ, tempoStart=0,stepTempo=0,wagner1MIDITime, wagner1MIDINotes, wagner1MIDIVel, wagner1MIDIEnd,wagner2MIDITime, wagner2MIDINotes, wagner2MIDIVel, wagner2MIDIEnd,wagner3MIDITime, wagner3MIDINotes, wagner3MIDIVel, wagner3MIDIEnd,wagner4MIDITime, wagner4MIDINotes, wagner4MIDIVel, wagner4MIDIEnd,document, <>bufferArr, <>randBuffArr, <>volArr, <>panArr, <network;
+OnViolence {var <>audioIn, s, <>ampIn, midiOut, d, <>amplitude, <>ampOnset, <>ampSilence, <>tempo=176, <>countGlob=1, <>stepGlob=1, <>notes, <>pedalOffGlob, <>pedalOnGlob, gap, <>piano, osc, oscMax, <>sensorVal1=0, <>sensorVal2=63, <>grito1, <>grito2,<>grito3,<>grito4, <>motor, <>metal, <>wagner1,<>wagner2, <>wagner3,<>wagner4,<>buxtahude,<>parsifal, tempoLock, <>metalOn, sensor, sensor1, sensor2, bend1, bend2, lowVal=43.276000976562, highVal=46.995998382568, leftVal=41.668201446533,basicPath, rightVal=46.628700256348, <>algoVersion, <>rrandArray, <>differ, tempoStart=0,stepTempo=0,wagner1MIDITime, wagner1MIDINotes, wagner1MIDIVel, wagner1MIDIEnd,wagner2MIDITime, wagner2MIDINotes, wagner2MIDIVel, wagner2MIDIEnd,wagner3MIDITime, wagner3MIDINotes, wagner3MIDIVel, wagner3MIDIEnd,wagner4MIDITime, wagner4MIDINotes, wagner4MIDIVel, wagner4MIDIEnd,document, <>bufferArr, <>randBuffArr, <>volArr, <>panArr, <network, <>master1, <>master2, <>instr, <>partials, <>pan, <>instArr, condition;
 	
 	*new {arg audioIn = 0, volArr, panArr;
 		^super.new.initOnViolence(audioIn, volArr, panArr);
@@ -20,6 +20,12 @@ OnViolence {var <>audioIn, s, <>ampIn, midiOut, d, <>amplitude, <>ampOnset, <>am
 		
 		basicPath =  Document.standardizePath("~/Library/Application Support/SuperCollider/Extensions/FedeClasses/OnViolence/");
 		
+		condition = Condition.new(true);
+		
+		instArr = [\chart1,\chart2,\wagner,\chart3,\chart4,\wagner,\chart5,\chart6,\wagner,\chart7,\chart8,\wagner,\chart9,\chart10,\wagner,\chart11,\chart12];
+		
+		rrandArray = Array.fill(124, {rrand(1,10)}); //select random samples;
+				
 		s.makeBundle(nil, {
 		bufferArr = [
 		Buffer.read(s, basicPath ++ "/OnViolenceSamples/metal/metal_bang.scpv"),
@@ -54,11 +60,19 @@ OnViolence {var <>audioIn, s, <>ampIn, midiOut, d, <>amplitude, <>ampOnset, <>am
 		Buffer.read(s, basicPath ++ "/OnViolenceSamples/wagner/parsifal_actIII_right.scpv")
 		];		
 		
-		rrandArray = Array.fill(124, {rrand(1,10)}); //select random samples;
+		s.sync;
+		
+		instr = NodeInst2(17, basicPath ++ "/OnViolenceSamples/singles chart/");
+		partials = NodePT2(512, 12);
+		pan = NodePan(difSys: \stereo);
 		
 		s.sync;
 		
-		"Buffers Allocated".postln;
+		pan.setOut(instr.nodeArr);
+		
+		s.sync;		
+
+		"First Buffers Allocated".postln;
 		
 		this.selectFiles(Array.fill(29, {rrand(1,10)}););
 		
@@ -67,7 +81,7 @@ OnViolence {var <>audioIn, s, <>ampIn, midiOut, d, <>amplitude, <>ampOnset, <>am
 	}
 	
 	selectFiles {arg arrayVersion;
-		var sampleNumbers, sampleVersion, pathFolder, condition;
+		var sampleNumbers, sampleVersion, pathFolder, condition, setStereoPan;
 		pathFolder = basicPath ++ "/OnViolenceSamples/randomSamples/";
 		sampleNumbers = [81, 85, 88, 89, 93, 98, 99, 102, 104, 107, 108, 110, 111, 112, 116, 117, 118, 120, 121, 122, 123]; 
 		algoVersion = arrayVersion; //26 items
@@ -77,7 +91,24 @@ OnViolence {var <>audioIn, s, <>ampIn, midiOut, d, <>amplitude, <>ampOnset, <>am
 		condition = Condition.new(true);
 		randBuffArr = Array.fill(rrandArray.size,0);
 		
+		
 		{
+		setStereoPan = {
+		var newArr, arr, arrPan, step, numChan;
+		numChan = instr.chanNum;
+		newArr = Array.fill(numChan, 0);
+		arr = instr.instrArr;
+		arr.rejectNil.size;
+		arrPan = Array.equalPan(arr.rejectNil.size, numChan);
+		step = 0;
+		instr.instrArr.do({|item, index| if(item.notNil, {newArr[index] = arrPan[step]; step = step + 1 }); });
+		pan.setOut(instr.nodeArr, newArr);
+		};
+
+		1.yield;	
+		"Instruments Loaded".postln;
+		this.setInstSources;
+		0.1.yield;	
 		"Loading Random Buffers".postln;
 		rrandArray.do({|item,index| 
 		var path;
@@ -105,7 +136,11 @@ OnViolence {var <>audioIn, s, <>ampIn, midiOut, d, <>amplitude, <>ampOnset, <>am
 		condition.wait;
 		
 		});
-		"\rBuffers Allocated".postln;
+		
+		"\rRandom Sample Buffers Allocated".postln;
+		
+		instr.makeInstArr(instArr,  {setStereoPan.value;});
+		
 		}.fork;
 
 	}
@@ -210,47 +245,42 @@ OnViolence {var <>audioIn, s, <>ampIn, midiOut, d, <>amplitude, <>ampOnset, <>am
 	
 	}
 	
-	startNodes {arg pianoOut = 0, metalOut=0, grito1Out = 0, grito2Out = 0, grito3Out=0, grito4Out=2, motorOut=3, wagner1Out=0, wagner2Out=0,wagner3Out=0,wagner4Out=0,buxtaOut=0, parsifalOut=0;
+	startNodes {arg out1 = 0, out2 = 2;
 		
-	piano = NodeProxy.audio(s, 2);
-	piano.play(pianoOut);
+	piano = NodeProxy.audio(s, 2); //detect
+	piano.play;
 	
 	metal = NodeProxy.audio(s, 2);
-	metal.play(metalOut); 
-	
 	grito1 = NodeProxy.audio(s, 2);
-	grito1.play(grito1Out);
-	
 	grito2 = NodeProxy.audio(s, 2);
-	grito2.play(grito2Out);
-	
 	grito3 = NodeProxy.audio(s, 2);
-	grito3.play(grito3Out);
-	
 	grito4 = NodeProxy.audio(s, 2);
-	grito4.play(grito4Out);
-	
 	wagner1 = NodeProxy.audio(s, 2);
-	wagner1.play(wagner1Out); 
-	
 	wagner2 = NodeProxy.audio(s, 2);
-	wagner2.play(wagner2Out);
-	
 	wagner3 = NodeProxy.audio(s, 2);
-	wagner3.play(wagner3Out); 
-	
 	wagner4 = NodeProxy.audio(s, 2);
-	wagner4.play(wagner4Out); 
-	
-	buxtahude = NodeProxy.audio(s, 2);
-	buxtahude.play(buxtaOut);
-	
+	buxtahude = NodeProxy.audio(s, 2);	
 	parsifal = NodeProxy.audio(s, 2);
-	parsifal.play(parsifalOut);
+	
+	
+	//instr1.startNode;
 	
 	{
-	0.5.yield;
-	motor = OnViolenceMotor(motorOut,1,-1,55,73,49,31, rectArr: [1400, 20, 24, 288]);
+	"Loading Nodes".postln;
+	0.25.yield;
+	partials.startsynth2(1); //start detecting partials
+	0.25.yield;
+	motor = OnViolenceMotor(0,1,panArr[5],55,73,49,31, rectArr: [1400, 20, 24, 288], playNode: false);
+	0.25.yield;
+	"Getting Partials".postln;
+	partials.getarrays; //get partials
+	0.25.yield;
+	"Node Masters".postln;
+	//two master volumes (one for stereo pair, the other for guitar amplifier
+	master1 = NodeMaster({metal.ar + grito1.ar + grito2.ar + grito3.ar + wagner1.ar + wagner2.ar + wagner3.ar + wagner4.ar + buxtahude.ar + parsifal.ar +  pan.node.ar}, out1);
+	0.25.yield;
+	master2 = NodeMaster({grito4.ar + motor.motor.ar}, out2);
+	"Nodes Ready".postln;
 	}.fork(AppClock);
 		
 	this.arrayTimes;
@@ -388,7 +418,7 @@ wagner1MIDIVel = [ 59, 70, 68, 73, 67, 67, 70, 67, 68, 70, 71, 70, 63, 73, 62, 6
 wagner1MIDIEnd = 0.96253;
 		Routine({1.do({
 			(1.0227272727273*(176/tempo)).yield;
-			this.wagnerAlgo(wagner1,11,panArr[6],wagner1MIDITime*(176/tempo), wagner1MIDINotes,wagner1MIDIVel,wagner1MIDIEnd,7,0,12,(volArr[6]*0.8)); //starts wagner pharse2, 7 mult,startPos 0,midiOffset 12, and tristan_prelude buffer. tenor_phrase2
+			this.wagnerAlgo(wagner1,bufferArr[9].bufnum,panArr[6],wagner1MIDITime*(176/tempo), wagner1MIDINotes,wagner1MIDIVel,wagner1MIDIEnd,7,0,12,(volArr[6]*0.8)); //starts wagner pharse2, 7 mult,startPos 0,midiOffset 12, and tristan_prelude buffer. tenor_phrase2
 			});}).play;
 		}
 		{pedalOn == 46} {
@@ -413,7 +443,7 @@ wagner4MIDIVel = [ 56, 68, 67, 71, 64, 56, 66, 59, 57, 57, 58, 60, 58, 65, 59, 5
 wagner4MIDIEnd = 0.96776;
 		Routine({1.do({
 			(0.34090909090909*(176/tempo)).yield;
-			this.wagnerAlgo(wagner4,13,panArr[9],wagner4MIDITime*(176/tempo), wagner4MIDINotes,wagner4MIDIVel,wagner4MIDIEnd,7,0,0, volArr[9]); //starts wagner, 7 mult,startPos 0,midiOffset 12, and parsifal_transformation buffer. bass_phrase1
+			this.wagnerAlgo(wagner4,bufferArr[11].bufnum,panArr[9],wagner4MIDITime*(176/tempo), wagner4MIDINotes,wagner4MIDIVel,wagner4MIDIEnd,7,0,0, volArr[9]); //starts wagner, 7 mult,startPos 0,midiOffset 12, and parsifal_transformation buffer. bass_phrase1
 			});}).play;
 		}
 		{pedalOn == 48} {
@@ -433,10 +463,7 @@ wagner4MIDIEnd = 0.96776;
 		this.funcPlay(stepGlob, (differ[stepGlob-71]+(7*(60/176))), (tempo/176), (amplitude));
 		stepGlob = stepGlob + 1;
 		this.funcPlay(stepGlob, (differ[stepGlob-71]+(11*(60/176))), (tempo/176), (amplitude));
-		}
-		
-		//stepGlob update until here
-		
+		}	
 		{pedalOn == 54} {
 		wagner2MIDITime = [ 0, 0.435, 0.93559, 1.40114, 1.86684, 2.34146, 2.56846, 2.78823, 3.01855, 3.24427, 3.46793, 3.71102, 3.92061, 4.17186, 4.38545, 4.63381, 4.85211, 5.1058, 5.3283, 5.55564, 5.78726, 6.03569, 7.20704, 7.46572, 7.69142, 7.93706, 8.16333, 8.38984, 8.61414, 9.86811 ];
 wagner2MIDINotes = [ 65, 70, 70, 70, 70, 68, 70, 68, 67, 68, 67, 65, 68, 67, 68, 67, 65, 67, 65, 63, 67, 65, 64, 65, 67, 64, 67, 69, 70, 69 ];
@@ -450,11 +477,11 @@ wagner2MIDIEnd = 0.93403;
 	
 		Routine({1.do({
 		(0.85227272727273*(176/tempo)).yield;
-		this.wagnerAlgo(wagner2,16,panArr[7],wagner2MIDITime*(176/tempo),wagner2MIDINotes,wagner2MIDIVel, wagner2MIDIEnd,2,0,12,volArr[7]); //starts wagner algorithm with 2 mult and SolIchLauchen! buffer. sop_phrase3
+		this.wagnerAlgo(wagner2,bufferArr[14].bufnum,panArr[7],wagner2MIDITime*(176/tempo),wagner2MIDINotes,wagner2MIDIVel, wagner2MIDIEnd,2,0,12,volArr[7]); //starts wagner algorithm with 2 mult and SolIchLauchen! buffer. sop_phrase3
 		(3.5795454545455*(176/tempo)).yield;
 		metalOn = 2; //turn metal bangs off
 		(4.3892045454545*(176/tempo)).yield;
-		this.wagnerAlgo(wagner3,18,panArr[8],wagner3MIDITime*(176/tempo), wagner3MIDINotes,wagner3MIDIVel,wagner3MIDIEnd,2,0,12,volArr[8]); //starts wagner algorithm with 3 mult and parsifal_komkom buffer. alto_phrase3	
+		this.wagnerAlgo(wagner3,bufferArr[16].bufnum,panArr[8],wagner3MIDITime*(176/tempo), wagner3MIDINotes,wagner3MIDIVel,wagner3MIDIEnd,2,0,12,volArr[8]); //starts wagner algorithm with 3 mult and parsifal_komkom buffer. alto_phrase3	
 		});}).play;
 		}
 		{pedalOn == 56} {
@@ -464,7 +491,7 @@ wagner2MIDIEnd = 0.93403;
 wagner2MIDIEnd = 1.01561;
 		Routine({1.do({
 		(2.2159090909091*(176/tempo)).yield;
-		this.wagnerAlgo(wagner2,22,panArr[7],wagner2MIDITime*(176/tempo),wagner2MIDINotes,wagner2MIDIVel, wagner2MIDIEnd,1.5,0,12,volArr[7]); //starts wagner algorithm with 1.5 mult and auf_as_as_tan! buffer. sop_phrase4
+		this.wagnerAlgo(wagner2,bufferArr[20].bufnum,panArr[7],wagner2MIDITime*(176/tempo),wagner2MIDINotes,wagner2MIDIVel, wagner2MIDIEnd,1.5,0,12,volArr[7]); //starts wagner algorithm with 1.5 mult and auf_as_as_tan! buffer. sop_phrase4
 		});}).play;
 		}
 		{pedalOn == 60} {
@@ -481,6 +508,8 @@ wagner2MIDIEnd = 1.01561;
 		{(pedalOn >= 38).and(pedalOn <= 55)} {metalOn = 0;}
 		{(pedalOn >= 56).and(pedalOn <= 100)} {metalOn = 2;}
 		;
+		
+		if(pedalOn >= 51, {stepGlob = 124;});
 		
 	}
 	
@@ -613,9 +642,6 @@ wagner2MIDIEnd = 1.01561;
 			countGlob=1;
 			stepGlob=121;
 		}
-		{pedalOff == 50;} {
-			
-		}
 		
 		//stepGlob update until here
 		
@@ -626,7 +652,7 @@ wagner2MIDIEnd = 1.01561;
 wagner2MIDIEnd = 0.91555;
 		Routine({1.do({
 		(0.68181818181818*(176/tempo)).yield;
-		this.wagnerAlgo(wagner2,15,panArr[7],wagner2MIDITime*(176/tempo),wagner2MIDINotes,wagner2MIDIVel, wagner2MIDIEnd,3,0,12,volArr[7]); //starts wagner algorithm with 3 mult and HeHo! buffer. sop_phrase2
+		this.wagnerAlgo(wagner2,bufferArr[13].bufnum,panArr[7],wagner2MIDITime*(176/tempo),wagner2MIDINotes,wagner2MIDIVel, wagner2MIDIEnd,3,0,12,volArr[7]); //starts wagner algorithm with 3 mult and HeHo! buffer. sop_phrase2
 		});}).play;
 		}
 		{pedalOff == 53} {
@@ -644,11 +670,11 @@ wagner1MIDIEnd = 0.99729;
 	wagner4MIDIEnd = 0.81921;
 	Routine({1.do({
 	(0.17045454545455*(176/tempo)).yield;
-	this.wagnerAlgo(wagner4,20,panArr[9],wagner4MIDITime*(176/tempo), wagner4MIDINotes,wagner4MIDIVel,wagner4MIDIEnd,3,0,12, volArr[9]); //starts wagner, 3 mult,startPos 0,midiOffset 12, and parsifal_van_bade_kehrt. bass_phrase3
+	this.wagnerAlgo(wagner4,bufferArr[18].bufnum,panArr[9],wagner4MIDITime*(176/tempo), wagner4MIDINotes,wagner4MIDIVel,wagner4MIDIEnd,3,0,12, volArr[9]); //starts wagner, 3 mult,startPos 0,midiOffset 12, and parsifal_van_bade_kehrt. bass_phrase3
 	(0.703125*(176/tempo)).yield;
-	this.wagnerAlgo(wagner3,17,panArr[8],wagner3MIDITime*(176/tempo), wagner3MIDINotes,wagner3MIDIVel,wagner3MIDIEnd,3,0,0,volArr[8]); //starts wagner algorithm with 3 mult and trsitan_preludeII buffer. alto_phrase2
+	this.wagnerAlgo(wagner3,bufferArr[15].bufnum,panArr[8],wagner3MIDITime*(176/tempo), wagner3MIDINotes,wagner3MIDIVel,wagner3MIDIEnd,3,0,0,volArr[8]); //starts wagner algorithm with 3 mult and trsitan_preludeII buffer. alto_phrase2
 	(0.93749999999995*(176/tempo)).yield;
-	this.wagnerAlgo(wagner1,19,panArr[6],wagner1MIDITime*(176/tempo), wagner1MIDINotes,wagner1MIDIVel,wagner1MIDIEnd,3,0,12,volArr[6]); //starts wagner algorithm with 3 mult and tristan_prelude buffer. tenor_phrase4
+	this.wagnerAlgo(wagner1,bufferArr[17].bufnum,panArr[6],wagner1MIDITime*(176/tempo), wagner1MIDINotes,wagner1MIDIVel,wagner1MIDIEnd,3,0,12,volArr[6]); //starts wagner algorithm with 3 mult and tristan_prelude buffer. tenor_phrase4
 	});}).play;}
 	{pedalOff == 54;} {
 		wagner4MIDITime = [ 0, 0.48919, 0.9333, 1.40955, 1.85785, 2.31444, 2.54655, 2.77088, 3.02001, 3.2772, 3.50163, 3.72964, 3.97383, 4.20878, 4.43551, 4.66431, 4.91177, 5.1623, 5.40268, 5.61955, 5.84173, 6.12344, 7.0537, 7.93095, 9.81296, 10.73382, 11.70746, 13.6092, 15.46883, 16.3962, 17.30361, 18.27207, 19.21313, 20.11914, 21.0387 ];
@@ -658,7 +684,7 @@ wagner4MIDIEnd = 3.6684;
 
 		Routine({1.do({
 			(0.34090909090909*(176/tempo)).yield;
-this.wagnerAlgo(wagner4,21,panArr[9],wagner4MIDITime*(176/tempo), wagner4MIDINotes,wagner4MIDIVel,wagner4MIDIEnd,2,0,0, volArr[9]); //starts wagner, 2 mult,startPos 0,midiOffset 0, and parsifal_preludeII. bass_phrase4
+this.wagnerAlgo(wagner4,bufferArr[19].bufnum,panArr[9],wagner4MIDITime*(176/tempo), wagner4MIDINotes,wagner4MIDIVel,wagner4MIDIEnd,2,0,0, volArr[9]); //starts wagner, 2 mult,startPos 0,midiOffset 0, and parsifal_preludeII. bass_phrase4
 			});}).play;
 		}
 		{pedalOff == 56;} {
@@ -678,17 +704,17 @@ wagner3MIDIVel = [ 70, 73, 77, 77, 78, 72, 73, 78, 78, 75, 69, 71, 80, 67, 52, 6
 		
 		Routine({1.do({
 		(2.0880681818182*(176/tempo)).yield;
-		this.wagnerAlgo(wagner3,24,panArr[8],wagner3MIDITime*(176/tempo), wagner3MIDINotes,wagner3MIDIVel,wagner3MIDIEnd,1,0,12,volArr[8]); //starts wagner algorithm with 4 mult and verrater_ha buffer. alto_phrase4
+		this.wagnerAlgo(wagner3,bufferArr[22].bufnum,panArr[8],wagner3MIDITime*(176/tempo), wagner3MIDINotes,wagner3MIDIVel,wagner3MIDIEnd,1,0,12,volArr[8]); //starts wagner algorithm with 4 mult and verrater_ha buffer. alto_phrase4
 		(0.82094*(176/tempo)).yield;
-		this.wagnerAlgo(wagner2,23,panArr[7],wagner2MIDITime*(176/tempo),wagner2MIDINotes,wagner2MIDIVel, wagner2MIDIEnd,1,0,12,volArr[7]); //starts wagner algorithm with 1 mult and koenig_merke_heil! buffer. sop_phrase5
+		this.wagnerAlgo(wagner2,bufferArr[21].bufnum,panArr[7],wagner2MIDITime*(176/tempo),wagner2MIDINotes,wagner2MIDIVel, wagner2MIDIEnd,1,0,12,volArr[7]); //starts wagner algorithm with 1 mult and koenig_merke_heil! buffer. sop_phrase5
 		(12.94195*(176/tempo)).yield;
-		this.wagnerAlgo(wagner4,26,panArr[9],wagner4MIDITime*(176/tempo), wagner4MIDINotes,wagner4MIDIVel,wagner4MIDIEnd,1,0,12, volArr[9]); //starts wagner, 1 mult,startPos 0,midiOffset 12, and parsifal_weh_hoho buffer. bass_phrase5
+		this.wagnerAlgo(wagner4,bufferArr[24].bufnum,panArr[9],wagner4MIDITime*(176/tempo), wagner4MIDINotes,wagner4MIDIVel,wagner4MIDIEnd,1,0,12, volArr[9]); //starts wagner, 1 mult,startPos 0,midiOffset 12, and parsifal_weh_hoho buffer. bass_phrase5
 		wagner1MIDITime = [ 0, 0.43668, 0.92356, 1.39472, 1.86051, 2.33669, 2.54125, 2.79771, 3.00566, 3.26049, 3.45647, 3.69883, 3.93714, 4.17674, 4.40239, 4.62087, 4.84831, 5.08735, 5.31378, 5.55273, 5.75323, 6.0369, 7.05622 ];
 wagner1MIDINotes = [ 55, 62, 62, 62, 62, 60, 62, 60, 58, 60, 58, 57, 60, 58, 60, 58, 57, 58, 57, 55, 58, 57, 57 ];
 wagner1MIDIVel = [ 57, 59, 67, 70, 66, 51, 58, 46, 57, 57, 48, 57, 49, 54, 52, 49, 50, 58, 56, 54, 64, 65, 59 ];
 wagner1MIDIEnd = 0.73818;
 		(5.95784*(176/tempo)).yield;
-		this.wagnerAlgo(wagner1,27,panArr[6],wagner1MIDITime*(176/tempo), wagner1MIDINotes,wagner1MIDIVel,wagner1MIDIEnd,1,0,12,volArr[6]); //starts wagner, 1 mult,startPos 0,midiOffset 12, and parsifal_met_diesem buffer. tenor_phrase6
+		this.wagnerAlgo(wagner1,bufferArr[25].bufnum,panArr[6],wagner1MIDITime*(176/tempo), wagner1MIDINotes,wagner1MIDIVel,wagner1MIDIEnd,1,0,12,volArr[6]); //starts wagner, 1 mult,startPos 0,midiOffset 12, and parsifal_met_diesem buffer. tenor_phrase6
 		(5.2*(176/tempo)).yield;
 		wagner3.set(\gate, 0, \dec, rrand(2.0,2.5));
 		wagner4.set(\gate, 0, \dec, rrand(2.0,2.5));
@@ -704,28 +730,43 @@ wagner1MIDIVel = [ 73, 79, 80, 82, 82, 73, 73, 61, 65, 67, 65, 68, 58, 74, 53, 6
 wagner1MIDIEnd = 0.32705;
 		Routine({1.do({
 			(2.7272727272727*(176/tempo)).yield;
-			this.wagnerAlgo(wagner1,25,panArr[6],wagner1MIDITime*(176/tempo), wagner1MIDINotes,wagner1MIDIVel,wagner1MIDIEnd,2,0,12,volArr[6]); //starts wagner, 2 mult,startPos 0,midiOffset 12, and parsifal_vergeh buffer. tenor_phrase5
+			this.wagnerAlgo(wagner1,bufferArr[23].bufnum,panArr[6],wagner1MIDITime*(176/tempo), wagner1MIDINotes,wagner1MIDIVel,wagner1MIDIEnd,2,0,12,volArr[6]); //starts wagner, 2 mult,startPos 0,midiOffset 12, and parsifal_vergeh buffer. tenor_phrase5
 			});}).play;
 		}
 		{pedalOff == 59;} {
 		//turn wagner off for solo buxtahude
+		wagner1.set(\gate, 0);
+		wagner2.set(\gate, 0);
+		wagner3.set(\gate, 0);
+		wagner4.set(\gate, 0);
+		
 		//solo buxtahude
-		buxtahude.put(0, \pvplayBuxta2, 0, [\out, 0, \recBuf, 28, \amp, volArr[10], \rate, (tempo/176), \gate, 1, \pan, 1]);
-		buxtahude.put(1, \pvplayBuxta2, 0, [\out, 0, \recBuf, 29, \amp, volArr[10], \rate, (tempo/176), \gate, 1, \pan, -1]);
+		buxtahude.put(0, \pvplayBuxta2, 0, [\out, 0, \recBuf, bufferArr[26].bufnum, \amp, volArr[10], \rate, (tempo/176), \gate, 1, \pan, 1]);
+		buxtahude.put(1, \pvplayBuxta2, 0, [\out, 0, \recBuf, bufferArr[27].bufnum, \amp, volArr[10], \rate, (tempo/176), \gate, 1, \pan, -1]);
 		}
 		{pedalOff == 60;} {
 		//solo wagner
-		//buxtahude.set(\gate, 1);
-		parsifal.put(0, \pvplayBuxta2, 0, [\out, 0, \recBuf, 30, \amp, volArr[11], \rate, (tempo/176), \gate, 1, \pan, 1]);
-		parsifal.put(1, \pvplayBuxta2, 0, [\out, 0, \recBuf, 31, \amp, volArr[11], \rate, (tempo/176), \gate, 1, \pan, -1]);
+		parsifal.put(0, \pvplayBuxta2, 0, [\out, 0, \recBuf, bufferArr[28].bufnum, \amp, volArr[11], \rate, (tempo/176), \gate, 1, \pan, 1]);
+		parsifal.put(1, \pvplayBuxta2, 0, [\out, 0, \recBuf, bufferArr[29].bufnum, \amp, volArr[11], \rate, (tempo/176), \gate, 1, \pan, -1]);
 		}
 		;
+		
+		if(pedalOff >= 50, {stepGlob=124;});
 		
 		//send tempo to computer2
 		//case
 //		{pedalOff >= 37} {midiOut.songPtr( tempo )};
 		
 
+	}
+	
+	resetNodeProxies {
+	buxtahude.set(\gate, 1);
+	parsifal.set(\gate, 1);
+	wagner1.set(\gate, 1);
+	wagner2.set(\gate, 1);
+	wagner3.set(\gate, 1);
+	wagner4.set(\gate, 1);	
 	}
 	
 	trigBang1 {
@@ -754,7 +795,7 @@ wagner1MIDIEnd = 0.32705;
 wagner1MIDINotes = [ 55, 62, 62, 62, 62, 60, 62, 60, 58, 60, 58, 57, 60, 58, 60, 58, 57, 58, 57, 55, 58, 57, 50, 62, 58, 60, 57, 58, 55, 57, 55, 57, 55, 55 ];
 wagner1MIDIVel = [ 71, 78, 71, 74, 73, 67, 71, 65, 65, 67, 65, 68, 66, 68, 53, 65, 66, 69, 63, 63, 65, 70, 74, 84, 71, 71, 75, 79, 74, 77, 68, 78, 73, 80 ];
 wagner1MIDIEnd = 0.6562;
-			this.wagnerAlgo(wagner1,9,panArr[6],wagner1MIDITime*(176/tempo), wagner1MIDINotes,wagner1MIDIVel,wagner1MIDIEnd,9,0,0,volArr[6]); //starts wagner algorithm with 9 mult and tristan_prelude buffer. tenor_phrase1
+			this.wagnerAlgo(wagner1,bufferArr[7].bufnum,panArr[6],wagner1MIDITime*(176/tempo), wagner1MIDINotes,wagner1MIDIVel,wagner1MIDIEnd,9,0,0,volArr[6]); //starts wagner algorithm with 9 mult and tristan_prelude buffer. tenor_phrase1
 			}
 			{(pedalOffGlob == 42).and(countGlob == 5)} {
 			
@@ -762,28 +803,28 @@ wagner1MIDIEnd = 0.6562;
 wagner2MIDINotes = [ 74, 79, 79, 79, 79, 77, 79, 77, 75, 77, 75, 74, 77, 75, 77, 75, 74, 75, 74, 72, 75, 74, 67, 79, 78, 79, 82, 81, 82, 79, 81, 78, 79, 79, 77, 75, 74, 72, 69, 70, 72, 70, 72, 74, 72, 74, 67, 72, 66, 67, 67, 66, 64, 66 ];
 wagner2MIDIVel = [ 68, 73, 71, 77, 69, 63, 68, 61, 58, 64, 65, 62, 58, 67, 61, 63, 63, 70, 67, 59, 74, 74, 68, 77, 73, 81, 77, 76, 76, 73, 75, 78, 74, 78, 74, 81, 75, 77, 63, 71, 73, 78, 74, 78, 79, 78, 73, 77, 77, 81, 81, 74, 71, 78 ];
 wagner2MIDIEnd = 0.6562;
-		this.wagnerAlgo(wagner2,10,panArr[7],wagner2MIDITime*(176/tempo),wagner2MIDINotes,wagner2MIDIVel, wagner2MIDIEnd,4,0,12,volArr[7]); //starts wagner algorithm with 4 mult and Shepards Pipe! buffer. sop_phrase1
+		this.wagnerAlgo(wagner2,bufferArr[8].bufnum,panArr[7],wagner2MIDITime*(176/tempo),wagner2MIDINotes,wagner2MIDIVel, wagner2MIDIEnd,4,0,12,volArr[7]); //starts wagner algorithm with 4 mult and Shepards Pipe! buffer. sop_phrase1
 			}
 			{(pedalOffGlob == 48).and(countGlob == 3)} {
 			wagner4MIDITime = [ 0, 0.20411, 0.43175, 0.6879, 1.1572, 1.63268, 4.41594, 5.30933, 7.47155, 7.68829, 7.99209, 8.12705, 8.26395, 8.32009, 8.44856, 8.54086, 8.66406, 8.75268, 8.88526, 9.02343, 10.05006, 11.01847, 13.80769, 14.76692, 16.14224, 16.59616, 18.01684, 18.48065, 18.73482, 18.9638, 19.1876, 19.44817, 19.66549, 19.88885, 20.11209, 20.36218, 20.59951, 20.82284, 21.05112, 21.28182, 21.50758, 21.74777, 21.95778, 22.20584, 22.65811, 23.13487, 24.11735, 25.49436, 25.93502 ];
 wagner4MIDINotes = [ 54, 55, 57, 58, 46, 51, 50, 48, 48, 46, 45, 43, 45, 46, 48, 50, 52, 54, 55, 51, 52, 50, 50, 52, 54, 55, 51, 53, 55, 53, 51, 53, 51, 50, 53, 51, 53, 51, 50, 51, 50, 48, 51, 50, 46, 58, 55, 57, 58 ];
 wagner4MIDIVel = [ 61, 75, 76, 84, 68, 76, 73, 79, 65, 72, 58, 73, 60, 74, 70, 71, 66, 69, 78, 84, 83, 77, 77, 80, 77, 82, 77, 72, 66, 71, 73, 76, 69, 70, 67, 74, 68, 66, 73, 74, 67, 78, 78, 77, 78, 81, 83, 82, 85 ];
 wagner4MIDIEnd = 0.96647;
-			this.wagnerAlgo(wagner4,14,panArr[9],wagner4MIDITime*(176/tempo), wagner4MIDINotes+12,wagner4MIDIVel,wagner4MIDIEnd,4,0,16,volArr[9]); //starts wagner algorithm with 4 mult and parsifal_nun_achte_wohl buffer. bass_phrase2
+			this.wagnerAlgo(wagner4,bufferArr[12].bufnum,panArr[9],wagner4MIDITime*(176/tempo), wagner4MIDINotes+12,wagner4MIDIVel,wagner4MIDIEnd,4,0,16,volArr[9]); //starts wagner algorithm with 4 mult and parsifal_nun_achte_wohl buffer. bass_phrase2
 			}
 			{(pedalOffGlob == 48).and(countGlob == 7)} {
 			wagner3MIDITime = [ 0, 0.49981, 0.98657, 1.45584, 1.93556, 2.39581, 2.62623, 2.84031, 3.06382, 3.30381, 3.51321, 3.74948, 3.97229, 4.22486, 4.44004, 4.67555, 4.90719, 5.17094, 5.38583, 5.6202, 5.82304, 6.11408, 8.98215, 9.85037 ];
 wagner3MIDINotes = [ 62, 67, 67, 67, 67, 65, 67, 65, 63, 65, 63, 62, 65, 63, 65, 63, 62, 63, 62, 60, 63, 62, 60, 62 ];
 wagner3MIDIVel = [ 69, 81, 76, 75, 75, 68, 72, 59, 63, 70, 66, 64, 58, 67, 64, 64, 64, 71, 68, 59, 70, 77, 69, 73 ];
 wagner3MIDIEnd = 1.77975;
-			this.wagnerAlgo(wagner3,8,panArr[8],wagner3MIDITime*(176/tempo), wagner3MIDINotes,wagner3MIDIVel,wagner3MIDIEnd,4,0,12,volArr[8]); //starts wagner algorithm with 4 mult and parsifal_komkom buffer. alto_phrase1
+			this.wagnerAlgo(wagner3,bufferArr[6].bufnum,panArr[8],wagner3MIDITime*(176/tempo), wagner3MIDINotes,wagner3MIDIVel,wagner3MIDIEnd,4,0,12,volArr[8]); //starts wagner algorithm with 4 mult and parsifal_komkom buffer. alto_phrase1
 			}
 			{(pedalOffGlob == 49).and(countGlob == 1)} {
 			wagner1MIDITime = [ 0, 0.4715, 0.96028, 1.44311, 1.93176, 3.3025, 4.22619, 5.17069, 6.56596, 7.47476, 7.93078, 8.40567, 8.64498, 8.92295, 9.37108, 9.83762, 10.30725, 10.80573, 11.26355, 11.72448, 11.95507, 12.2187, 12.4382, 12.68296, 12.91768, 13.14702, 13.37984, 13.63288, 13.88107, 14.10626, 14.30839, 14.53982, 14.74714, 15.01979, 15.23764, 15.50634, 16.84679, 17.35275, 18.75453, 19.68404, 20.6378, 21.12992, 22.53289, 22.97131 ];
 wagner1MIDINotes = [ 55, 57, 57, 57, 58, 57, 57, 58, 55, 57, 58, 57, 55, 57, 57, 62, 62, 62, 62, 60, 62, 60, 58, 60, 58, 57, 60, 58, 60, 58, 57, 58, 57, 55, 58, 57, 58, 55, 57, 62, 62, 58, 60, 58 ];
 wagner1MIDIVel = [ 58, 66, 63, 68, 70, 74, 70, 73, 75, 67, 68, 70, 64, 78, 67, 75, 70, 74, 75, 72, 65, 58, 61, 66, 63, 65, 66, 71, 59, 67, 71, 74, 68, 69, 70, 73, 68, 76, 69, 75, 77, 70, 70, 71 ];
 wagner1MIDIEnd = 1.40038;
-			this.wagnerAlgo(wagner1,12,panArr[6],wagner1MIDITime*(176/tempo), wagner1MIDINotes,wagner1MIDIVel,wagner1MIDIEnd,5,0,12,volArr[6]); //starts wagner algorithm with 9 mult and tristan_prelude buffer. tenor_phrase3
+			this.wagnerAlgo(wagner1,bufferArr[10].bufnum,panArr[6],wagner1MIDITime*(176/tempo), wagner1MIDINotes,wagner1MIDIVel,wagner1MIDIEnd,5,0,12,volArr[6]); //starts wagner algorithm with 9 mult and tristan_prelude buffer. tenor_phrase3
 			};
 			
 			countGlob = countGlob + 1;	
@@ -843,7 +884,7 @@ wagner1MIDIEnd = 1.40038;
 //wagner1MIDINotes = [ 55, 62, 62, 62, 62, 60, 62, 60, 58, 60, 58, 57, 60, 58, 60, 58, 57, 58, 57, 55, 58, 57, 50, 62, 58, 60, 57, 58, 55, 57, 55, 57, 55, 55 ];
 //wagner1MIDIVel = [ 71, 78, 71, 74, 73, 67, 71, 65, 65, 67, 65, 68, 66, 68, 53, 65, 66, 69, 63, 63, 65, 70, 74, 84, 71, 71, 75, 79, 74, 77, 68, 78, 73, 80 ];
 //wagner1MIDIEnd = 0.6562;
-//			this.wagnerAlgo(wagner1,9,panArr[6],wagner1MIDITime*(176/tempo), wagner1MIDINotes,wagner1MIDIVel,wagner1MIDIEnd,9,0,0,volArr[6]); //starts wagner algorithm with 9 mult and tristan_prelude buffer. tenor_phrase1
+//			this.wagnerAlgo(wagner1,bufferArr[7].bufnum,panArr[6],wagner1MIDITime*(176/tempo), wagner1MIDINotes,wagner1MIDIVel,wagner1MIDIEnd,9,0,0,volArr[6]); //starts wagner algorithm with 9 mult and tristan_prelude buffer. tenor_phrase1
 //			}
 //			{(pedalOffGlob == 41).and(countGlob == 5)} {
 //			
@@ -851,28 +892,28 @@ wagner1MIDIEnd = 1.40038;
 //wagner2MIDINotes = [ 74, 79, 79, 79, 79, 77, 79, 77, 75, 77, 75, 74, 77, 75, 77, 75, 74, 75, 74, 72, 75, 74, 67, 79, 78, 79, 82, 81, 82, 79, 81, 78, 79, 79, 77, 75, 74, 72, 69, 70, 72, 70, 72, 74, 72, 74, 67, 72, 66, 67, 67, 66, 64, 66 ];
 //wagner2MIDIVel = [ 68, 73, 71, 77, 69, 63, 68, 61, 58, 64, 65, 62, 58, 67, 61, 63, 63, 70, 67, 59, 74, 74, 68, 77, 73, 81, 77, 76, 76, 73, 75, 78, 74, 78, 74, 81, 75, 77, 63, 71, 73, 78, 74, 78, 79, 78, 73, 77, 77, 81, 81, 74, 71, 78 ];
 //wagner2MIDIEnd = 0.6562;
-//		this.wagnerAlgo(wagner2,10,panArr[7],wagner2MIDITime*(176/tempo),wagner2MIDINotes,wagner2MIDIVel, wagner2MIDIEnd,4,0,12,volArr[7]); //starts wagner algorithm with 4 mult and Shepards Pipe! buffer. sop_phrase1
+//		this.wagnerAlgo(wagner2,bufferArr[8].bufnum,panArr[7],wagner2MIDITime*(176/tempo),wagner2MIDINotes,wagner2MIDIVel, wagner2MIDIEnd,4,0,12,volArr[7]); //starts wagner algorithm with 4 mult and Shepards Pipe! buffer. sop_phrase1
 //			}
 //			{(pedalOffGlob == 47).and(countGlob == 3)} {
 //			wagner4MIDITime = [ 0, 0.20411, 0.43175, 0.6879, 1.1572, 1.63268, 4.41594, 5.30933, 7.47155, 7.68829, 7.99209, 8.12705, 8.26395, 8.32009, 8.44856, 8.54086, 8.66406, 8.75268, 8.88526, 9.02343, 10.05006, 11.01847, 13.80769, 14.76692, 16.14224, 16.59616, 18.01684, 18.48065, 18.73482, 18.9638, 19.1876, 19.44817, 19.66549, 19.88885, 20.11209, 20.36218, 20.59951, 20.82284, 21.05112, 21.28182, 21.50758, 21.74777, 21.95778, 22.20584, 22.65811, 23.13487, 24.11735, 25.49436, 25.93502 ];
 //wagner4MIDINotes = [ 54, 55, 57, 58, 46, 51, 50, 48, 48, 46, 45, 43, 45, 46, 48, 50, 52, 54, 55, 51, 52, 50, 50, 52, 54, 55, 51, 53, 55, 53, 51, 53, 51, 50, 53, 51, 53, 51, 50, 51, 50, 48, 51, 50, 46, 58, 55, 57, 58 ];
 //wagner4MIDIVel = [ 61, 75, 76, 84, 68, 76, 73, 79, 65, 72, 58, 73, 60, 74, 70, 71, 66, 69, 78, 84, 83, 77, 77, 80, 77, 82, 77, 72, 66, 71, 73, 76, 69, 70, 67, 74, 68, 66, 73, 74, 67, 78, 78, 77, 78, 81, 83, 82, 85 ];
 //wagner4MIDIEnd = 0.96647;
-//			this.wagnerAlgo(wagner4,14,panArr[9],wagner4MIDITime*(176/tempo), wagner4MIDINotes+12,wagner4MIDIVel,wagner4MIDIEnd,4,0,16,volArr[9]); //starts wagner algorithm with 4 mult and parsifal_nun_achte_wohl buffer. bass_phrase2
+//			this.wagnerAlgo(wagner4,bufferArr[12].bufnum,panArr[9],wagner4MIDITime*(176/tempo), wagner4MIDINotes+12,wagner4MIDIVel,wagner4MIDIEnd,4,0,16,volArr[9]); //starts wagner algorithm with 4 mult and parsifal_nun_achte_wohl buffer. bass_phrase2
 //			}
 //			{(pedalOffGlob == 47).and(countGlob == 7)} {
 //			wagner3MIDITime = [ 0, 0.49981, 0.98657, 1.45584, 1.93556, 2.39581, 2.62623, 2.84031, 3.06382, 3.30381, 3.51321, 3.74948, 3.97229, 4.22486, 4.44004, 4.67555, 4.90719, 5.17094, 5.38583, 5.6202, 5.82304, 6.11408, 8.98215, 9.85037 ];
 //wagner3MIDINotes = [ 62, 67, 67, 67, 67, 65, 67, 65, 63, 65, 63, 62, 65, 63, 65, 63, 62, 63, 62, 60, 63, 62, 60, 62 ];
 //wagner3MIDIVel = [ 69, 81, 76, 75, 75, 68, 72, 59, 63, 70, 66, 64, 58, 67, 64, 64, 64, 71, 68, 59, 70, 77, 69, 73 ];
 //wagner3MIDIEnd = 1.77975;
-//			this.wagnerAlgo(wagner3,8,panArr[8],wagner3MIDITime*(176/tempo), wagner3MIDINotes,wagner3MIDIVel,wagner3MIDIEnd,4,0,12,volArr[8]); //starts wagner algorithm with 4 mult and parsifal_komkom buffer. alto_phrase1
+//			this.wagnerAlgo(wagner3,bufferArr[6].bufnum,panArr[8],wagner3MIDITime*(176/tempo), wagner3MIDINotes,wagner3MIDIVel,wagner3MIDIEnd,4,0,12,volArr[8]); //starts wagner algorithm with 4 mult and parsifal_komkom buffer. alto_phrase1
 //			}
 //			{(pedalOffGlob == 48).and(countGlob == 1)} {
 //			wagner1MIDITime = [ 0, 0.4715, 0.96028, 1.44311, 1.93176, 3.3025, 4.22619, 5.17069, 6.56596, 7.47476, 7.93078, 8.40567, 8.64498, 8.92295, 9.37108, 9.83762, 10.30725, 10.80573, 11.26355, 11.72448, 11.95507, 12.2187, 12.4382, 12.68296, 12.91768, 13.14702, 13.37984, 13.63288, 13.88107, 14.10626, 14.30839, 14.53982, 14.74714, 15.01979, 15.23764, 15.50634, 16.84679, 17.35275, 18.75453, 19.68404, 20.6378, 21.12992, 22.53289, 22.97131 ];
 //wagner1MIDINotes = [ 55, 57, 57, 57, 58, 57, 57, 58, 55, 57, 58, 57, 55, 57, 57, 62, 62, 62, 62, 60, 62, 60, 58, 60, 58, 57, 60, 58, 60, 58, 57, 58, 57, 55, 58, 57, 58, 55, 57, 62, 62, 58, 60, 58 ];
 //wagner1MIDIVel = [ 58, 66, 63, 68, 70, 74, 70, 73, 75, 67, 68, 70, 64, 78, 67, 75, 70, 74, 75, 72, 65, 58, 61, 66, 63, 65, 66, 71, 59, 67, 71, 74, 68, 69, 70, 73, 68, 76, 69, 75, 77, 70, 70, 71 ];
 //wagner1MIDIEnd = 1.40038;
-//			this.wagnerAlgo(wagner1,12,panArr[6],wagner1MIDITime*(176/tempo), wagner1MIDINotes,wagner1MIDIVel,wagner1MIDIEnd,5,0,12,volArr[6]); //starts wagner algorithm with 9 mult and tristan_prelude buffer. tenor_phrase3
+//			this.wagnerAlgo(wagner1,bufferArr[10].bufnum,panArr[6],wagner1MIDITime*(176/tempo), wagner1MIDINotes,wagner1MIDIVel,wagner1MIDIEnd,5,0,12,volArr[6]); //starts wagner algorithm with 9 mult and tristan_prelude buffer. tenor_phrase3
 //			};
 //			
 //			
@@ -985,14 +1026,14 @@ wagner1MIDIEnd = 1.40038;
 	grito3.put(0, \pvplayBet, 0, [\out, 0, \recBuf, randBuffArr[2].bufnum, \rate, 1, \amp, 0, \thresh, 0.5, \ratioDown, 0.6, \ratioUp, 0.9, \adjVol, 1.0, \pan, 0]);
 	grito4.put(0, \pvplayMono, 0, [\out, 0, \recBuf, randBuffArr[3].bufnum, \rate, 1, \amp, 0, \thresh, 0.5, \ratioDown, 0.7, \ratioUp, 0.9, \adjVol, 0.5, \pan, -1]);
 	
-	wagner1.put(0, \playWagner, 0, [\rate,1,\amp,0,\buffer,7]);
-	wagner1.put(1, \playWagner, 0, [\rate,1,\amp,0,\buffer,7]);
-	wagner2.put(0, \playWagner, 0, [\rate,1,\amp,0,\buffer,8]);
-	wagner2.put(1, \playWagner, 0, [\rate,1,\amp,0,\buffer,8]);
-	wagner3.put(0, \playWagner, 0, [\rate,1,\amp,0,\buffer,9]);
-	wagner3.put(1, \playWagner, 0, [\rate,1,\amp,0,\buffer,9]);
-	wagner4.put(0, \playWagner, 0, [\rate,1,\amp,0,\buffer,10]);
-	wagner4.put(1, \playWagner, 0, [\rate,1,\amp,0,\buffer,10]);
+	wagner1.put(0, \playWagner, 0, [\rate,1,\amp,0,\buffer,bufferArr[5].bufnum]);
+	wagner1.put(1, \playWagner, 0, [\rate,1,\amp,0,\buffer,bufferArr[5].bufnum]);
+	wagner2.put(0, \playWagner, 0, [\rate,1,\amp,0,\buffer,bufferArr[6].bufnum]);
+	wagner2.put(1, \playWagner, 0, [\rate,1,\amp,0,\buffer,bufferArr[6].bufnum]);
+	wagner3.put(0, \playWagner, 0, [\rate,1,\amp,0,\buffer,bufferArr[7].bufnum]);
+	wagner3.put(1, \playWagner, 0, [\rate,1,\amp,0,\buffer,bufferArr[7].bufnum]);
+	wagner4.put(0, \playWagner, 0, [\rate,1,\amp,0,\buffer,bufferArr[8].bufnum]);
+	wagner4.put(1, \playWagner, 0, [\rate,1,\amp,0,\buffer,bufferArr[8].bufnum]);
 	0.2.yield;
 	wagner1.objects[0].set(\gate, 0);
 	wagner1.objects[1].set(\gate, 0);
@@ -1022,7 +1063,7 @@ wagner1MIDIEnd = 1.40038;
 	1.do({
 	index = wagnerPatt.next;
 	rate = (wagnerNotes[step].midicps/((55+wagnerMidiOff).midicps));
-	wagnerSynth.put(index,\playWagner, 0, [\rate, rate, \amp, (wagnerVelocity[step]/wagnerVelocity.maxItem)*ampWagner, \start, (0+wagnerOffset)*44100, \atk, rrand(0.05,0.3), \dec, rrand(0.2,0.5), \buffer, wagnerBuffer, \pan, wagnerPan]);
+	wagnerSynth.put(index,\playWagner, 0, [\rate, rate, \amp, (wagnerVelocity[step]/wagnerVelocity.maxItem)*ampWagner, \start, (0+wagnerOffset)*44100, \atk, rrand(0.05,0.3), \dec, rrand(0.2,0.5), \buffer, wagnerBuffer, \pan, wagnerPan, \gate, 1]);
 	step = step + 1;
 	wagnerArray = Array.fill((wagnerTimes.size/wagnerMult).round(1), {rrand(0, wagnerTimes.size)});
 	wagnerArray.sort.postln;
@@ -1031,7 +1072,7 @@ wagner1MIDIEnd = 1.40038;
 	rate = (wagnerNotes[step].midicps/((55+wagnerMidiOff).midicps));
 	wagnerSynth.objects[index].set(\gate, 0);
 	index = wagnerPatt.next;
-	wagnerSynth.put(index,\playWagner, 0, [\rate, rate, \amp, (wagnerVelocity[step]/wagnerVelocity.maxItem)*ampWagner, \start, (wagnerRateTime[step]+wagnerOffset)*44100, \atk, rrand(0.05,0.3), \dec, rrand(0.2,0.5), \buffer, wagnerBuffer, \pan, wagnerPan]);
+	wagnerSynth.put(index,\playWagner, 0, [\rate, rate, \amp, (wagnerVelocity[step]/wagnerVelocity.maxItem)*ampWagner, \start, (wagnerRateTime[step]+wagnerOffset)*44100, \atk, rrand(0.05,0.3), \dec, rrand(0.2,0.5), \buffer, wagnerBuffer, \pan, wagnerPan, \gate, 1]);
 	});
 	wagnerDiff[step].yield;
 	
@@ -1090,7 +1131,7 @@ wagner1MIDIEnd = 1.40038;
 					400 @ 24, // dimensions
 					"volMotor", // label
 					controlSpec, // control spec
-					{|ez| motor.set(\globamp, ez.value) },// action
+					{|ez| motor.vol(ez.value) },// action
 					1.0 // initVal
 					);
 	//wagner slider					
@@ -1150,6 +1191,76 @@ wagner1MIDIEnd = 1.40038;
 		};
 
 		}
+		
+	startMIDI {var midiout;
+	
+	MIDIdef.cc(\behringer, {arg ...args; 
+	var volSpec, masterVol;
+	volSpec = [-inf, 6, \db, 0, -inf, " dB"].asSpec;
+	
+	case
+	//knobs:
+	{args[1] == 1}{"metalGlobAmp: ".post; metal.set(\globamp, args[0].linlin(0,127,0,2).round(0.02).postln) }
+	{args[1] == 2}{"gritosGlobAmp: ".post; 
+				grito1.set(\globamp, args[0].linlin(0,127,0,2).round(0.02).postln);
+				grito2.set(\globamp, args[0].linlin(0,127,0,2).round(0.02));
+				grito3.set(\globamp, args[0].linlin(0,127,0,2).round(0.02)); }
+	{args[1] == 3}{"grito4GlobAmp: ".post; grito4.set(\globamp, args[0].linlin(0,127,0,2).round(0.02).postln); }
+	{args[1] == 4}{"motorAmp: ".post; motor.vol(args[0].linlin(0,127,0,2).round(0.02).postln) }
+	{args[1] == 5}{"wagnerGlobAmp: ".post; 
+				wagner1.set(\globamp, args[0].linlin(0,127,0,2).round(0.02).postln);
+				wagner2.set(\globamp, args[0].linlin(0,127,0,2).round(0.02));
+				wagner3.set(\globamp, args[0].linlin(0,127,0,2).round(0.02));
+				wagner4.set(\globamp, args[0].linlin(0,127,0,2).round(0.02));
+		 }
+	{args[1] == 6}{"buxtahudeGlobAmp: ".post; buxtahude.set(\globamp, args[0].linlin(0,127,0,2).round(0.02).postln) }
+	{args[1] == 7}{"parsifalGlobAmp: ".post; parsifal.set(\globamp, args[0].linlin(0,127,0,2).round(0.02).postln) }
+	//pedal
+	{args[1] == 94}{
+		
+		masterVol = volSpec.map(args[0].linlin(0,122,1,0)).postln;
+				
+		master1.setVol(masterVol);
+		master2.setVol(masterVol);
+		
+		} //main volumen
+	
+	}, srcID: 970490220);
+	
+	midiout = MIDIOut.newByName("BCF2000", "Port 1");
+	(1..8).do{|item| var value=63; midiout.control(0,item,value); MIDIIn.doControlAction(970490220, 0, item, value);};
+	(81..88).do{|item| var value=63; midiout.control(0,item,value); MIDIIn.doControlAction(970490220, 0, item, value);};
+	}	
+	
+	funcNotes {arg instNum=1, id=0, note=60, vel=127, bend=0, pan=0, rateThis=1, mulRate=1, volumeThis=0, adjMainThis=1, adjVolThis=0, noteThis=0, mulTransp=0, del=0, atk=0, rel=0, mulDur=1, durationMul=1, pause=0, curve=0, noteType=\pitch, prob=1, globProb=1, dis=1, mulDis=1, dbdif=2, cutfreq=1000, highRange=1000, lowRange=0, eqtemp=0, match=false, arrange=\norm;
+		var globHighRange=139, globLowRange=0;
+		var newNote;
+		if((volumeThis != -inf).and(pause == 0).and(id.notNil), {
+		if(globProb.coin, { //global shotgun filter
+		if(prob.coin, { //individual shotgun filter
+		if(arrange == \norm, {
+		newNote = note;
+		}, {
+		case
+		{arrange == \rand}{newNote = rrand(0,127);}
+		{arrange == \sqrt}{newNote = note.sqrt;}
+		;
+		});
+		instr.note(instNum, id, (((newNote.midiMin(lowRange).midiMax(highRange))
+		.midiRange(globLowRange, globHighRange)+(noteThis+mulTransp))),((((vel.linlin(0,127,0,1.0)*volumeThis.dbamp)*adjMainThis)+(adjVolThis/2))/2), bend, (rateThis*mulRate), del, atk, rel, (mulDur*durationMul), noteType, (dis*mulDis), dbdif, cutfreq, vel.linlin(0,127,0,1.0), eqtemp, match);
+		});
+		});
+		});
+		}
+	
+	setInstSources {	
+	instArr.do{|item, index| 
+	if([\wagner, \chart2, \chart4, \chart7, \chart12].includes(item).not, {
+		[item, index+1].postln;
+		instr.setSource(index+1,\scpv);	
+	});
+		};	
+	}
 	
 	
 	*initClass {

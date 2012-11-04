@@ -1,10 +1,10 @@
-OnViolenceMotor {var s, <out, basicPath, motor, sensor, <>lowVal, <>highVal, <>leftVal, <>rightVal, bendLow, bendHigh, newMacroArray1, newMacroArray2, arrA, arrB, pivot1, pivot2, step1, step2, thisArray1, thisArray2, <>direction1, <>direction2, oscNode, sensorVal1, sensorVal2, <>sensorLag1, <>sensorLag2, whichPedal, noteLow, noteHigh, <>volMotor, <synth1, <synth2, <>sensorWin, <slider, <window, <>panMotor; 
+OnViolenceMotor {var s, <out, basicPath, <>motor, sensor, <>lowVal, <>highVal, <>leftVal, <>rightVal, bendLow, bendHigh, newMacroArray1, newMacroArray2, arrA, arrB, pivot1, pivot2, step1, step2, thisArray1, thisArray2, <>direction1, <>direction2, oscNode, sensorVal1, sensorVal2, <>sensorLag1, <>sensorLag2, whichPedal, noteLow, noteHigh, <>volMotor, <synth1, <synth2, <>sensorWin, <slider, <window, <>panMotor; 
 		
-	*new {arg outBus=0, vol=1, panMotor=0, lowVal=43.276000976562, highVal=46.995998382568, leftVal=41.668201446533, rightVal=46.628700256348, pathName, rectArr;
-		^super.new.initOnViolenceMotor(outBus, vol, panMotor, lowVal, highVal, leftVal, rightVal, pathName, rectArr);
+	*new {arg outBus=0, vol=1, panMotor=0, lowVal=43.276000976562, highVal=46.995998382568, leftVal=41.668201446533, rightVal=46.628700256348, pathName, rectArr, playNode=true;
+		^super.new.initOnViolenceMotor(outBus, vol, panMotor, lowVal, highVal, leftVal, rightVal, pathName, rectArr, playNode);
 	}
 	
-	initOnViolenceMotor {arg outBus, vol, pan, valLow, valHigh, valLeft,valRight,pathName, rectArr;
+	initOnViolenceMotor {arg outBus, vol, pan, valLow, valHigh, valLeft,valRight,pathName, rectArr, playNode;
 		var sensorPitch;
 		out = outBus;
 		volMotor = vol;
@@ -19,7 +19,7 @@ OnViolenceMotor {var s, <out, basicPath, motor, sensor, <>lowVal, <>highVal, <>l
 		s = Server.default;
 		sensor = NodeProxy.control(s, 1);
 		motor = NodeProxy.audio(s, 2);
-		motor.play(out);
+		if(playNode, {motor.play(out);});
 		
 		bendLow = 0;
 		bendHigh = 0;
