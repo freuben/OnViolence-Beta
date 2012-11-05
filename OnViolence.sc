@@ -1,4 +1,4 @@
-OnViolence {var <>audioIn, s, <>ampIn, midiOut, d, <>amplitude, <>ampOnset, <>ampSilence, <>tempo=176, <>countGlob=1, <>stepGlob=1, <>notes, <>pedalOffGlob, <>pedalOnGlob, gap, <>piano, osc, oscMax, <>sensorVal1=0, <>sensorVal2=63, <>grito1, <>grito2,<>grito3,<>grito4, <>motor, <>metal, <>wagner1,<>wagner2, <>wagner3,<>wagner4,<>buxtahude,<>parsifal, tempoLock, <>metalOn, sensor, sensor1, sensor2, bend1, bend2, lowVal=43.276000976562, highVal=46.995998382568, leftVal=41.668201446533,basicPath, rightVal=46.628700256348, <>algoVersion, <>rrandArray, <>differ, tempoStart=0,stepTempo=0,wagner1MIDITime, wagner1MIDINotes, wagner1MIDIVel, wagner1MIDIEnd,wagner2MIDITime, wagner2MIDINotes, wagner2MIDIVel, wagner2MIDIEnd,wagner3MIDITime, wagner3MIDINotes, wagner3MIDIVel, wagner3MIDIEnd,wagner4MIDITime, wagner4MIDINotes, wagner4MIDIVel, wagner4MIDIEnd,document, <>bufferArr, <>randBuffArr, <>volArr, <>panArr, <network, <>master1, <>master2, <>instr, <>partials, <>pan, <>instArr, condition;
+OnViolence {var <>audioIn, s, <>ampIn, midiOut, d, <>amplitude, <>ampOnset, <>ampSilence, <>tempo=176, <>countGlob=1, <>stepGlob=1, <>notes, <>pedalOffGlob, <>pedalOnGlob, gap, <>piano, osc, oscMax, <>sensorVal1=0, <>sensorVal2=63, <>grito1, <>grito2,<>grito3,<>grito4, <>motor, <>metal, <>wagner1,<>wagner2, <>wagner3,<>wagner4,<>buxtahude,<>parsifal, tempoLock, <>metalOn, sensor, sensor1, sensor2, bend1, bend2, lowVal=43.276000976562, highVal=46.995998382568, leftVal=41.668201446533,basicPath, rightVal=46.628700256348, <>algoVersion, <>rrandArray, <>differ, tempoStart=0,stepTempo=0,wagner1MIDITime, wagner1MIDINotes, wagner1MIDIVel, wagner1MIDIEnd,wagner2MIDITime, wagner2MIDINotes, wagner2MIDIVel, wagner2MIDIEnd,wagner3MIDITime, wagner3MIDINotes, wagner3MIDIVel, wagner3MIDIEnd,wagner4MIDITime, wagner4MIDINotes, wagner4MIDIVel, wagner4MIDIEnd,document, <>bufferArr, <>randBuffArr, <>volArr, <>panArr, <network, <>master1, <>master2, <>instr, <>partials, <>pan, <>instArr, condition, pnosoloRout, <>pnosoloVelGate=40, <>pnosoloTranspAdj=1, <>pnosoloProb=0.4, <>pnosoloAdjVol=1, <>pnosoloTempoAdj=1, <>pnosoloVol=1, <>chunks, <>chunksAdjTime=1.0, <>chunksAdjDur=1.2, <>chunksTransp=1.0, <>chunksVolAdj=0.4, <>chunksVolArr, <>chunksEqTrans=1;
 	
 	*new {arg audioIn = 0, volArr, panArr;
 		^super.new.initOnViolence(audioIn, volArr, panArr);
@@ -18,7 +18,12 @@ OnViolence {var <>audioIn, s, <>ampIn, midiOut, d, <>amplitude, <>ampOnset, <>am
 		panArr = arrPan;
 		panArr ?? {panArr = [0, -0.5, 0.5, 0, -1, 1, 0.25, -0.75, -0.25, 0.75, 0, 0];}; //panMetal, panScream1, panScream2, panScream3, panScream4, panMotor, panWagner1, panWagner2, panWagner3, panWagner4, panBuxta, panParsifal
 		
+		//for the moment
+		chunksVolArr = [1.2,0.7,0.8,0.8,0.7,0.8,0.8,0.6,0.9,0.7,0.7,1.2];
+		
 		basicPath =  Document.standardizePath("~/Library/Application Support/SuperCollider/Extensions/FedeClasses/OnViolence/");
+		
+		chunks = (basicPath ++ "/data/chunksData.rtf").loadPath;
 		
 		condition = Condition.new(true);
 		
@@ -1232,7 +1237,7 @@ wagner1MIDIEnd = 1.40038;
 	(81..88).do{|item| var value=63; midiout.control(0,item,value); MIDIIn.doControlAction(970490220, 0, item, value);};
 	}	
 	
-	funcNotes {arg instNum=1, id=0, note=60, vel=127, bend=0, pan=0, rateThis=1, mulRate=1, volumeThis=0, adjMainThis=1, adjVolThis=0, noteThis=0, mulTransp=0, del=0, atk=0, rel=0, mulDur=1, durationMul=1, pause=0, curve=0, noteType=\pitch, prob=1, globProb=1, dis=1, mulDis=1, dbdif=2, cutfreq=1000, highRange=1000, lowRange=0, eqtemp=0, match=false, arrange=\norm;
+	funcNotes {arg instNum=1, id=0, note=60, vel=127, bend=0, rateThis=1, mulRate=1, volumeThis=0, adjMainThis=1, adjVolThis=0, noteThis=0, mulTransp=0, del=0, atk=0, rel=0, mulDur=1, durationMul=1, pause=0, curve=0, noteType=\pitch, prob=1, globProb=1, dis=1, mulDis=1, dbdif=2, cutfreq=1000, highRange=1000, lowRange=0, eqtemp=0, match=false, arrange=\norm;
 		var globHighRange=139, globLowRange=0;
 		var newNote;
 		if((volumeThis != -inf).and(pause == 0).and(id.notNil), {
@@ -1262,6 +1267,64 @@ wagner1MIDIEnd = 1.40038;
 		};	
 	}
 	
+	pnosoloStart {
+	var chartsInst2, index, indexPar, midiarr;
+	chartsInst2 = [ 3, 6, 9, 12, 15 ];
+	index = rrand(0,4);
+	pnosoloRout = {
+	inf.do{
+	indexPar = rrand(2,10);
+	midiarr = [partials.frequencies[indexPar], partials.magnitudes[indexPar]].spectralmidi;
+	
+	if(midiarr[1] < pnosoloVelGate, {
+	this.funcNotes(chartsInst2[index], instr.getIndex(instr.buffSampler[chartsInst2[index]-1].unbubble, instr.synthTypeArr[chartsInst2[index]-1]), midiarr[0], midiarr[1], midiarr[2], [-1,1].wchoose([0.4,0.6]), mulTransp: 0*pnosoloTranspAdj, noteType: [\freq,\pitch].choose, match: [true,false].wchoose([0.1,0.9]), adjMainThis: pnosoloVol, adjVolThis: pnosoloAdjVol, prob: pnosoloProb, mulRate: [0.5,1.0, 2.0].wchoose([0.5,0.3,0.2]));
+	}, {"gate".postln});
+	((60/128/3)*pnosoloTempoAdj).yield;
+	}
+	}.fork;
+	}
+	
+	pnosoloStop {
+	pnosoloRout.stop;	
+	}
+	
+	chunkPlayer {arg whichChunk=\chunk1, initVol=1, initDur=1.0, chunksMatch=true, dbdif=10, jitter=0.25;
+	var arrInfo, durAdj, timeAdj, type, transEq, chartsInst, bend, freqnote;
+	chartsInst = [ 1, 2, 4, 5, 7, 8, 10, 11, 13, 14, 16, 17 ];
+	
+	("Playing " ++ whichChunk).postln;
+	arrInfo = chunks[chunks.flop[0].flat.indexOf(whichChunk)];
+	
+	arrInfo.do{|item, index| 
+
+	{
+	item[0].size.do{|it|
+	
+	if(item[1][it] == \rest, {}, {
+	
+	if(instr.synthTypeArr[index] == \wav, {
+
+	type = [\freq, \pitch].choose;
+	}, {
+	type = \freq;
+	});
+	
+	transEq = chunksEqTrans * (item[1][it]*chunksTransp).linlin(36,91, -12,12).round(12);
+		
+	freqnote = partials.frequencies[index-1].cpsmidi;
+	bend = freqnote - freqnote.round(1);
+		
+	instr.note2(chartsInst[index-1], instr.getIndex(instr.buffSampler[chartsInst[index-1]-1].unbubble, instr.synthTypeArr[chartsInst[index-1]-1]), item[1][it]*chunksTransp, item[2][it].linlin(0,127,0,1)*chunksVolAdj*chunksVolArr[index-1]*initVol, bend, mulDur: ((item[3][it]*chunksAdjDur*initDur)/chunksAdjTime)*rrand(0.9,1.1), type: type, match: chunksMatch, eqvol: item[2][it].linlin(0,127,0,1.0), cutfreq: ((item[1][it]*chunksTransp)+transEq).midicps, dbdif: dbdif, del: [rrand(0,0.1), rrand(0,0.5)].wchoose([0.9,0.1])); 
+	
+	});
+	((item[0][it]*(100/128)*(rrand(1+(0.05*jitter), 1-(0.05*jitter))))/chunksAdjTime).yield;
+
+	}
+	}.fork
+	
+	}
+		
+	}
 	
 	*initClass {
 

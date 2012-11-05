@@ -7,476 +7,477 @@
 <meta name="Generator" content="Cocoa HTML Writer">
 <meta name="CocoaVersion" content="1138.51">
 <style type="text/css">
-p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 10.0px Monaco}
-p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; min-height: 12.0px}
-p.p3 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #d5100d}
-p.p4 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #737373}
-p.p5 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco}
-p.p6 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #ff7929}
-p.p7 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #d5100d; min-height: 12.0px}
-p.p8 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #132bc2}
-p.p9 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #132bc2; min-height: 12.0px}
-span.s1 {color: #ff7929}
+p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #d5100d}
+p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 10.0px Monaco; min-height: 14.0px}
+p.p3 {margin: 0.0px 0.0px 0.0px 0.0px; font: 10.0px Monaco}
+p.p4 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; min-height: 12.0px}
+p.p5 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #737373}
+p.p6 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco}
+p.p7 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #ff7929}
+p.p8 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #d5100d; min-height: 12.0px}
+p.p9 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #132bc2}
+p.p10 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #132bc2; min-height: 12.0px}
+p.p11 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #000000}
+p.p12 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #ff7929; min-height: 12.0px}
+span.s1 {color: #737373}
 span.s2 {color: #000000}
-span.s3 {color: #132bc3}
-span.s4 {color: #008326}
-span.s5 {color: #1b39f5}
-span.s6 {color: #d5100d}
-span.s7 {color: #737373}
+span.s3 {color: #ff7929}
+span.s4 {color: #132bc3}
+span.s5 {color: #008326}
+span.s6 {color: #1b39f5}
+span.s7 {color: #d5100d}
 span.s8 {color: #132bc2}
-span.s9 {color: #464ec3}
 span.Apple-tab-span {white-space:pre}
 </style>
 </head>
 <body>
-<p class="p1">s.bootAndMIDI;</p>
-<p class="p2"><br></p>
-<p class="p3"><span class="s1">~violence</span><span class="s2"> = </span><span class="s3">OnViolence</span><span class="s2">(audioIn: 0); </span>//ins: audioIn, audioInOnset</p>
-<p class="p2"><br></p>
-<p class="p4"><span class="s1">~violence</span><span class="s2">.connect(</span>"tremmac56150"<span class="s2">);</span></p>
-<p class="p2"><br></p>
-<p class="p5"><span class="s1">~violence</span>.sendArray;</p>
-<p class="p2"><br></p>
-<p class="p3"><span class="s1">~violence</span><span class="s2">.mixer2; </span>//metal, scream1, scream2, scream3, scream4, motor, wagner1, wagner2, wagner3, wagner4, buxta, parsifal</p>
-<p class="p2"><br></p>
-<p class="p5"><span class="s1">~violence</span>.startNodes(out1:0, out2:0);</p>
-<p class="p2"><br></p>
-<p class="p5"><span class="s1">~violence</span>.readyToStart;</p>
-<p class="p2"><br></p>
-<p class="p2"><br></p>
-<p class="p5"><span class="s1">~violence</span>.funcPlay(81,0,1,0);</p>
-<p class="p2"><br></p>
-<p class="p5"><span class="s1">~violence.</span>metal.spawn([<span class="s4">\amp</span>, 0.3, <span class="s4">\recBuf</span>, ~violence.bufferArr[[0,1,2].choose].bufnum, <span class="s4">\rate</span>, rrand(0.8,1.2), <span class="s4">\pan</span>, 0]);</p>
-<p class="p2"><br></p>
-<p class="p2"><br></p>
-<p class="p5"><span class="s1">~violence</span>.startMIDI;</p>
-<p class="p2"><br></p>
-<p class="p3">//score</p>
-<p class="p5">(</p>
-<p class="p5"><span class="s1">~tempo</span> = 176;</p>
-<p class="p5"><span class="s1">~violence</span>.trigAmp(0.1);</p>
-<p class="p5"><span class="s1">~rout</span> = {<span class="s5">var</span> count=720; <span class="s6">//start count</span></p>
-<p class="p2"><span class="Apple-tab-span">	</span></p>
-<p class="p5">(731-count).do{</p>
-<p class="p5">(<span class="s7">"count: "</span> ++ count).postln;</p>
-<p class="p5">(<span class="s7">"stepGlob: "</span> ++ <span class="s1">~violence</span>.stepGlob).postln;</p>
-<p class="p2"><br></p>
-<p class="p5">if(count &lt; 730, {</p>
-<p class="p5">case</p>
-<p class="p5">{count == 1} {<span class="s1">~violence</span>.pedalOffFunc(1);} <span class="s6">//measure 1</span></p>
-<p class="p5">{count == 101} {<span class="s1">~violence</span>.pedalOnFunc(1);} <span class="s6">//measure 51</span></p>
-<p class="p5">{count == 109} {<span class="s1">~violence</span>.pedalOffFunc(2);} <span class="s6">//measure 55</span></p>
-<p class="p5">{count == 117} {<span class="s1">~violence</span>.pedalOnFunc(2);} <span class="s6">//measure 59</span></p>
-<p class="p5">{count == 125} {<span class="s1">~violence</span>.pedalOffFunc(3);} <span class="s6">//measure 63</span></p>
-<p class="p5">{count == 133} {<span class="s1">~violence</span>.pedalOnFunc(3);} <span class="s6">//measure 67</span></p>
-<p class="p5">{count == 141} {<span class="s1">~violence</span>.pedalOffFunc(4);} <span class="s6">//measure 71</span></p>
-<p class="p5">{count == 153} {<span class="s1">~violence</span>.pedalOnFunc(4);} <span class="s6">//measure 77</span></p>
-<p class="p5">{count == 161} {<span class="s1">~violence</span>.pedalOffFunc(5);} <span class="s6">//measure 81</span></p>
-<p class="p5">{count == 223} {<span class="s1">~violence</span>.pedalOnFunc(5);} <span class="s6">//measure 112</span></p>
-<p class="p5">{count == 231} {<span class="s1">~violence</span>.pedalOffFunc(6);} <span class="s6">//measure 116</span></p>
-<p class="p5">{count == 239} {<span class="s1">~violence</span>.pedalOnFunc(6);} <span class="s6">//measure 120</span></p>
-<p class="p5">{count == 247} {<span class="s1">~violence</span>.pedalOffFunc(7);} <span class="s6">//measure 124</span></p>
-<p class="p5">{count == 254} {<span class="s1">~violence</span>.pedalOnFunc(7);} <span class="s6">//measure 127</span></p>
-<p class="p5">{count == 261} {<span class="s1">~violence</span>.pedalOffFunc(8);} <span class="s6">//measure 131</span></p>
-<p class="p5">{count == 268} {<span class="s1">~violence</span>.pedalOnFunc(8);} <span class="s6">//measure 134</span></p>
-<p class="p5">{count == 275} {<span class="s1">~violence</span>.pedalOffFunc(9);} <span class="s6">//measure 138</span></p>
-<p class="p5">{count == 281} {<span class="s1">~violence</span>.pedalOnFunc(9);} <span class="s6">//measure 141</span></p>
-<p class="p5">{count == 287} {<span class="s1">~violence</span>.pedalOffFunc(10);} <span class="s6">//measure 144</span></p>
-<p class="p5">{count == 293} {<span class="s1">~violence</span>.pedalOnFunc(10);} <span class="s6">//measure 147</span></p>
-<p class="p5">{count == 299} {<span class="s1">~violence</span>.pedalOffFunc(11);} <span class="s6">//measure 150</span></p>
-<p class="p5">{count == 304} {<span class="s1">~violence</span>.pedalOnFunc(11);} <span class="s6">//measure 152</span></p>
-<p class="p5">{count == 309} {<span class="s1">~violence</span>.pedalOffFunc(12);} <span class="s6">//measure 155</span></p>
-<p class="p5">{count == 314} {<span class="s1">~violence</span>.pedalOnFunc(12);} <span class="s6">//measure 157</span></p>
-<p class="p5">{count == 319} {<span class="s1">~violence</span>.pedalOffFunc(13);} <span class="s6">//measure 160</span></p>
-<p class="p5">{count == 323} {<span class="s1">~violence</span>.pedalOnFunc(13);} <span class="s6">//measure 162</span></p>
-<p class="p5">{count == 327} {<span class="s1">~violence</span>.pedalOffFunc(14);} <span class="s6">//measure 164</span></p>
-<p class="p5">{count == 331} {<span class="s1">~violence</span>.pedalOnFunc(14);} <span class="s6">//measure 166</span></p>
-<p class="p5">{count == 335} {<span class="s1">~violence</span>.pedalOffFunc(15);} <span class="s6">//measure 168</span></p>
-<p class="p5">{count == 339} {<span class="s1">~violence</span>.pedalOnFunc(15);} <span class="s6">//measure 170</span></p>
-<p class="p5">{count == 343} {<span class="s1">~violence</span>.pedalOffFunc(16);} <span class="s6">//measure 172</span></p>
-<p class="p5">{count == 345} {<span class="s1">~violence</span>.pedalOnFunc(16);} <span class="s6">//measure 173</span></p>
-<p class="p2"><br></p>
-<p class="p5">{count == 349} {<span class="s1">~violence</span>.pedalOnFunc(17);} <span class="s6">//measure 175</span></p>
-<p class="p5">{count == 353} {<span class="s1">~violence</span>.pedalOffFunc(17);} <span class="s6">//measure 177</span></p>
-<p class="p5">{count == 355} {<span class="s1">~violence</span>.pedalOnFunc(18);} <span class="s6">//measure 178</span></p>
-<p class="p5">{count == 359} {<span class="s1">~violence</span>.pedalOffFunc(18);} <span class="s6">//measure 180</span></p>
-<p class="p5">{count == 361} {<span class="s1">~violence</span>.pedalOnFunc(19);} <span class="s6">//measure 181</span></p>
-<p class="p5">{count == 365} {<span class="s1">~violence</span>.pedalOffFunc(19);} <span class="s6">//measure 183</span></p>
-<p class="p5">{count == 367} {<span class="s1">~violence</span>.pedalOnFunc(20);} <span class="s6">//measure 184</span></p>
-<p class="p5">{count == 371} {<span class="s1">~violence</span>.pedalOffFunc(20);} <span class="s6">//measure 186</span></p>
-<p class="p5">{count == 373} {<span class="s1">~violence</span>.pedalOnFunc(21);} <span class="s6">//measure 187</span></p>
-<p class="p5">{count == 377} {<span class="s1">~violence</span>.pedalOffFunc(21);} <span class="s6">//measure 189</span></p>
-<p class="p5">{count == 379} {<span class="s1">~violence</span>.pedalOnFunc(22);} <span class="s6">//measure 190</span></p>
-<p class="p5">{count == 383} {<span class="s1">~violence</span>.pedalOffFunc(22);} <span class="s6">//measure 192</span></p>
-<p class="p5">{count == 385} {<span class="s1">~violence</span>.pedalOnFunc(23);} <span class="s6">//measure 193</span></p>
-<p class="p5">{count == 389} {<span class="s1">~violence</span>.pedalOffFunc(23);} <span class="s6">//measure 195</span></p>
-<p class="p5">{count == 391} {<span class="s1">~violence</span>.pedalOnFunc(24);} <span class="s6">//measure 196</span></p>
-<p class="p5">{count == 395} {<span class="s1">~violence</span>.pedalOffFunc(24);} <span class="s6">//measure 198</span></p>
-<p class="p5">{count == 397} {<span class="s1">~violence</span>.pedalOnFunc(25);} <span class="s6">//measure 199</span></p>
-<p class="p5">{count == 401} {<span class="s1">~violence</span>.pedalOffFunc(25);} <span class="s6">//measure 201</span></p>
-<p class="p5">{count == 403} {<span class="s1">~violence</span>.pedalOnFunc(26);} <span class="s6">//measure 202</span></p>
-<p class="p5">{count == 407} {<span class="s1">~violence</span>.pedalOffFunc(26);} <span class="s6">//measure 204</span></p>
-<p class="p5">{count == 409} {<span class="s1">~violence</span>.pedalOnFunc(27);} <span class="s6">//measure 205</span></p>
-<p class="p5">{count == 413} {<span class="s1">~violence</span>.pedalOffFunc(27);} <span class="s6">//measure 207</span></p>
-<p class="p5">{count == 415} {<span class="s1">~violence</span>.pedalOnFunc(28);} <span class="s6">//measure 208</span></p>
-<p class="p5">{count == 419} {<span class="s1">~violence</span>.pedalOffFunc(28);} <span class="s6">//measure 210</span></p>
-<p class="p5">{count == 421} {<span class="s1">~violence</span>.pedalOnFunc(29);} <span class="s6">//measure 211</span></p>
-<p class="p5">{count == 425} {<span class="s1">~violence</span>.pedalOffFunc(29);} <span class="s6">//measure 213</span></p>
-<p class="p5">{count == 427} {<span class="s1">~violence</span>.pedalOnFunc(30);} <span class="s6">//measure 214</span></p>
-<p class="p5">{count == 431} {<span class="s1">~violence</span>.pedalOffFunc(30);} <span class="s6">//measure 216</span></p>
-<p class="p5">{count == 433} {<span class="s1">~violence</span>.pedalOnFunc(31);} <span class="s6">//measure 217</span></p>
-<p class="p5">{count == 437} {<span class="s1">~violence</span>.pedalOffFunc(31);} <span class="s6">//measure 219</span></p>
-<p class="p5">{count == 439} {<span class="s1">~violence</span>.pedalOnFunc(32);} <span class="s6">//measure 220</span></p>
-<p class="p5">{count == 443} {<span class="s1">~violence</span>.pedalOffFunc(32);} <span class="s6">//measure 222</span></p>
-<p class="p5">{count == 445} {<span class="s1">~violence</span>.pedalOnFunc(33);} <span class="s6">//measure 223</span></p>
-<p class="p5">{count == 449} {<span class="s1">~violence</span>.pedalOffFunc(33);} <span class="s6">//measure 225</span></p>
-<p class="p5">{count == 451} {<span class="s1">~violence</span>.pedalOnFunc(34);} <span class="s6">//measure 226</span></p>
-<p class="p5">{count == 455} {<span class="s1">~violence</span>.pedalOffFunc(34);} <span class="s6">//measure 228</span></p>
-<p class="p5">{count == 457} {<span class="s1">~violence</span>.pedalOnFunc(35);} <span class="s6">//measure 229</span></p>
-<p class="p5">{count == 461} {<span class="s1">~violence</span>.pedalOffFunc(35);} <span class="s6">//measure 231</span></p>
-<p class="p5">{count == 463} {<span class="s1">~violence</span>.pedalOnFunc(36);} <span class="s6">//measure 232</span></p>
-<p class="p5">{count == 467} {<span class="s1">~violence</span>.pedalOffFunc(36);} <span class="s6">//measure 234</span></p>
-<p class="p5">{count == 469} {<span class="s1">~violence</span>.pedalOnFunc(37);} <span class="s6">//measure 235</span></p>
-<p class="p2"><br></p>
-<p class="p5">{count == 475} {<span class="s1">~violence</span>.pedalOffFunc(37);} <span class="s6">//measure 238</span></p>
-<p class="p5">{count == 507} {<span class="s1">~violence</span>.pedalOnFunc(38);} <span class="s6">//measure 254</span></p>
-<p class="p5">{count == 513} {<span class="s1">~violence</span>.pedalOffFunc(38);} <span class="s6">//measure 257</span></p>
-<p class="p5">{count == 522} {<span class="s1">~violence</span>.pedalOnFunc(39);} <span class="s6">//measure 261</span></p>
-<p class="p5">{count == 526} {<span class="s1">~violence</span>.pedalOffFunc(39);} <span class="s6">//measure 263</span></p>
-<p class="p5">{count == 527} {<span class="s1">~violence</span>.pedalOnFunc(40);} <span class="s6">//measure 264</span></p>
-<p class="p5">{count == 535} {<span class="s1">~violence</span>.pedalOffFunc(40);} <span class="s6">//measure 268</span></p>
-<p class="p5">{count == 538} {<span class="s1">~violence</span>.pedalOnFunc(41);} <span class="s6">//measure 269</span></p>
-<p class="p5">{count == 547} {<span class="s1">~violence</span>.pedalOffFunc(41);} <span class="s6">//measure 274</span></p>
-<p class="p5">{count == 558} {<span class="s1">~violence</span>.pedalOnFunc(42);} <span class="s6">//measure 279</span></p>
-<p class="p5">{count == 564} {<span class="s1">~violence</span>.pedalOffFunc(42);} <span class="s6">//measure 282</span></p>
-<p class="p5">{count == 577} {<span class="s1">~violence</span>.pedalOnFunc(43);} <span class="s6">//measure 289</span></p>
-<p class="p5">{count == 584} {<span class="s1">~violence</span>.pedalOffFunc(43);} <span class="s6">//measure 292</span></p>
-<p class="p5">{count == 588} {<span class="s1">~violence</span>.pedalOnFunc(44);} <span class="s6">//measure 294</span></p>
-<p class="p5">{count == 590} {<span class="s1">~violence</span>.pedalOffFunc(44);} <span class="s6">//measure 295</span></p>
-<p class="p5">{count == 593} {<span class="s1">~violence</span>.pedalOnFunc(45);} <span class="s6">//measure 297</span></p>
-<p class="p5">{count == 597} {<span class="s1">~violence</span>.pedalOffFunc(45);} <span class="s6">//measure 299</span></p>
-<p class="p5">{count == 599} {<span class="s1">~violence</span>.pedalOnFunc(46);} <span class="s6">//measure 300</span></p>
-<p class="p5">{count == 607} {<span class="s1">~violence</span>.pedalOffFunc(46);} <span class="s6">//measure 304</span></p>
-<p class="p5">{count == 617} {<span class="s1">~violence</span>.pedalOnFunc(47);} <span class="s6">//measure 309</span></p>
-<p class="p5">{count == 632} {<span class="s1">~violence</span>.pedalOffFunc(47);} <span class="s6">//measure 316</span></p>
-<p class="p5">{count == 634} {<span class="s1">~violence</span>.pedalOnFunc(48);} <span class="s6">//measure 317</span></p>
-<p class="p5">{count == 639} {<span class="s1">~violence</span>.pedalOffFunc(48);} <span class="s6">//measure 320</span></p>
-<p class="p5">{count == 648} {<span class="s1">~violence</span>.pedalOnFunc(49);} <span class="s6">//measure 324</span></p>
-<p class="p5">{count == 650} {<span class="s1">~violence</span>.pedalOffFunc(49);} <span class="s6">//measure 325</span></p>
-<p class="p5">{count == 655} {<span class="s1">~violence</span>.pedalOnFunc(50);} <span class="s6">//measure 328</span></p>
-<p class="p5">{count == 667} {<span class="s1">~violence</span>.pedalOffFunc(50);} <span class="s6">//measure 334</span></p>
-<p class="p5">{count == 678} {<span class="s1">~violence</span>.pedalOnFunc(51);} <span class="s6">//measure 339</span></p>
-<p class="p2"><br></p>
-<p class="p3"><span class="s2">{count == 687} {</span><span class="s1">~violence</span><span class="s2">.pedalOffFunc(51);} </span>//measure 344 (first perc) perc measure 310</p>
-<p class="p5">{count == 696} {<span class="s1">~violence</span>.pedalOnFunc(52);} <span class="s6">//algoscore</span></p>
-<p class="p5">{count == 704} {<span class="s1">~violence</span>.pedalOffFunc(52);} <span class="s6">//perc measure 312 (first perc)</span></p>
-<p class="p5">{count == 711} {<span class="s1">~violence</span>.pedalOnFunc(53);} <span class="s6">//algoscore</span></p>
-<p class="p5">{count == 722} {<span class="s1">~violence</span>.pedalOffFunc(53);} <span class="s6">//perc measure 314</span></p>
-<p class="p3">//{count == 731} {~violence.pedalOnFunc(54);} //algoscore</p>
-<p class="p3">////{count == 744} {~violence.pedalOffFunc(54);} //partials (first partials) <span class="Apple-converted-space"> </span></p>
-<p class="p5">;</p>
-<p class="p2"><br></p>
-<p class="p5">case</p>
-<p class="p5">{<span class="s1">~violence</span>.metalOn == 1} {<span class="s1">~violence</span>.trigBang1}</p>
-<p class="p5">{<span class="s1">~violence</span>.metalOn == 0} {<span class="s1">~violence</span>.trigBang2};</p>
-<p class="p2"><br></p>
-<p class="p5">(60/<span class="s1">~tempo</span>).yield;</p>
-<p class="p5">count = count + 1;</p>
-<p class="p2"><br></p>
-<p class="p5">}, {</p>
-<p class="p2"><br></p>
-<p class="p4">"new section"<span class="s2">.postln;</span></p>
-<p class="p5">count = 731;</p>
-<p class="p5"><span class="s1">~violence</span>.pedalOnFunc(54); <span class="s6">// algoscore<span class="Apple-converted-space"> </span></span></p>
-<p class="p2"><br></p>
-<p class="p5">13.do{</p>
-<p class="p5">(<span class="s7">"count: "</span> ++ count).postln;</p>
-<p class="p5">(<span class="s7">"stepGlob: "</span> ++ <span class="s1">~violence</span>.stepGlob).postln;</p>
-<p class="p5">case</p>
-<p class="p5">{<span class="s1">~violence</span>.metalOn == 1} {<span class="s1">~violence</span>.trigBang1}</p>
-<p class="p5">{<span class="s1">~violence</span>.metalOn == 0} {<span class="s1">~violence</span>.trigBang2};</p>
-<p class="p2"><br></p>
-<p class="p5">(60/<span class="s1">~tempo</span>).yield;</p>
-<p class="p5">count = count + 1;</p>
-<p class="p5">};</p>
-<p class="p3">//improvise</p>
-<p class="p5">(5.47*(176/<span class="s1">~tempo</span>)).yield;<span class="Apple-tab-span">	</span></p>
-<p class="p5"><span class="s1">~violence</span>.pedalOffFunc(54); <span class="s6">//measure 316</span></p>
-<p class="p5">13.do{</p>
-<p class="p5">(<span class="s7">"count: "</span> ++ count).postln;</p>
-<p class="p5">(<span class="s7">"stepGlob: "</span> ++ <span class="s1">~violence</span>.stepGlob).postln;</p>
-<p class="p5">case</p>
-<p class="p5">{<span class="s1">~violence</span>.metalOn == 1} {<span class="s1">~violence</span>.trigBang1}</p>
-<p class="p5">{<span class="s1">~violence</span>.metalOn == 0} {<span class="s1">~violence</span>.trigBang2};</p>
-<p class="p2"><br></p>
-<p class="p5">(60/<span class="s1">~tempo</span>).yield;</p>
-<p class="p5">count = count + 1;</p>
-<p class="p5">};</p>
-<p class="p5"><span class="s1">~violence</span>.pedalOnFunc(55); <span class="s6">//algoscore</span></p>
-<p class="p2"><br></p>
-<p class="p5">13.do{</p>
-<p class="p5">(<span class="s7">"count: "</span> ++ count).postln;</p>
-<p class="p5">(<span class="s7">"stepGlob: "</span> ++ <span class="s1">~violence</span>.stepGlob).postln;</p>
-<p class="p5">case</p>
-<p class="p5">{<span class="s1">~violence</span>.metalOn == 1} {<span class="s1">~violence</span>.trigBang1}</p>
-<p class="p5">{<span class="s1">~violence</span>.metalOn == 0} {<span class="s1">~violence</span>.trigBang2};</p>
-<p class="p2"><br></p>
-<p class="p5">(60/<span class="s1">~tempo</span>).yield;</p>
-<p class="p5">count = count + 1;</p>
-<p class="p5">};</p>
-<p class="p5"><span class="s1">~violence</span>.pedalOffFunc(55); <span class="s6">//measure 318</span></p>
-<p class="p5">7.do{</p>
-<p class="p5">(<span class="s7">"count: "</span> ++ count).postln;</p>
-<p class="p5">(<span class="s7">"stepGlob: "</span> ++ <span class="s1">~violence</span>.stepGlob).postln;</p>
-<p class="p5">case</p>
-<p class="p5">{<span class="s1">~violence</span>.metalOn == 1} {<span class="s1">~violence</span>.trigBang1}</p>
-<p class="p5">{<span class="s1">~violence</span>.metalOn == 0} {<span class="s1">~violence</span>.trigBang2};</p>
-<p class="p2"><br></p>
-<p class="p5">(60/<span class="s1">~tempo</span>).yield;</p>
-<p class="p5">count = count + 1;</p>
-<p class="p5">};</p>
-<p class="p3"><span class="s1">~violence</span><span class="s2">.pedalOnFunc(56); </span>//algoscore (improvise)</p>
-<p class="p5">(7.17*(176/<span class="s1">~tempo</span>)).yield;</p>
-<p class="p5"><span class="s1">~violence</span>.pedalOffFunc(56); <span class="s6">//measure 320</span></p>
-<p class="p5">7.do{</p>
-<p class="p5">(<span class="s7">"count: "</span> ++ count).postln;</p>
-<p class="p5">(<span class="s7">"stepGlob: "</span> ++ <span class="s1">~violence</span>.stepGlob).postln;</p>
-<p class="p5">case</p>
-<p class="p5">{<span class="s1">~violence</span>.metalOn == 1} {<span class="s1">~violence</span>.trigBang1}</p>
-<p class="p5">{<span class="s1">~violence</span>.metalOn == 0} {<span class="s1">~violence</span>.trigBang2};</p>
-<p class="p2"><br></p>
-<p class="p5">(60/<span class="s1">~tempo</span>).yield;</p>
-<p class="p5">count = count + 1;</p>
-<p class="p5">};</p>
-<p class="p3"><span class="s1">~violence</span><span class="s2">.pedalOnFunc(57); </span>//algoscore (improvise)</p>
-<p class="p5">(3.07*(176/<span class="s1">~tempo</span>)).yield;</p>
-<p class="p5"><span class="s1">~violence</span>.pedalOffFunc(57); <span class="s6">//measure 322</span></p>
-<p class="p5">31.do{</p>
-<p class="p5">(<span class="s7">"count: "</span> ++ count).postln;</p>
-<p class="p5">(<span class="s7">"stepGlob: "</span> ++ <span class="s1">~violence</span>.stepGlob).postln;</p>
-<p class="p5">case</p>
-<p class="p5">{<span class="s1">~violence</span>.metalOn == 1} {<span class="s1">~violence</span>.trigBang1}</p>
-<p class="p5">{<span class="s1">~violence</span>.metalOn == 0} {<span class="s1">~violence</span>.trigBang2};</p>
-<p class="p2"><br></p>
-<p class="p5">(60/<span class="s1">~tempo</span>).yield;</p>
-<p class="p5">count = count + 1;</p>
-<p class="p5">};</p>
-<p class="p3"><span class="s1">~violence</span><span class="s2">.pedalOnFunc(58); </span>//algoscore (improvise)</p>
-<p class="p5">(6.42*(176/<span class="s1">~tempo</span>)).yield;</p>
-<p class="p5"><span class="s1">~violence</span>.pedalOffFunc(58); <span class="s6">//measure 324</span></p>
-<p class="p5">9.do{</p>
-<p class="p5">(<span class="s7">"count: "</span> ++ count).postln;</p>
-<p class="p5">(<span class="s7">"stepGlob: "</span> ++ <span class="s1">~violence</span>.stepGlob).postln;</p>
-<p class="p5">case</p>
-<p class="p5">{<span class="s1">~violence</span>.metalOn == 1} {<span class="s1">~violence</span>.trigBang1}</p>
-<p class="p5">{<span class="s1">~violence</span>.metalOn == 0} {<span class="s1">~violence</span>.trigBang2};</p>
-<p class="p2"><br></p>
-<p class="p5">(60/<span class="s1">~tempo</span>).yield;</p>
-<p class="p5">count = count + 1;</p>
-<p class="p5">};</p>
-<p class="p3"><span class="s1">~violence</span><span class="s2">.pedalOnFunc(59); </span>//algoscore (improvise with pitch/rhythm)</p>
-<p class="p5">(7.5*(176/<span class="s1">~tempo</span>)).yield;</p>
-<p class="p5"><span class="s1">~violence</span>.pedalOffFunc(59); <span class="s6">//buxtehude</span></p>
-<p class="p5">(15.5*(176/<span class="s1">~tempo</span>)).yield;</p>
-<p class="p4">"SOLO PIANO"<span class="s2">.postln;</span></p>
-<p class="p5"><span class="s1">~violence</span>.pedalOnFunc(60); <span class="s6">//solo piano</span></p>
-<p class="p5">(7.5*(176/<span class="s1">~tempo</span>)).yield;</p>
-<p class="p5"><span class="s1">~violence</span>.pedalOffFunc(60); <span class="s6">//wagner<span class="Apple-converted-space"> </span></span></p>
-<p class="p5">(64*(176/<span class="s1">~tempo</span>)).yield;</p>
-<p class="p4">"SOLO PIANO"<span class="s2">.postln;</span></p>
-<p class="p5"><span class="s1">~violence</span>.pedalOnFunc(61); <span class="s6">//solo piano</span></p>
-<p class="p5">});</p>
-<p class="p2"><br></p>
-<p class="p5">};</p>
-<p class="p2"><br></p>
-<p class="p5">}.fork</p>
-<p class="p5">)</p>
-<p class="p2"><br></p>
-<p class="p2"><br></p>
-<p class="p3"><span class="s1">~violence</span><span class="s2">.resetNodeProxies; </span>//reset node proxies</p>
-<p class="p2"><br></p>
-<p class="p5"><span class="s1">~violence</span>.pedalOnFunc(1);</p>
-<p class="p2"><br></p>
-<p class="p6">~violence<span class="s2">.remove;</span></p>
-<p class="p7"><br></p>
-<p class="p5"><span class="s1">~violence</span>.startNodes(grito4Out:0, motorOut:0);</p>
-<p class="p2"><br></p>
-<p class="p5"><span class="s1">~violence</span>.readyToStart;</p>
-<p class="p7"><br></p>
-<p class="p7"><br></p>
-<p class="p6">~measure<span class="s2"> = 344;</span></p>
-<p class="p5">(<span class="s1">~measure</span> * 2) - 1;</p>
-<p class="p2"><br></p>
-<p class="p2"><br></p>
-<p class="p2"><br></p>
-<p class="p5"><span class="s1">~violence</span>.metalOn = 2;</p>
-<p class="p2"><br></p>
-<p class="p2"><br></p>
-<p class="p5"><span class="s3">MIDIdef</span>.cc(<span class="s4">\behringer</span>, {<span class="s5">arg</span> ...args;<span class="Apple-converted-space"> </span></p>
-<p class="p5"><span class="Apple-tab-span">	</span><span class="s5">var</span> volSpec, masterVol;</p>
-<p class="p5"><span class="Apple-tab-span">	</span>volSpec = [-inf, 6, <span class="s4">\db</span>, 0, -inf, <span class="s7">" dB"</span>].asSpec;</p>
-<p class="p2"><span class="Apple-tab-span">	</span></p>
-<p class="p5"><span class="Apple-tab-span">	</span>case</p>
-<p class="p5"><span class="Apple-tab-span">	</span>{args[1] == 94}{</p>
-<p class="p2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
-<p class="p5"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>masterVol = volSpec.map(args[0].linlin(0,122,1,0)).postln;</p>
-<p class="p2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
-<p class="p5"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s1">~violence</span>.master1.setVol(masterVol);</p>
-<p class="p5"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s1">~violence</span>.master2.setVol(masterVol);</p>
-<p class="p3"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>} </span>//main volumen</p>
-<p class="p2"><span class="Apple-tab-span">	</span></p>
-<p class="p5"><span class="Apple-tab-span">	</span>}, srcID: 970490220);</p>
-<p class="p2"><br></p>
-<p class="p2"><br></p>
-<p class="p5"><span class="s8">MIDIdef</span>.cc(<span class="s4">\behringer</span>, {<span class="s5">arg</span> ...args;<span class="Apple-converted-space"> </span></p>
-<p class="p5"><span class="Apple-tab-span">	</span><span class="s5">var</span> volSpec, masterVol;</p>
-<p class="p5"><span class="Apple-tab-span">	</span>volSpec = [-inf, 6, <span class="s4">\db</span>, 0, -inf, <span class="s7">" dB"</span>].asSpec;</p>
-<p class="p2"><span class="Apple-tab-span">	</span></p>
-<p class="p5"><span class="Apple-tab-span">	</span>case</p>
-<p class="p5"><span class="Apple-tab-span">	</span>{args[1] == 1}{<span class="s1">~violence</span>.metal.set(<span class="s4">\globamp</span>, args[0].linlin(0,127,0,2).round(0.02).postln) }</p>
-<p class="p5"><span class="Apple-tab-span">	</span>{args[1] == 2}{<span class="s1">~violence.</span>grito1.set(<span class="s4">\globamp</span>, args[0].linlin(0,127,0,2).round(0.02).postln);</p>
-<p class="p5"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s1">~violence.</span>grito2.set(<span class="s4">\globamp</span>, args[0].linlin(0,127,0,2).round(0.02).postln);</p>
-<p class="p5"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s1">~violence.</span>grito3.set(<span class="s4">\globamp</span>, args[0].linlin(0,127,0,2).round(0.02).postln);</p>
-<p class="p5"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s1">~violence</span>.metal.set(<span class="s4">\globamp</span>, args[0].linlin(0,127,0,2).round(0.02).postln); }</p>
-<p class="p5"><span class="Apple-tab-span">	</span>{args[1] == 3}{<span class="s1">~violence</span>.grito4.set(<span class="s4">\globamp</span>, args[0].linlin(0,127,0,2).round(0.02).postln); }</p>
-<p class="p5"><span class="Apple-tab-span">	</span>{args[1] == 4}{<span class="s1">~violence</span>.motor.vol(args[0].linlin(0,127,0,2).round(0.02).postln) }</p>
-<p class="p5"><span class="Apple-tab-span">	</span>{args[1] == 5}{<span class="s1">~violence</span>.metal.set(<span class="s4">\globamp</span>, args[0].linlin(0,127,0,2).round(0.02).postln);</p>
-<p class="p5"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s1">~violence</span>.wagner1.set(<span class="s4">\globamp</span>, args[0].linlin(0,127,0,2).round(0.02).postln);</p>
-<p class="p5"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s1">~violence</span>.wagner2.set(<span class="s4">\globamp</span>, args[0].linlin(0,127,0,2).round(0.02).postln);</p>
-<p class="p5"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s1">~violence</span>.wagner3.set(<span class="s4">\globamp</span>, args[0].linlin(0,127,0,2).round(0.02).postln);</p>
-<p class="p5"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s1">~violence</span>.wagner4.set(<span class="s4">\globamp</span>, args[0].linlin(0,127,0,2).round(0.02).postln);</p>
-<p class="p5"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>}</p>
-<p class="p5"><span class="Apple-tab-span">	</span>{args[1] == 6}{<span class="s1">~violence</span>.buxtahude.set(<span class="s4">\globamp</span>, args[0].linlin(0,127,0,2).round(0.02).postln) }</p>
-<p class="p5"><span class="Apple-tab-span">	</span>{args[1] == 7}{<span class="s1">~violence</span>.parsifal.set(<span class="s4">\globamp</span>, args[0].linlin(0,127,0,2).round(0.02).postln) };</p>
-<p class="p3"><span class="s2"><span class="Apple-tab-span">	</span></span>//{args[1] == 88}{~violence.metal.set(\globamp, volSpec.map(args[0].linlin(0,127,0,1)).postln) };</p>
-<p class="p2"><span class="Apple-tab-span">	</span></p>
-<p class="p5"><span class="Apple-tab-span">	</span>});</p>
-<p class="p2"><span class="Apple-tab-span">	</span></p>
-<p class="p5"><span class="s8">MIDIdef</span>.cc(<span class="s4">\behringer</span>, {<span class="s5">arg</span> ...args; args.postln;});</p>
-<p class="p5"><span class="s3">MIDIIn</span>.doControlAction(1, 1, 81, 90);</p>
-<p class="p5">m = <span class="s3">MIDIOut</span>.newByName(<span class="s7">"BCF2000"</span>, <span class="s7">"Port 1"</span>);</p>
-<p class="p5">(81..88).do{|item| m.control(0,item,65) }</p>
-<p class="p2"><span class="Apple-tab-span">	</span></p>
-<p class="p2"><br></p>
-<p class="p5">(1..8).do{|item| var value=63; m.control(0,item,value); <span class="s8">MIDIIn</span>.doControlAction(970490220, 0, item, value); }<span class="Apple-tab-span">	</span></p>
-<p class="p2"><br></p>
-<p class="p5">(81..88).do{<span class="s5">|item|</span> <span class="s5">var</span> value=63; m.control(0,item,value); <span class="s3">MIDIIn</span>.doControlAction(970490220, 0, item, value);}</p>
-<p class="p2"><br></p>
-<p class="p8">MIDIdef.freeAll;</p>
-<p class="p9"><br></p>
-<p class="p3">////////////////////////////////////</p>
-<p class="p2"><br></p>
-<p class="p3">//Huddersfield-Cambridge setup<span class="Apple-converted-space"> </span></p>
-<p class="p5">(</p>
-<p class="p5"><span class="s1">~violence</span>.prepare(pianoOut: 0, metalOut: 4, grito1Out: 1, grito2Out: 2, grito3Out: 3, grito4Out:7, motorOut: 6, wagner1Out: 2, wagner2Out: 0, wagner3Out: 0, wagner4Out: 2, buxtaOut: 0, parsifalOut: 2); <span class="s6">//outs: piano, metal, grito1, grito2, grito3, grito4, motor,wagner1,wagner2,wagner3,wagner4,buxta,parsifal</span></p>
-<p class="p5">)</p>
-<p class="p2"><br></p>
-<p class="p2"><br></p>
-<p class="p3"><span class="s1">~violence</span><span class="s2">.mixer; </span>//global amplitude mixer</p>
-<p class="p2"><br></p>
-<p class="p3"><span class="s1">~violence</span><span class="s2">.readyToStart(156, 0.13, 1); </span>//firstTempo, onsetThresh, page, pedalDown, pedalUp<span class="Apple-converted-space"> </span></p>
-<p class="p2"><br></p>
-<p class="p3"><span class="s1">~violence</span><span class="s2">.readyToStart(156, 0.13, </span><span class="s4">\pedal</span><span class="s2">, 51, 51);</span>//firstTempo, onsetThresh, page, pedalDown, pedalUp</p>
-<p class="p2"><br></p>
-<p class="p3"><span class="s1">~violence</span><span class="s2">.readyToStart(156, 0.13, </span><span class="s4">\pedal</span><span class="s2">, 59, 59);</span>//firstTempo, onsetThresh, page, pedalDown, pedalUp</p>
-<p class="p2"><br></p>
-<p class="p3"><span class="s1">~violence</span><span class="s2">.readyToStart(156, 0.13, 16);</span>//firstTempo, onsetThresh, page =&gt; notice the change in onsetThresh<span class="Apple-converted-space"> </span></p>
-<p class="p2"><br></p>
-<p class="p5"><span class="s1">~violence</span>.remove; <span class="s6">//to stop</span></p>
-<p class="p2"><br></p>
-<p class="p3"><span class="s1">~violence</span><span class="s2">.keyboardPedal; </span>//instead of midi pedal, use letters q and a</p>
-<p class="p5"><span class="s1">~violence</span>.keyboardPedalOff; <span class="s6">//turn it off</span></p>
-<p class="p2"><br></p>
-<p class="p3"><span class="s1">~violence</span><span class="s2">.mixer2; </span>//a specific amp mixer</p>
-<p class="p2"><br></p>
-<p class="p2"><br></p>
-<p class="p2"><br></p>
-<p class="p5"><span class="s1">~violence</span>.algoVersion</p>
-<p class="p2"><br></p>
-<p class="p3"><span class="s1">~violence</span><span class="s2">.funcPage(17) </span>//change page number</p>
-<p class="p3"><span class="s1">~violence</span><span class="s2">.changePedalNum(16,16) </span>//args:<span class="Apple-converted-space">  </span>pedalDown, pedalUp</p>
-<p class="p2"><br></p>
-<p class="p3"><span class="s1">~violence</span><span class="s2">.changeLocation(5,3,3) </span>//args: page, pedalDown, pedalUp</p>
-<p class="p2"><br></p>
-<p class="p5"><span class="s1">~violence</span>.funcAlgoScore(4,18,176);<span class="Apple-converted-space"> </span></p>
-<p class="p5"><span class="s1">~violence</span>.funcAlgoScore(3,18,176);<span class="Apple-converted-space"> </span></p>
-<p class="p2"><br></p>
-<p class="p2"><br></p>
-<p class="p2"><br></p>
-<p class="p3">//restart</p>
-<p class="p5"><span class="s1">~violence</span>.prepare(0,0,2,2,2,3,4);</p>
-<p class="p3"><span class="s1">~violence</span><span class="s2">.readyToStart(5,3,3);</span>//page, pedalDown, pedalUp</p>
-<p class="p2"><br></p>
-<p class="p6">~violence<span class="s2">.remove;</span></p>
-<p class="p2"><br></p>
-<p class="p3">//change volumes</p>
-<p class="p5"><span class="s1">~violence</span>.piano.set(<span class="s4">\globamp</span>, 0); <span class="s6">//piano</span></p>
-<p class="p5"><span class="s1">~violence</span>.metal.set(<span class="s4">\globamp</span>, 0); <span class="s6">//metal</span></p>
-<p class="p5"><span class="s1">~violence</span>.grito1.set(<span class="s4">\globamp</span>, 0.0); <span class="s6">//pvplayVoc</span></p>
-<p class="p5"><span class="s1">~violence</span>.grito2.set(<span class="s4">\globamp</span>, 0.0); <span class="s6">//pvplayGrito</span></p>
-<p class="p5"><span class="s1">~violence</span>.grito3.set(<span class="s4">\globamp</span>, 4.0); <span class="s6">//pvplayBet</span></p>
-<p class="p2"><br></p>
-<p class="p2"><br></p>
-<p class="p2"><br></p>
-<p class="p5"><span class="s1">~violence</span>.pedalOffFunc;</p>
-<p class="p2"><br></p>
-<p class="p5"><span class="s1">~violence</span>.pedalOnFunc;</p>
-<p class="p2"><br></p>
-<p class="p3">///////////////////////////////////////////////////////////</p>
-<p class="p2"><br></p>
-<p class="p5">(</p>
-<p class="p5"><span class="s1">~violence</span> = <span class="s3">OnViolence</span>(audioIn: 1,<span class="Apple-converted-space"> </span></p>
-<p class="p5">ampIn: 1.0, volMetal: 1.0, volScream1: 1.5, volScream2: 0.5, volScream3: 0.9, volScream4: 1.0, volMotor: 1.0, volWagner1: 0.2, volWagner2: 0.2, volWagner3: 0.2, volWagner4: 0.2, volBuxta:1.0, volParsifal: 0.9); <span class="s6">//ins: audioIn, audioInOnset</span></p>
-<p class="p3">//vol: pianoVol, metalVol, grito1Vol, grito2Vol, grito3Vol, grito4Vol, volMotor, volWagner1, volWagner2, volWagner3, volWagner4, buxtahude, parsifal</p>
-<p class="p5">)</p>
-<p class="p2"><br></p>
-<p class="p3">//~version = Array.fill(26, {rrand(1,10)}); //random versions<span class="Apple-converted-space"> </span></p>
-<p class="p5"><span class="s1">~version</span> = [ 8, 7, 10, 9, 2, 1, 6, 9, 8, 4, 7, 1, 10, 7, 9, 8, 7, 2, 7, 7, 7, 2, 10, 1, 9, 4 ]; <span class="s6">//to practise a specific version, write the array...</span></p>
-<p class="p2"><br></p>
-<p class="p3"><span class="s1">~violence</span><span class="s2">.selectFiles(</span><span class="s1">~version</span><span class="s2">); </span>//this takes a few seconds</p>
-<p class="p2"><br></p>
-<p class="p2"><br></p>
-<p class="p3">//~violence.sendVersion; //make sure the message is recived in computer2</p>
-<p class="p2"><br></p>
-<p class="p3">//(</p>
-<p class="p3">//~violence.prepare(pianoOut: 0, metalOut: 0, grito1Out: 2, grito2Out: 2, grito3Out: 2, grito4Out:3, motorOut: 4, wagner1Out: 5, wagner2Out: 5, wagner3Out: 5, wagner4Out: 5, buxtaOut: 5, parsifalOut: 5); //outs: piano, metal, grito1, grito2, grito3, grito4, motor,wagner1,wagner2,wagner3,wagner4,buxta,parsifal</p>
-<p class="p3">//)</p>
-<p class="p2"><br></p>
-<p class="p3">//~violence.prepare(0,0,0,0,0,1,1,0,0,0,0); //for built in demo</p>
-<p class="p2"><br></p>
-<p class="p3">///////////////////////////////////////////////////////////</p>
-<p class="p3">//sketches</p>
-<p class="p2"><br></p>
-<p class="p2"><br></p>
-<p class="p5"><span class="s1">~index</span> = rrand(0,4);</p>
-<p class="p5"><span class="s1">~midiarr</span> = [<span class="s1">~violence</span>.partials.frequencies[<span class="s1">~index</span>], <span class="s1">~violence</span>.partials.magnitudes[<span class="s1">~index</span>]].spectralmidi;</p>
-<p class="p2"><br></p>
-<p class="p2"><br></p>
-<p class="p5"><span class="s1">~violence</span>.partials.magnitudes</p>
-<p class="p2"><br></p>
-<p class="p5"><span class="s1">~prob</span> = 0.6;</p>
-<p class="p6">~velGate<span class="s2"> = 50;</span></p>
-<p class="p5"><span class="s1">~adjVol</span> = 1.5;</p>
-<p class="p6">~tempoAdj<span class="s2"> = 1;</span></p>
-<p class="p6">~transpAdj<span class="s2"> = 0.5;</span></p>
-<p class="p2"><br></p>
-<p class="p5">(</p>
-<p class="p6">~rout<span class="s2"> = {</span></p>
-<p class="p5"><span class="s9">inf</span>.do{</p>
-<p class="p5"><span class="s1">~index</span> = rrand(2,10);</p>
-<p class="p5"><span class="s1">~midiarr</span> = [<span class="s1">~violence</span>.partials.frequencies[<span class="s1">~index</span>], <span class="s1">~violence</span>.partials.magnitudes[<span class="s1">~index</span>]].spectralmidi;</p>
-<p class="p2"><br></p>
-<p class="p6"><span class="s2">if(</span>~midiarr<span class="s2">[1] &lt; </span>~velGate<span class="s2">, {</span></p>
-<p class="p5"><span class="s1">~violence</span>.funcNotes(0, <span class="s1">~midiarr</span>[0], <span class="s1">~midiarr</span>[1], <span class="s1">~midiarr</span>[2], rrand(-1,1), [-1,1].wchoose([0.4,0.6]), mulTransp: 0*<span class="s1">~transpAdj</span>, noteType: [<span class="s4">\freq</span>,<span class="s4">\pitch</span>].choose, match: [<span class="s9">true</span>,<span class="s9">false</span>].wchoose([0.1,0.9]);, adjVolThis: <span class="s1">~adjVol</span>, prob: <span class="s1">~prob</span>, mulRate: [0.5,1.0, 2.0].wchoose([0.5,0.3,0.2]));</p>
-<p class="p5">}, {<span class="s7">"gate"</span>.postln});</p>
-<p class="p5">((60/128/3)*<span class="s1">~tempoAdj</span>).yield;</p>
-<p class="p5">}</p>
-<p class="p5">}.fork;</p>
-<p class="p5">)</p>
-<p class="p2"><br></p>
-<p class="p5"><span class="s1">~prob</span> = 0.4;</p>
-<p class="p5"><span class="s1">~adjVol</span> = 0.5;</p>
-<p class="p2"><br></p>
-<p class="p5"><span class="s1">~rout</span>.stop;</p>
+<p class="p1"><span class="s1">"perform"</span><span class="s2">.myScript.appleScript; </span>//script for performance</p>
+<p class="p2"><br></p>
+<p class="p3">s.bootAndMIDI;</p>
+<p class="p4"><br></p>
+<p class="p1"><span class="s3">~violence</span><span class="s2"> = </span><span class="s4">OnViolence</span><span class="s2">(audioIn: 0); </span>//ins: audioIn, audioInOnset</p>
+<p class="p4"><br></p>
+<p class="p5"><span class="s3">~violence</span><span class="s2">.connect(</span>"tremmac56150"<span class="s2">);</span></p>
+<p class="p4"><br></p>
+<p class="p6"><span class="s3">~violence</span>.sendArray;</p>
+<p class="p4"><br></p>
+<p class="p1"><span class="s3">~violence</span><span class="s2">.mixer2; </span>//metal, scream1, scream2, scream3, scream4, motor, wagner1, wagner2, wagner3, wagner4, buxta, parsifal</p>
+<p class="p4"><br></p>
+<p class="p6"><span class="s3">~violence</span>.startNodes(out1:0, out2:0);</p>
+<p class="p4"><br></p>
+<p class="p6"><span class="s3">~violence</span>.readyToStart;</p>
+<p class="p4"><br></p>
+<p class="p4"><br></p>
+<p class="p6"><span class="s3">~violence</span>.funcPlay(81,0,1,0);</p>
+<p class="p4"><br></p>
+<p class="p6"><span class="s3">~violence.</span>metal.spawn([<span class="s5">\amp</span>, 0.3, <span class="s5">\recBuf</span>, ~violence.bufferArr[[0,1,2].choose].bufnum, <span class="s5">\rate</span>, rrand(0.8,1.2), <span class="s5">\pan</span>, 0]);</p>
+<p class="p4"><br></p>
+<p class="p4"><br></p>
+<p class="p6"><span class="s3">~violence</span>.startMIDI;</p>
+<p class="p4"><br></p>
+<p class="p1">//score</p>
+<p class="p6">(</p>
+<p class="p6"><span class="s3">~tempo</span> = 176;</p>
+<p class="p6"><span class="s3">~violence</span>.trigAmp(0.1);</p>
+<p class="p6"><span class="s3">~rout</span> = {<span class="s6">var</span> count=720; <span class="s7">//start count</span></p>
+<p class="p4"><span class="Apple-tab-span">	</span></p>
+<p class="p6">(731-count).do{</p>
+<p class="p6">(<span class="s1">"count: "</span> ++ count).postln;</p>
+<p class="p6">(<span class="s1">"stepGlob: "</span> ++ <span class="s3">~violence</span>.stepGlob).postln;</p>
+<p class="p4"><br></p>
+<p class="p6">if(count &lt; 730, {</p>
+<p class="p6">case</p>
+<p class="p6">{count == 1} {<span class="s3">~violence</span>.pedalOffFunc(1);} <span class="s7">//measure 1</span></p>
+<p class="p6">{count == 101} {<span class="s3">~violence</span>.pedalOnFunc(1);} <span class="s7">//measure 51</span></p>
+<p class="p6">{count == 109} {<span class="s3">~violence</span>.pedalOffFunc(2);} <span class="s7">//measure 55</span></p>
+<p class="p6">{count == 117} {<span class="s3">~violence</span>.pedalOnFunc(2);} <span class="s7">//measure 59</span></p>
+<p class="p6">{count == 125} {<span class="s3">~violence</span>.pedalOffFunc(3);} <span class="s7">//measure 63</span></p>
+<p class="p6">{count == 133} {<span class="s3">~violence</span>.pedalOnFunc(3);} <span class="s7">//measure 67</span></p>
+<p class="p6">{count == 141} {<span class="s3">~violence</span>.pedalOffFunc(4);} <span class="s7">//measure 71</span></p>
+<p class="p6">{count == 153} {<span class="s3">~violence</span>.pedalOnFunc(4);} <span class="s7">//measure 77</span></p>
+<p class="p6">{count == 161} {<span class="s3">~violence</span>.pedalOffFunc(5);} <span class="s7">//measure 81</span></p>
+<p class="p6">{count == 223} {<span class="s3">~violence</span>.pedalOnFunc(5);} <span class="s7">//measure 112</span></p>
+<p class="p6">{count == 231} {<span class="s3">~violence</span>.pedalOffFunc(6);} <span class="s7">//measure 116</span></p>
+<p class="p6">{count == 239} {<span class="s3">~violence</span>.pedalOnFunc(6);} <span class="s7">//measure 120</span></p>
+<p class="p6">{count == 247} {<span class="s3">~violence</span>.pedalOffFunc(7);} <span class="s7">//measure 124</span></p>
+<p class="p6">{count == 254} {<span class="s3">~violence</span>.pedalOnFunc(7);} <span class="s7">//measure 127</span></p>
+<p class="p6">{count == 261} {<span class="s3">~violence</span>.pedalOffFunc(8);} <span class="s7">//measure 131</span></p>
+<p class="p6">{count == 268} {<span class="s3">~violence</span>.pedalOnFunc(8);} <span class="s7">//measure 134</span></p>
+<p class="p6">{count == 275} {<span class="s3">~violence</span>.pedalOffFunc(9);} <span class="s7">//measure 138</span></p>
+<p class="p6">{count == 281} {<span class="s3">~violence</span>.pedalOnFunc(9);} <span class="s7">//measure 141</span></p>
+<p class="p6">{count == 287} {<span class="s3">~violence</span>.pedalOffFunc(10);} <span class="s7">//measure 144</span></p>
+<p class="p6">{count == 293} {<span class="s3">~violence</span>.pedalOnFunc(10);} <span class="s7">//measure 147</span></p>
+<p class="p6">{count == 299} {<span class="s3">~violence</span>.pedalOffFunc(11);} <span class="s7">//measure 150</span></p>
+<p class="p6">{count == 304} {<span class="s3">~violence</span>.pedalOnFunc(11);} <span class="s7">//measure 152</span></p>
+<p class="p6">{count == 309} {<span class="s3">~violence</span>.pedalOffFunc(12);} <span class="s7">//measure 155</span></p>
+<p class="p6">{count == 314} {<span class="s3">~violence</span>.pedalOnFunc(12);} <span class="s7">//measure 157</span></p>
+<p class="p6">{count == 319} {<span class="s3">~violence</span>.pedalOffFunc(13);} <span class="s7">//measure 160</span></p>
+<p class="p6">{count == 323} {<span class="s3">~violence</span>.pedalOnFunc(13);} <span class="s7">//measure 162</span></p>
+<p class="p6">{count == 327} {<span class="s3">~violence</span>.pedalOffFunc(14);} <span class="s7">//measure 164</span></p>
+<p class="p6">{count == 331} {<span class="s3">~violence</span>.pedalOnFunc(14);} <span class="s7">//measure 166</span></p>
+<p class="p6">{count == 335} {<span class="s3">~violence</span>.pedalOffFunc(15);} <span class="s7">//measure 168</span></p>
+<p class="p6">{count == 339} {<span class="s3">~violence</span>.pedalOnFunc(15);} <span class="s7">//measure 170</span></p>
+<p class="p6">{count == 343} {<span class="s3">~violence</span>.pedalOffFunc(16);} <span class="s7">//measure 172</span></p>
+<p class="p6">{count == 345} {<span class="s3">~violence</span>.pedalOnFunc(16);} <span class="s7">//measure 173</span></p>
+<p class="p4"><br></p>
+<p class="p6">{count == 349} {<span class="s3">~violence</span>.pedalOnFunc(17);} <span class="s7">//measure 175</span></p>
+<p class="p6">{count == 353} {<span class="s3">~violence</span>.pedalOffFunc(17);} <span class="s7">//measure 177</span></p>
+<p class="p6">{count == 355} {<span class="s3">~violence</span>.pedalOnFunc(18);} <span class="s7">//measure 178</span></p>
+<p class="p6">{count == 359} {<span class="s3">~violence</span>.pedalOffFunc(18);} <span class="s7">//measure 180</span></p>
+<p class="p6">{count == 361} {<span class="s3">~violence</span>.pedalOnFunc(19);} <span class="s7">//measure 181</span></p>
+<p class="p6">{count == 365} {<span class="s3">~violence</span>.pedalOffFunc(19);} <span class="s7">//measure 183</span></p>
+<p class="p6">{count == 367} {<span class="s3">~violence</span>.pedalOnFunc(20);} <span class="s7">//measure 184</span></p>
+<p class="p6">{count == 371} {<span class="s3">~violence</span>.pedalOffFunc(20);} <span class="s7">//measure 186</span></p>
+<p class="p6">{count == 373} {<span class="s3">~violence</span>.pedalOnFunc(21);} <span class="s7">//measure 187</span></p>
+<p class="p6">{count == 377} {<span class="s3">~violence</span>.pedalOffFunc(21);} <span class="s7">//measure 189</span></p>
+<p class="p6">{count == 379} {<span class="s3">~violence</span>.pedalOnFunc(22);} <span class="s7">//measure 190</span></p>
+<p class="p6">{count == 383} {<span class="s3">~violence</span>.pedalOffFunc(22);} <span class="s7">//measure 192</span></p>
+<p class="p6">{count == 385} {<span class="s3">~violence</span>.pedalOnFunc(23);} <span class="s7">//measure 193</span></p>
+<p class="p6">{count == 389} {<span class="s3">~violence</span>.pedalOffFunc(23);} <span class="s7">//measure 195</span></p>
+<p class="p6">{count == 391} {<span class="s3">~violence</span>.pedalOnFunc(24);} <span class="s7">//measure 196</span></p>
+<p class="p6">{count == 395} {<span class="s3">~violence</span>.pedalOffFunc(24);} <span class="s7">//measure 198</span></p>
+<p class="p6">{count == 397} {<span class="s3">~violence</span>.pedalOnFunc(25);} <span class="s7">//measure 199</span></p>
+<p class="p6">{count == 401} {<span class="s3">~violence</span>.pedalOffFunc(25);} <span class="s7">//measure 201</span></p>
+<p class="p6">{count == 403} {<span class="s3">~violence</span>.pedalOnFunc(26);} <span class="s7">//measure 202</span></p>
+<p class="p6">{count == 407} {<span class="s3">~violence</span>.pedalOffFunc(26);} <span class="s7">//measure 204</span></p>
+<p class="p6">{count == 409} {<span class="s3">~violence</span>.pedalOnFunc(27);} <span class="s7">//measure 205</span></p>
+<p class="p6">{count == 413} {<span class="s3">~violence</span>.pedalOffFunc(27);} <span class="s7">//measure 207</span></p>
+<p class="p6">{count == 415} {<span class="s3">~violence</span>.pedalOnFunc(28);} <span class="s7">//measure 208</span></p>
+<p class="p6">{count == 419} {<span class="s3">~violence</span>.pedalOffFunc(28);} <span class="s7">//measure 210</span></p>
+<p class="p6">{count == 421} {<span class="s3">~violence</span>.pedalOnFunc(29);} <span class="s7">//measure 211</span></p>
+<p class="p6">{count == 425} {<span class="s3">~violence</span>.pedalOffFunc(29);} <span class="s7">//measure 213</span></p>
+<p class="p6">{count == 427} {<span class="s3">~violence</span>.pedalOnFunc(30);} <span class="s7">//measure 214</span></p>
+<p class="p6">{count == 431} {<span class="s3">~violence</span>.pedalOffFunc(30);} <span class="s7">//measure 216</span></p>
+<p class="p6">{count == 433} {<span class="s3">~violence</span>.pedalOnFunc(31);} <span class="s7">//measure 217</span></p>
+<p class="p6">{count == 437} {<span class="s3">~violence</span>.pedalOffFunc(31);} <span class="s7">//measure 219</span></p>
+<p class="p6">{count == 439} {<span class="s3">~violence</span>.pedalOnFunc(32);} <span class="s7">//measure 220</span></p>
+<p class="p6">{count == 443} {<span class="s3">~violence</span>.pedalOffFunc(32);} <span class="s7">//measure 222</span></p>
+<p class="p6">{count == 445} {<span class="s3">~violence</span>.pedalOnFunc(33);} <span class="s7">//measure 223</span></p>
+<p class="p6">{count == 449} {<span class="s3">~violence</span>.pedalOffFunc(33);} <span class="s7">//measure 225</span></p>
+<p class="p6">{count == 451} {<span class="s3">~violence</span>.pedalOnFunc(34);} <span class="s7">//measure 226</span></p>
+<p class="p6">{count == 455} {<span class="s3">~violence</span>.pedalOffFunc(34);} <span class="s7">//measure 228</span></p>
+<p class="p6">{count == 457} {<span class="s3">~violence</span>.pedalOnFunc(35);} <span class="s7">//measure 229</span></p>
+<p class="p6">{count == 461} {<span class="s3">~violence</span>.pedalOffFunc(35);} <span class="s7">//measure 231</span></p>
+<p class="p6">{count == 463} {<span class="s3">~violence</span>.pedalOnFunc(36);} <span class="s7">//measure 232</span></p>
+<p class="p6">{count == 467} {<span class="s3">~violence</span>.pedalOffFunc(36);} <span class="s7">//measure 234</span></p>
+<p class="p6">{count == 469} {<span class="s3">~violence</span>.pedalOnFunc(37);} <span class="s7">//measure 235</span></p>
+<p class="p4"><br></p>
+<p class="p6">{count == 475} {<span class="s3">~violence</span>.pedalOffFunc(37);} <span class="s7">//measure 238</span></p>
+<p class="p6">{count == 507} {<span class="s3">~violence</span>.pedalOnFunc(38);} <span class="s7">//measure 254</span></p>
+<p class="p6">{count == 513} {<span class="s3">~violence</span>.pedalOffFunc(38);} <span class="s7">//measure 257</span></p>
+<p class="p6">{count == 522} {<span class="s3">~violence</span>.pedalOnFunc(39);} <span class="s7">//measure 261</span></p>
+<p class="p6">{count == 526} {<span class="s3">~violence</span>.pedalOffFunc(39);} <span class="s7">//measure 263</span></p>
+<p class="p6">{count == 527} {<span class="s3">~violence</span>.pedalOnFunc(40);} <span class="s7">//measure 264</span></p>
+<p class="p6">{count == 535} {<span class="s3">~violence</span>.pedalOffFunc(40);} <span class="s7">//measure 268</span></p>
+<p class="p6">{count == 538} {<span class="s3">~violence</span>.pedalOnFunc(41);} <span class="s7">//measure 269</span></p>
+<p class="p6">{count == 547} {<span class="s3">~violence</span>.pedalOffFunc(41);} <span class="s7">//measure 274</span></p>
+<p class="p6">{count == 558} {<span class="s3">~violence</span>.pedalOnFunc(42);} <span class="s7">//measure 279</span></p>
+<p class="p6">{count == 564} {<span class="s3">~violence</span>.pedalOffFunc(42);} <span class="s7">//measure 282</span></p>
+<p class="p6">{count == 577} {<span class="s3">~violence</span>.pedalOnFunc(43);} <span class="s7">//measure 289</span></p>
+<p class="p6">{count == 584} {<span class="s3">~violence</span>.pedalOffFunc(43);} <span class="s7">//measure 292</span></p>
+<p class="p6">{count == 588} {<span class="s3">~violence</span>.pedalOnFunc(44);} <span class="s7">//measure 294</span></p>
+<p class="p6">{count == 590} {<span class="s3">~violence</span>.pedalOffFunc(44);} <span class="s7">//measure 295</span></p>
+<p class="p6">{count == 593} {<span class="s3">~violence</span>.pedalOnFunc(45);} <span class="s7">//measure 297</span></p>
+<p class="p6">{count == 597} {<span class="s3">~violence</span>.pedalOffFunc(45);} <span class="s7">//measure 299</span></p>
+<p class="p6">{count == 599} {<span class="s3">~violence</span>.pedalOnFunc(46);} <span class="s7">//measure 300</span></p>
+<p class="p6">{count == 607} {<span class="s3">~violence</span>.pedalOffFunc(46);} <span class="s7">//measure 304</span></p>
+<p class="p6">{count == 617} {<span class="s3">~violence</span>.pedalOnFunc(47);} <span class="s7">//measure 309</span></p>
+<p class="p6">{count == 632} {<span class="s3">~violence</span>.pedalOffFunc(47);} <span class="s7">//measure 316</span></p>
+<p class="p6">{count == 634} {<span class="s3">~violence</span>.pedalOnFunc(48);} <span class="s7">//measure 317</span></p>
+<p class="p6">{count == 639} {<span class="s3">~violence</span>.pedalOffFunc(48);} <span class="s7">//measure 320</span></p>
+<p class="p6">{count == 648} {<span class="s3">~violence</span>.pedalOnFunc(49);} <span class="s7">//measure 324</span></p>
+<p class="p6">{count == 650} {<span class="s3">~violence</span>.pedalOffFunc(49);} <span class="s7">//measure 325</span></p>
+<p class="p6">{count == 655} {<span class="s3">~violence</span>.pedalOnFunc(50);} <span class="s7">//measure 328</span></p>
+<p class="p6">{count == 667} {<span class="s3">~violence</span>.pedalOffFunc(50);} <span class="s7">//measure 334</span></p>
+<p class="p6">{count == 678} {<span class="s3">~violence</span>.pedalOnFunc(51);} <span class="s7">//measure 339</span></p>
+<p class="p4"><br></p>
+<p class="p1"><span class="s2">{count == 687} {</span><span class="s3">~violence</span><span class="s2">.pedalOffFunc(51);} </span>//measure 344 (first perc) perc measure 310</p>
+<p class="p6">{count == 696} {<span class="s3">~violence</span>.pedalOnFunc(52);} <span class="s7">//algoscore</span></p>
+<p class="p6">{count == 704} {<span class="s3">~violence</span>.pedalOffFunc(52);} <span class="s7">//perc measure 312 (first perc)</span></p>
+<p class="p6">{count == 711} {<span class="s3">~violence</span>.pedalOnFunc(53);} <span class="s7">//algoscore</span></p>
+<p class="p6">{count == 722} {<span class="s3">~violence</span>.pedalOffFunc(53);} <span class="s7">//perc measure 314</span></p>
+<p class="p1">//{count == 731} {~violence.pedalOnFunc(54);} //algoscore</p>
+<p class="p1">////{count == 744} {~violence.pedalOffFunc(54);} //partials (first partials) <span class="Apple-converted-space"> </span></p>
+<p class="p6">;</p>
+<p class="p4"><br></p>
+<p class="p6">case</p>
+<p class="p6">{<span class="s3">~violence</span>.metalOn == 1} {<span class="s3">~violence</span>.trigBang1}</p>
+<p class="p6">{<span class="s3">~violence</span>.metalOn == 0} {<span class="s3">~violence</span>.trigBang2};</p>
+<p class="p4"><br></p>
+<p class="p6">(60/<span class="s3">~tempo</span>).yield;</p>
+<p class="p6">count = count + 1;</p>
+<p class="p4"><br></p>
+<p class="p6">}, {</p>
+<p class="p4"><br></p>
+<p class="p5">"new section"<span class="s2">.postln;</span></p>
+<p class="p6">count = 731;</p>
+<p class="p6"><span class="s3">~violence</span>.pedalOnFunc(54); <span class="s7">// algoscore<span class="Apple-converted-space"> </span></span></p>
+<p class="p4"><br></p>
+<p class="p6">13.do{</p>
+<p class="p6">(<span class="s1">"count: "</span> ++ count).postln;</p>
+<p class="p6">(<span class="s1">"stepGlob: "</span> ++ <span class="s3">~violence</span>.stepGlob).postln;</p>
+<p class="p6">case</p>
+<p class="p6">{<span class="s3">~violence</span>.metalOn == 1} {<span class="s3">~violence</span>.trigBang1}</p>
+<p class="p6">{<span class="s3">~violence</span>.metalOn == 0} {<span class="s3">~violence</span>.trigBang2};</p>
+<p class="p4"><br></p>
+<p class="p6">(60/<span class="s3">~tempo</span>).yield;</p>
+<p class="p6">count = count + 1;</p>
+<p class="p6">};</p>
+<p class="p1">//improvise</p>
+<p class="p6">(5.47*(176/<span class="s3">~tempo</span>)).yield;<span class="Apple-tab-span">	</span></p>
+<p class="p6"><span class="s3">~violence</span>.pedalOffFunc(54); <span class="s7">//measure 316</span></p>
+<p class="p6">13.do{</p>
+<p class="p6">(<span class="s1">"count: "</span> ++ count).postln;</p>
+<p class="p6">(<span class="s1">"stepGlob: "</span> ++ <span class="s3">~violence</span>.stepGlob).postln;</p>
+<p class="p6">case</p>
+<p class="p6">{<span class="s3">~violence</span>.metalOn == 1} {<span class="s3">~violence</span>.trigBang1}</p>
+<p class="p6">{<span class="s3">~violence</span>.metalOn == 0} {<span class="s3">~violence</span>.trigBang2};</p>
+<p class="p4"><br></p>
+<p class="p6">(60/<span class="s3">~tempo</span>).yield;</p>
+<p class="p6">count = count + 1;</p>
+<p class="p6">};</p>
+<p class="p6"><span class="s3">~violence</span>.pedalOnFunc(55); <span class="s7">//algoscore</span></p>
+<p class="p4"><br></p>
+<p class="p6">13.do{</p>
+<p class="p6">(<span class="s1">"count: "</span> ++ count).postln;</p>
+<p class="p6">(<span class="s1">"stepGlob: "</span> ++ <span class="s3">~violence</span>.stepGlob).postln;</p>
+<p class="p6">case</p>
+<p class="p6">{<span class="s3">~violence</span>.metalOn == 1} {<span class="s3">~violence</span>.trigBang1}</p>
+<p class="p6">{<span class="s3">~violence</span>.metalOn == 0} {<span class="s3">~violence</span>.trigBang2};</p>
+<p class="p4"><br></p>
+<p class="p6">(60/<span class="s3">~tempo</span>).yield;</p>
+<p class="p6">count = count + 1;</p>
+<p class="p6">};</p>
+<p class="p6"><span class="s3">~violence</span>.pedalOffFunc(55); <span class="s7">//measure 318</span></p>
+<p class="p6">7.do{</p>
+<p class="p6">(<span class="s1">"count: "</span> ++ count).postln;</p>
+<p class="p6">(<span class="s1">"stepGlob: "</span> ++ <span class="s3">~violence</span>.stepGlob).postln;</p>
+<p class="p6">case</p>
+<p class="p6">{<span class="s3">~violence</span>.metalOn == 1} {<span class="s3">~violence</span>.trigBang1}</p>
+<p class="p6">{<span class="s3">~violence</span>.metalOn == 0} {<span class="s3">~violence</span>.trigBang2};</p>
+<p class="p4"><br></p>
+<p class="p6">(60/<span class="s3">~tempo</span>).yield;</p>
+<p class="p6">count = count + 1;</p>
+<p class="p6">};</p>
+<p class="p1"><span class="s3">~violence</span><span class="s2">.pedalOnFunc(56); </span>//algoscore (improvise)</p>
+<p class="p6">(7.17*(176/<span class="s3">~tempo</span>)).yield;</p>
+<p class="p6"><span class="s3">~violence</span>.pedalOffFunc(56); <span class="s7">//measure 320</span></p>
+<p class="p6">7.do{</p>
+<p class="p6">(<span class="s1">"count: "</span> ++ count).postln;</p>
+<p class="p6">(<span class="s1">"stepGlob: "</span> ++ <span class="s3">~violence</span>.stepGlob).postln;</p>
+<p class="p6">case</p>
+<p class="p6">{<span class="s3">~violence</span>.metalOn == 1} {<span class="s3">~violence</span>.trigBang1}</p>
+<p class="p6">{<span class="s3">~violence</span>.metalOn == 0} {<span class="s3">~violence</span>.trigBang2};</p>
+<p class="p4"><br></p>
+<p class="p6">(60/<span class="s3">~tempo</span>).yield;</p>
+<p class="p6">count = count + 1;</p>
+<p class="p6">};</p>
+<p class="p1"><span class="s3">~violence</span><span class="s2">.pedalOnFunc(57); </span>//algoscore (improvise)</p>
+<p class="p6">(3.07*(176/<span class="s3">~tempo</span>)).yield;</p>
+<p class="p6"><span class="s3">~violence</span>.pedalOffFunc(57); <span class="s7">//measure 322</span></p>
+<p class="p6">31.do{</p>
+<p class="p6">(<span class="s1">"count: "</span> ++ count).postln;</p>
+<p class="p6">(<span class="s1">"stepGlob: "</span> ++ <span class="s3">~violence</span>.stepGlob).postln;</p>
+<p class="p6">case</p>
+<p class="p6">{<span class="s3">~violence</span>.metalOn == 1} {<span class="s3">~violence</span>.trigBang1}</p>
+<p class="p6">{<span class="s3">~violence</span>.metalOn == 0} {<span class="s3">~violence</span>.trigBang2};</p>
+<p class="p4"><br></p>
+<p class="p6">(60/<span class="s3">~tempo</span>).yield;</p>
+<p class="p6">count = count + 1;</p>
+<p class="p6">};</p>
+<p class="p1"><span class="s3">~violence</span><span class="s2">.pedalOnFunc(58); </span>//algoscore (improvise)</p>
+<p class="p6">(6.42*(176/<span class="s3">~tempo</span>)).yield;</p>
+<p class="p6"><span class="s3">~violence</span>.pedalOffFunc(58); <span class="s7">//measure 324</span></p>
+<p class="p6">9.do{</p>
+<p class="p6">(<span class="s1">"count: "</span> ++ count).postln;</p>
+<p class="p6">(<span class="s1">"stepGlob: "</span> ++ <span class="s3">~violence</span>.stepGlob).postln;</p>
+<p class="p6">case</p>
+<p class="p6">{<span class="s3">~violence</span>.metalOn == 1} {<span class="s3">~violence</span>.trigBang1}</p>
+<p class="p6">{<span class="s3">~violence</span>.metalOn == 0} {<span class="s3">~violence</span>.trigBang2};</p>
+<p class="p4"><br></p>
+<p class="p6">(60/<span class="s3">~tempo</span>).yield;</p>
+<p class="p6">count = count + 1;</p>
+<p class="p6">};</p>
+<p class="p1"><span class="s3">~violence</span><span class="s2">.pedalOnFunc(59); </span>//algoscore (improvise with pitch/rhythm)</p>
+<p class="p6">(7.5*(176/<span class="s3">~tempo</span>)).yield;</p>
+<p class="p6"><span class="s3">~violence</span>.pedalOffFunc(59); <span class="s7">//buxtehude</span></p>
+<p class="p6">(15.5*(176/<span class="s3">~tempo</span>)).yield;</p>
+<p class="p5">"SOLO PIANO"<span class="s2">.postln;</span></p>
+<p class="p6"><span class="s3">~violence</span>.pedalOnFunc(60); <span class="s7">//solo piano</span></p>
+<p class="p6">(7.5*(176/<span class="s3">~tempo</span>)).yield;</p>
+<p class="p6"><span class="s3">~violence</span>.pedalOffFunc(60); <span class="s7">//wagner<span class="Apple-converted-space"> </span></span></p>
+<p class="p6">(64*(176/<span class="s3">~tempo</span>)).yield;</p>
+<p class="p5">"SOLO PIANO"<span class="s2">.postln;</span></p>
+<p class="p6"><span class="s3">~violence</span>.pedalOnFunc(61); <span class="s7">//solo piano</span></p>
+<p class="p6">});</p>
+<p class="p4"><br></p>
+<p class="p6">};</p>
+<p class="p4"><br></p>
+<p class="p6">}.fork</p>
+<p class="p6">)</p>
+<p class="p4"><br></p>
+<p class="p4"><br></p>
+<p class="p1"><span class="s3">~violence</span><span class="s2">.resetNodeProxies; </span>//reset node proxies</p>
+<p class="p4"><br></p>
+<p class="p6"><span class="s3">~violence</span>.pedalOnFunc(1);</p>
+<p class="p4"><br></p>
+<p class="p7">~violence<span class="s2">.remove;</span></p>
+<p class="p8"><br></p>
+<p class="p6"><span class="s3">~violence</span>.startNodes(grito4Out:0, motorOut:0);</p>
+<p class="p4"><br></p>
+<p class="p6"><span class="s3">~violence</span>.readyToStart;</p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p7">~measure<span class="s2"> = 344;</span></p>
+<p class="p6">(<span class="s3">~measure</span> * 2) - 1;</p>
+<p class="p4"><br></p>
+<p class="p4"><br></p>
+<p class="p4"><br></p>
+<p class="p6"><span class="s3">~violence</span>.metalOn = 2;</p>
+<p class="p4"><br></p>
+<p class="p4"><br></p>
+<p class="p6"><span class="s4">MIDIdef</span>.cc(<span class="s5">\behringer</span>, {<span class="s6">arg</span> ...args;<span class="Apple-converted-space"> </span></p>
+<p class="p6"><span class="Apple-tab-span">	</span><span class="s6">var</span> volSpec, masterVol;</p>
+<p class="p6"><span class="Apple-tab-span">	</span>volSpec = [-inf, 6, <span class="s5">\db</span>, 0, -inf, <span class="s1">" dB"</span>].asSpec;</p>
+<p class="p4"><span class="Apple-tab-span">	</span></p>
+<p class="p6"><span class="Apple-tab-span">	</span>case</p>
+<p class="p6"><span class="Apple-tab-span">	</span>{args[1] == 94}{</p>
+<p class="p4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
+<p class="p6"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>masterVol = volSpec.map(args[0].linlin(0,122,1,0)).postln;</p>
+<p class="p4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
+<p class="p6"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">~violence</span>.master1.setVol(masterVol);</p>
+<p class="p6"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">~violence</span>.master2.setVol(masterVol);</p>
+<p class="p1"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>} </span>//main volumen</p>
+<p class="p4"><span class="Apple-tab-span">	</span></p>
+<p class="p6"><span class="Apple-tab-span">	</span>}, srcID: 970490220);</p>
+<p class="p4"><br></p>
+<p class="p4"><br></p>
+<p class="p6"><span class="s8">MIDIdef</span>.cc(<span class="s5">\behringer</span>, {<span class="s6">arg</span> ...args;<span class="Apple-converted-space"> </span></p>
+<p class="p6"><span class="Apple-tab-span">	</span><span class="s6">var</span> volSpec, masterVol;</p>
+<p class="p6"><span class="Apple-tab-span">	</span>volSpec = [-inf, 6, <span class="s5">\db</span>, 0, -inf, <span class="s1">" dB"</span>].asSpec;</p>
+<p class="p4"><span class="Apple-tab-span">	</span></p>
+<p class="p6"><span class="Apple-tab-span">	</span>case</p>
+<p class="p6"><span class="Apple-tab-span">	</span>{args[1] == 1}{<span class="s3">~violence</span>.metal.set(<span class="s5">\globamp</span>, args[0].linlin(0,127,0,2).round(0.02).postln) }</p>
+<p class="p6"><span class="Apple-tab-span">	</span>{args[1] == 2}{<span class="s3">~violence.</span>grito1.set(<span class="s5">\globamp</span>, args[0].linlin(0,127,0,2).round(0.02).postln);</p>
+<p class="p6"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">~violence.</span>grito2.set(<span class="s5">\globamp</span>, args[0].linlin(0,127,0,2).round(0.02).postln);</p>
+<p class="p6"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">~violence.</span>grito3.set(<span class="s5">\globamp</span>, args[0].linlin(0,127,0,2).round(0.02).postln);</p>
+<p class="p6"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">~violence</span>.metal.set(<span class="s5">\globamp</span>, args[0].linlin(0,127,0,2).round(0.02).postln); }</p>
+<p class="p6"><span class="Apple-tab-span">	</span>{args[1] == 3}{<span class="s3">~violence</span>.grito4.set(<span class="s5">\globamp</span>, args[0].linlin(0,127,0,2).round(0.02).postln); }</p>
+<p class="p6"><span class="Apple-tab-span">	</span>{args[1] == 4}{<span class="s3">~violence</span>.motor.vol(args[0].linlin(0,127,0,2).round(0.02).postln) }</p>
+<p class="p6"><span class="Apple-tab-span">	</span>{args[1] == 5}{<span class="s3">~violence</span>.metal.set(<span class="s5">\globamp</span>, args[0].linlin(0,127,0,2).round(0.02).postln);</p>
+<p class="p6"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">~violence</span>.wagner1.set(<span class="s5">\globamp</span>, args[0].linlin(0,127,0,2).round(0.02).postln);</p>
+<p class="p6"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">~violence</span>.wagner2.set(<span class="s5">\globamp</span>, args[0].linlin(0,127,0,2).round(0.02).postln);</p>
+<p class="p6"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">~violence</span>.wagner3.set(<span class="s5">\globamp</span>, args[0].linlin(0,127,0,2).round(0.02).postln);</p>
+<p class="p6"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">~violence</span>.wagner4.set(<span class="s5">\globamp</span>, args[0].linlin(0,127,0,2).round(0.02).postln);</p>
+<p class="p6"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>}</p>
+<p class="p6"><span class="Apple-tab-span">	</span>{args[1] == 6}{<span class="s3">~violence</span>.buxtahude.set(<span class="s5">\globamp</span>, args[0].linlin(0,127,0,2).round(0.02).postln) }</p>
+<p class="p6"><span class="Apple-tab-span">	</span>{args[1] == 7}{<span class="s3">~violence</span>.parsifal.set(<span class="s5">\globamp</span>, args[0].linlin(0,127,0,2).round(0.02).postln) };</p>
+<p class="p1"><span class="s2"><span class="Apple-tab-span">	</span></span>//{args[1] == 88}{~violence.metal.set(\globamp, volSpec.map(args[0].linlin(0,127,0,1)).postln) };</p>
+<p class="p4"><span class="Apple-tab-span">	</span></p>
+<p class="p6"><span class="Apple-tab-span">	</span>});</p>
+<p class="p4"><span class="Apple-tab-span">	</span></p>
+<p class="p6"><span class="s8">MIDIdef</span>.cc(<span class="s5">\behringer</span>, {<span class="s6">arg</span> ...args; args.postln;});</p>
+<p class="p6"><span class="s4">MIDIIn</span>.doControlAction(1, 1, 81, 90);</p>
+<p class="p6">m = <span class="s4">MIDIOut</span>.newByName(<span class="s1">"BCF2000"</span>, <span class="s1">"Port 1"</span>);</p>
+<p class="p6">(81..88).do{|item| m.control(0,item,65) }</p>
+<p class="p4"><span class="Apple-tab-span">	</span></p>
+<p class="p4"><br></p>
+<p class="p6">(1..8).do{|item| var value=63; m.control(0,item,value); <span class="s8">MIDIIn</span>.doControlAction(970490220, 0, item, value); }<span class="Apple-tab-span">	</span></p>
+<p class="p4"><br></p>
+<p class="p6">(81..88).do{<span class="s6">|item|</span> <span class="s6">var</span> value=63; m.control(0,item,value); <span class="s4">MIDIIn</span>.doControlAction(970490220, 0, item, value);}</p>
+<p class="p4"><br></p>
+<p class="p9">MIDIdef.freeAll;</p>
+<p class="p10"><br></p>
+<p class="p1">////////////////////////////////////</p>
+<p class="p4"><br></p>
+<p class="p1">//Huddersfield-Cambridge setup<span class="Apple-converted-space"> </span></p>
+<p class="p6">(</p>
+<p class="p6"><span class="s3">~violence</span>.prepare(pianoOut: 0, metalOut: 4, grito1Out: 1, grito2Out: 2, grito3Out: 3, grito4Out:7, motorOut: 6, wagner1Out: 2, wagner2Out: 0, wagner3Out: 0, wagner4Out: 2, buxtaOut: 0, parsifalOut: 2); <span class="s7">//outs: piano, metal, grito1, grito2, grito3, grito4, motor,wagner1,wagner2,wagner3,wagner4,buxta,parsifal</span></p>
+<p class="p6">)</p>
+<p class="p4"><br></p>
+<p class="p4"><br></p>
+<p class="p1"><span class="s3">~violence</span><span class="s2">.mixer; </span>//global amplitude mixer</p>
+<p class="p4"><br></p>
+<p class="p1"><span class="s3">~violence</span><span class="s2">.readyToStart(156, 0.13, 1); </span>//firstTempo, onsetThresh, page, pedalDown, pedalUp<span class="Apple-converted-space"> </span></p>
+<p class="p4"><br></p>
+<p class="p1"><span class="s3">~violence</span><span class="s2">.readyToStart(156, 0.13, </span><span class="s5">\pedal</span><span class="s2">, 51, 51);</span>//firstTempo, onsetThresh, page, pedalDown, pedalUp</p>
+<p class="p4"><br></p>
+<p class="p1"><span class="s3">~violence</span><span class="s2">.readyToStart(156, 0.13, </span><span class="s5">\pedal</span><span class="s2">, 59, 59);</span>//firstTempo, onsetThresh, page, pedalDown, pedalUp</p>
+<p class="p4"><br></p>
+<p class="p1"><span class="s3">~violence</span><span class="s2">.readyToStart(156, 0.13, 16);</span>//firstTempo, onsetThresh, page =&gt; notice the change in onsetThresh<span class="Apple-converted-space"> </span></p>
+<p class="p4"><br></p>
+<p class="p6"><span class="s3">~violence</span>.remove; <span class="s7">//to stop</span></p>
+<p class="p4"><br></p>
+<p class="p1"><span class="s3">~violence</span><span class="s2">.keyboardPedal; </span>//instead of midi pedal, use letters q and a</p>
+<p class="p6"><span class="s3">~violence</span>.keyboardPedalOff; <span class="s7">//turn it off</span></p>
+<p class="p4"><br></p>
+<p class="p1"><span class="s3">~violence</span><span class="s2">.mixer2; </span>//a specific amp mixer</p>
+<p class="p4"><br></p>
+<p class="p4"><br></p>
+<p class="p4"><br></p>
+<p class="p6"><span class="s3">~violence</span>.algoVersion</p>
+<p class="p4"><br></p>
+<p class="p1"><span class="s3">~violence</span><span class="s2">.funcPage(17) </span>//change page number</p>
+<p class="p1"><span class="s3">~violence</span><span class="s2">.changePedalNum(16,16) </span>//args:<span class="Apple-converted-space">  </span>pedalDown, pedalUp</p>
+<p class="p4"><br></p>
+<p class="p1"><span class="s3">~violence</span><span class="s2">.changeLocation(5,3,3) </span>//args: page, pedalDown, pedalUp</p>
+<p class="p4"><br></p>
+<p class="p6"><span class="s3">~violence</span>.funcAlgoScore(4,18,176);<span class="Apple-converted-space"> </span></p>
+<p class="p6"><span class="s3">~violence</span>.funcAlgoScore(3,18,176);<span class="Apple-converted-space"> </span></p>
+<p class="p4"><br></p>
+<p class="p4"><br></p>
+<p class="p4"><br></p>
+<p class="p1">//restart</p>
+<p class="p6"><span class="s3">~violence</span>.prepare(0,0,2,2,2,3,4);</p>
+<p class="p1"><span class="s3">~violence</span><span class="s2">.readyToStart(5,3,3);</span>//page, pedalDown, pedalUp</p>
+<p class="p4"><br></p>
+<p class="p7">~violence<span class="s2">.remove;</span></p>
+<p class="p4"><br></p>
+<p class="p1">//change volumes</p>
+<p class="p6"><span class="s3">~violence</span>.piano.set(<span class="s5">\globamp</span>, 0); <span class="s7">//piano</span></p>
+<p class="p6"><span class="s3">~violence</span>.metal.set(<span class="s5">\globamp</span>, 0); <span class="s7">//metal</span></p>
+<p class="p6"><span class="s3">~violence</span>.grito1.set(<span class="s5">\globamp</span>, 0.0); <span class="s7">//pvplayVoc</span></p>
+<p class="p6"><span class="s3">~violence</span>.grito2.set(<span class="s5">\globamp</span>, 0.0); <span class="s7">//pvplayGrito</span></p>
+<p class="p6"><span class="s3">~violence</span>.grito3.set(<span class="s5">\globamp</span>, 4.0); <span class="s7">//pvplayBet</span></p>
+<p class="p4"><br></p>
+<p class="p4"><br></p>
+<p class="p4"><br></p>
+<p class="p6"><span class="s3">~violence</span>.pedalOffFunc;</p>
+<p class="p4"><br></p>
+<p class="p6"><span class="s3">~violence</span>.pedalOnFunc;</p>
+<p class="p4"><br></p>
+<p class="p1"><span class="s1">"finish"</span><span class="s2">.myScript.appleScript; </span>//script after performance</p>
+<p class="p4"><br></p>
+<p class="p1">///////////////////////////////////////////////////////////</p>
+<p class="p4"><br></p>
+<p class="p6">(</p>
+<p class="p6"><span class="s3">~violence</span> = <span class="s4">OnViolence</span>(audioIn: 1,<span class="Apple-converted-space"> </span></p>
+<p class="p6">ampIn: 1.0, volMetal: 1.0, volScream1: 1.5, volScream2: 0.5, volScream3: 0.9, volScream4: 1.0, volMotor: 1.0, volWagner1: 0.2, volWagner2: 0.2, volWagner3: 0.2, volWagner4: 0.2, volBuxta:1.0, volParsifal: 0.9); <span class="s7">//ins: audioIn, audioInOnset</span></p>
+<p class="p1">//vol: pianoVol, metalVol, grito1Vol, grito2Vol, grito3Vol, grito4Vol, volMotor, volWagner1, volWagner2, volWagner3, volWagner4, buxtahude, parsifal</p>
+<p class="p6">)</p>
+<p class="p4"><br></p>
+<p class="p1">//~version = Array.fill(26, {rrand(1,10)}); //random versions<span class="Apple-converted-space"> </span></p>
+<p class="p6"><span class="s3">~version</span> = [ 8, 7, 10, 9, 2, 1, 6, 9, 8, 4, 7, 1, 10, 7, 9, 8, 7, 2, 7, 7, 7, 2, 10, 1, 9, 4 ]; <span class="s7">//to practise a specific version, write the array...</span></p>
+<p class="p4"><br></p>
+<p class="p1"><span class="s3">~violence</span><span class="s2">.selectFiles(</span><span class="s3">~version</span><span class="s2">); </span>//this takes a few seconds</p>
+<p class="p4"><br></p>
+<p class="p4"><br></p>
+<p class="p1">//~violence.sendVersion; //make sure the message is recived in computer2</p>
+<p class="p4"><br></p>
+<p class="p1">//(</p>
+<p class="p1">//~violence.prepare(pianoOut: 0, metalOut: 0, grito1Out: 2, grito2Out: 2, grito3Out: 2, grito4Out:3, motorOut: 4, wagner1Out: 5, wagner2Out: 5, wagner3Out: 5, wagner4Out: 5, buxtaOut: 5, parsifalOut: 5); //outs: piano, metal, grito1, grito2, grito3, grito4, motor,wagner1,wagner2,wagner3,wagner4,buxta,parsifal</p>
+<p class="p1">//)</p>
+<p class="p4"><br></p>
+<p class="p1">//~violence.prepare(0,0,0,0,0,1,1,0,0,0,0); //for built in demo</p>
+<p class="p4"><br></p>
+<p class="p1">///////////////////////////////////////////////////////////</p>
+<p class="p1">//sketches</p>
+<p class="p4"><br></p>
+<p class="p4"><br></p>
+<p class="p11"><span class="s3">~violence</span>.pnosoloProb;</p>
+<p class="p11"><span class="s3">~violence</span>.pnosoloVelGate;</p>
+<p class="p11"><span class="s3">~violence</span>.pnosoloAdjVol;</p>
+<p class="p11"><span class="s3">~violence</span>.pnosoloTempoAdj;</p>
+<p class="p11"><span class="s3">~violence</span>.pnosoloTranspAdj;</p>
+<p class="p11"><span class="s3">~violence</span>.pnosoloVol;</p>
+<p class="p4"><br></p>
+<p class="p11"><span class="s3">~violence</span>.pnosoloStart;</p>
+<p class="p4"><br></p>
+<p class="p6"><span class="s3">~violence</span>.pnosoloProb = 0.4;</p>
+<p class="p6"><span class="s3">~violence</span>.pnosoloAdjVol = 0.5;</p>
+<p class="p6"><span class="s3">~violence</span>.pnosoloVelGate = 20;</p>
+<p class="p12"><br></p>
+<p class="p6"><span class="s3">~violence</span>.pnosoloStop;</p>
+<p class="p4"><br></p>
+<p class="p6"><span class="s3">~violence</span>.chunksAdjTime = 0.9;</p>
+<p class="p4"><br></p>
+<p class="p11"><span class="s3">~violence</span>.chunkPlayer(<span class="s5">\chunk1</span>, 0.5); <span class="s7">//chunk, vol</span></p>
+<p class="p4"><br></p>
+<p class="p11"><span class="s3">~violence</span>.chunkPlayer(<span class="s5">\chunk13</span>, 0.5, 0.5/1.2);</p>
+<p class="p4"><br></p>
+<p class="p6"><span class="s3">~violence</span>.chunksAdjDur = 1.2;</p>
+<p class="p4"><br></p>
+<p class="p4"><br></p>
+<p class="p4"><br></p>
 </body>
 </html>
