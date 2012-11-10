@@ -1,4 +1,4 @@
-OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, <>motorPan, s, basicPath, <>score, globalMIDI, globalTimes, start, end, bufferTimes, selectPitch, buffType, algoTimes, <>stepPedal, countPedalUp, countPedalDown,<>tempo=1, <>partials, <percglobalTimesGlob, partialTrig=0, document, <>bufferArr, <>node, <>rightWin, clock, <motorSound, movwin, <>src, <>imageScale, <>imageAdj, movieScale, movieWinScale, <>network, snapshot, <>pedalTime, pedalDownMistake, pedalUpMistake, netConnect, <>rrandArray;
+OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, <>motorPan, s, basicPath, <>score, globalMIDI, globalTimes, start, end, bufferTimes, selectPitch, buffType, algoTimes, <>stepPedal, countPedalUp, countPedalDown,<>tempo=1, <>partials, <percglobalTimesGlob, partialTrig=0, document, <>bufferArr, <>node, <>rightWin, clock, <motorSound, movwin, <>src, <>imageScale, <>imageAdj, movieScale, movieWinScale, <>network, snapshot, <>pedalTime, pedalDownMistake, pedalUpMistake, netConnect, <>rrandArray, <>muteMovie=false;
 	
 	*new {arg headOut=0, motorOut=0, motorVol=3, panVal=0, lowVal=40, highVal=50, leftVal=49, rightVal=31, src, scoreType=\macBookPro15, connect=false, hostcomputer="tremmac56150", port=57120;
 	^super.new.initOnViolenceScore(headOut, motorOut, motorVol, panVal, lowVal, highVal, leftVal, rightVal, src, scoreType, connect, hostcomputer, port);
@@ -185,7 +185,9 @@ OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, <>motorPan, s, basicPath
 	if(ip.notNil, {
 	network = NetAddr(hostcomputer.ipAddr, port);
 	OSCdef(\tempotrack, {|msg, time, addr, recvPort| tempo = msg[1].postln}, '/tempo', network);
-	OSCdef(\randArr, {|msg, time, addr, recvPort| stringArr = msg[1].postln;
+	OSCdef(\randArr, {|msg, time, addr, recvPort| 
+		"Random array recieved:".postln;
+		stringArr = msg[1].postln;
 		stringArr = stringArr.asString.findReplaceAll(" ");
 		stringArr = stringArr.findReplace("[","").findReplace("]","");
 		rrandArray = stringArr.split($,);
@@ -357,7 +359,10 @@ OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, <>motorPan, s, basicPath
 		
 		//score algo choices
 		if(netConnect, {
-		randNum = (rrandArray[sampleEnd-1].asInteger);}, {
+		if(rrandArray.notNil, {
+		randNum = (rrandArray[sampleEnd-1].asInteger);
+		}, { randNum = rrand(0,9);});
+		}, {
 		randNum = rrand(0,9);
 		});
 		
@@ -480,7 +485,8 @@ OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, <>motorPan, s, basicPath
 		{countPedalDown == 55} {this.funcPerc(4, rrand(0,9), tempo); this.partialNum(24);}
 		{countPedalDown == 56} {this.funcPerc(5, rrand(0,9), tempo); this.partialNum(9);}
 		{countPedalDown == 57} {this.funcPerc(6, rrand(0,9), tempo, 0.85); this.partialNum(19);}
-		{countPedalDown == 58} {this.funcPerc(7, 0, tempo); this.partialNum(24);}
+		//{countPedalDown == 58} {this.funcPerc(7, 0, tempo); this.partialNum(24);}
+		{countPedalDown == 58} {this.funcPerc(7, 0, tempo); this.partialNum(11);}
 		{countPedalDown == 59} {this.timerOnly(15.0*(1/tempo))}
 		
 		{countPedalDown == 66} {this.partialNum(17);}
@@ -552,15 +558,17 @@ OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, <>motorPan, s, basicPath
 		{countPedalUp == 60} {score.tagClose; this.funcAlgoScore(26,35,tempo,1);}
 		{countPedalUp == 61} {score.tagClose; this.partialNotes(7.17*(1/tempo),36,"c 3".notemidi,"c 6".notemidi, "F");}
 		{countPedalUp == 62} {score.tagClose; this.partialNotes(3.07*(1/tempo),37,"c 2".notemidi,"c 7".notemidi, "F");}
-		{countPedalUp == 63} {score.tagClose; this.partialNotes(6.42*(1/tempo),38,"c 2".notemidi,"c 7".notemidi, "P");}
-		{countPedalUp == 64} {score.tagClose; this.partialNotes(7.5*(1/tempo),39,"c 2".notemidi,"c 7".notemidi, "p", false); this.funcPerc(8, 0, tempo, 1, 0);}
+		{countPedalUp == 63} {score.tagClose; this.partialNotes(3.42*(1/tempo),38,"c 2".notemidi,"c 7".notemidi, "P");}
+		{countPedalUp == 64} {score.tagClose; this.partialNotes(3.0*(1/tempo),39,"c 2".notemidi,"c 7".notemidi, "p", false); 
+			//this.funcPerc(8, 0, tempo, 1, 0);
+			}
 		{countPedalUp == 65} {score.tagClose; this.funcPage(40)}
-		{countPedalUp == 66} { this.textOnly("FREE IMPROV", 37.5*(1/tempo), 41); }
+		{countPedalUp == 66} { this.textOnly("FREE IMPROV", 63.5*(1/tempo), 41); }
 		
 		{countPedalUp == 67} {this.funcPage(42);}
 		{countPedalUp == 68} {this.movie(1,1/tempo,movieScale,43);}
 		{countPedalUp == 69} {this.movie(2,1/tempo,movieScale,44);}
-		{countPedalUp == 70} { this.textOnly("FREE IMPROV", 13.45*(1/tempo), 45); }
+		{countPedalUp == 70} { this.textOnly("FREE IMPROV", 14.55*(1/tempo), 45); }
 		{countPedalUp == 71} {this.funcPage(46);}
 		{countPedalUp == 72} {this.movie(3,1/tempo,movieScale,47);}
 		{countPedalUp == 73} {this.funcPage(48);}
@@ -661,7 +669,7 @@ OnViolenceScore {var <>headOut, <>motorOut, <>motorVol, <>motorPan, s, basicPath
 		{	
 		score.clearWindow;
 		0.1.yield;
-		score.playMovie(moviePath, rate,	(1280-100)*(scale/1.2), (720-100)*(scale/1.2), 50*(scale/1.2));
+		score.playMovie(moviePath, rate,	(1280-100)*(scale/1.2), (720-100)*(scale/1.2), 50*(scale/1.2), mute: muteMovie);
 
 		this.movieWin(whichMovie, movieWinScale);
 		
