@@ -82,7 +82,7 @@ span.Apple-tab-span {white-space:pre}
 <p class="p1"><span class="s3">~violence</span><span class="s2">.mixer2; </span>//metal, scream1, scream2, scream3, scream4, motor, wagner1, wagner2, wagner3, wagner4, buxta, parsifal</p>
 <p class="p4"><br></p>
 <p class="p4"><br></p>
-<p class="p5"><span class="s3">~violence</span>.funcPlay(81,0,1,0);</p>
+<p class="p5"><span class="s3">~violence</span>.funcPlay(1,0,1,0);</p>
 <p class="p4"><br></p>
 <p class="p5"><span class="s3">~violence.</span>metal.spawn([<span class="s9">\amp</span>, 0.3, <span class="s9">\recBuf</span>, ~violence.bufferArr[[0,1,2].choose].bufnum, <span class="s9">\rate</span>, rrand(0.8,1.2), <span class="s9">\pan</span>, 0]);</p>
 <p class="p4"><br></p>
@@ -516,7 +516,7 @@ span.Apple-tab-span {white-space:pre}
 <p class="p5">(<span class="s3">~measure</span> * 2) - 1;</p>
 <p class="p4"><br></p>
 <p class="p4"><br></p>
-<p class="p4"><br></p>
+<p class="p5">~rout.stop;</p>
 <p class="p5"><span class="s3">~violence</span>.metalOn = 2;</p>
 <p class="p4"><br></p>
 <p class="p4"><br></p>
@@ -571,6 +571,9 @@ span.Apple-tab-span {white-space:pre}
 <p class="p5">(81..88).do{<span class="s10">|item|</span> <span class="s10">var</span> value=63; m.control(0,item,value); <span class="s4">MIDIIn</span>.doControlAction(970490220, 0, item, value);}</p>
 <p class="p4"><br></p>
 <p class="p9">MIDIdef.freeAll;</p>
+<p class="p10"><br></p>
+<p class="p1"><span class="s1">"finish"</span><span class="s2">.myScript.appleScript; </span>//script after performance</p>
+<p class="p10"><br></p>
 <p class="p10"><br></p>
 <p class="p1">////////////////////////////////////</p>
 <p class="p4"><br></p>

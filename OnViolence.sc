@@ -1,4 +1,4 @@
-OnViolence {var <>audioIn, s, <>ampIn, midiOut, d, <>amplitude, <>tempo=1, <>countGlob=1, <>stepGlob=1, <>notes, <>pedalOffGlob, <>pedalOnGlob, <>piano, osc, oscMax, <>sensorVal1=0, <>sensorVal2=63, <>grito1, <>grito2,<>grito3,<>grito4, <>motor, <>metal, <>wagner1,<>wagner2, <>wagner3,<>wagner4,<>buxtahude,<>parsifal, <>buxtasynths, <>metalOn, sensor, sensor1, sensor2, bend1, bend2, <>lowVal=39, <>highVal=45, leftVal=41.668201446533,basicPath, rightVal=46.628700256348, <>algoVersion, <>rrandArray, <>differ, tempoStart=0,stepTempo=0,wagner1MIDITime, wagner1MIDINotes, wagner1MIDIVel, wagner1MIDIEnd,wagner2MIDITime, wagner2MIDINotes, wagner2MIDIVel, wagner2MIDIEnd,wagner3MIDITime, wagner3MIDINotes, wagner3MIDIVel, wagner3MIDIEnd,wagner4MIDITime, wagner4MIDINotes, wagner4MIDIVel, wagner4MIDIEnd,document, <>bufferArr, <>randBuffArr, <>volArr, <>panArr, <network, <>master1, <>master2, <>instr, <>partials, <>pan, <>instArr, condition, pnosoloRout, <>pnosoloVelGate=40, <>pnosoloTranspAdj=1, <>pnosoloProb=0.4, <>pnosoloAdjVol=1, <>pnosoloVol=1, <>chunks, <>chunksAdjDur=1.0, <>chunksTransp=1.0, <>chunksVolAdj=0.4, <>chunksVolArr, <>chunksEqTrans=1, <>buxsynthAdjTime=1, <>lastSecVol=0.55, <>ampPar=0.2, <>tempoTrack=1, <>trackingTempo=false, <>trackTempo, <>silenceGritos=false, <>volArr1, <>volArr2;
+OnViolence {var <>audioIn, s, <>ampIn, midiOut, d, <>amplitude, <>tempo=1, <>countGlob=1, <>stepGlob=1, <>notes, <>pedalOffGlob, <>pedalOnGlob, <>piano, osc, oscMax, <>sensorVal1=0, <>sensorVal2=63, <>grito1, <>grito2,<>grito3,<>grito4, <>motor, <>metal, <>wagner1,<>wagner2, <>wagner3,<>wagner4,<>buxtahude,<>parsifal, <>buxtasynths, <>metalOn, sensor, sensor1, sensor2, bend1, bend2, <>lowVal=50, <>highVal=115, leftVal=41.668201446533,basicPath, rightVal=46.628700256348, <>algoVersion, <>rrandArray, <>differ, tempoStart=0,stepTempo=0,wagner1MIDITime, wagner1MIDINotes, wagner1MIDIVel, wagner1MIDIEnd,wagner2MIDITime, wagner2MIDINotes, wagner2MIDIVel, wagner2MIDIEnd,wagner3MIDITime, wagner3MIDINotes, wagner3MIDIVel, wagner3MIDIEnd,wagner4MIDITime, wagner4MIDINotes, wagner4MIDIVel, wagner4MIDIEnd,document, <>bufferArr, <>randBuffArr, <>volArr, <>panArr, <network, <>master1, <>master2, <>instr, <>partials, <>pan, <>instArr, condition, pnosoloRout, <>pnosoloVelGate=40, <>pnosoloTranspAdj=1, <>pnosoloProb=0.4, <>pnosoloAdjVol=1, <>pnosoloVol=1, <>chunks, <>chunksAdjDur=1.0, <>chunksTransp=1.0, <>chunksVolAdj=0.4, <>chunksVolArr, <>chunksEqTrans=1, <>buxsynthAdjTime=1, <>lastSecVol=0.55, <>ampPar=0.2, <>tempoTrack=1, <>trackingTempo=false, <>trackTempo, <>silenceGritos=false, <>volArr1, <>volArr2;
 	
 	*new {arg audioIn = 0, volArr, panArr;
 		^super.new.initOnViolence(audioIn, volArr, panArr);
@@ -1506,12 +1506,19 @@ wagner1MIDIEnd = 1.40038;
 		{args[1] == 1} {"thresh: ".post; 
 			localThresh = args[0].linlin(0,127,0,2.0);
 			this.thresh((globalThresh * localThresh).postln)}
-		{args[1] == 2} {}
-		
+		{args[1] == 2} {
+			"pnosolo velGate: ".post;
+			pnosoloVelGate = args[0].postln;
+			}
+		{args[1] == 3} {"pnosolo prob: ".post;
+			pnosoloProb = args[0].linlin(0,127,0,1.0).postln;
+			}
+		{args[1] == 4} {"pnosolo adjVol: ".post;
+			pnosoloAdjVol = args[0].linlin(0,127,0,1.0).postln;
+			}
 		{args[1] == 5} {"globalthresh: ".post; 
 			globalThresh = args[0].linlin(0,127,1,10.0).postln;
 			this.thresh(globalThresh * localThresh)};
-		
 		}, srcID: 1592006730);
 	
 	//spoofs:
